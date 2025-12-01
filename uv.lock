@@ -1235,7 +1235,6 @@ dependencies = [
 [package.dev-dependencies]
 dev = [
     { name = "bandit" },
-    { name = "keyrings-alt" },
     { name = "mypy" },
     { name = "pre-commit" },
     { name = "pyinstaller" },
@@ -1264,7 +1263,6 @@ requires-dist = [
 [package.metadata.requires-dev]
 dev = [
     { name = "bandit" },
-    { name = "keyrings-alt" },
     { name = "mypy" },
     { name = "pre-commit" },
     { name = "pyinstaller" },
