@@ -12,6 +12,7 @@ dependencies = [
     "cryptography",
     "defusedxml",
     "keyring",
+    "keyrings-alt",
     "polars",
     "pyrig",
     "tqdm",
@@ -24,7 +25,6 @@ winiutils = "pyrig.dev.cli.cli:main"
 [dependency-groups]
 dev = [
     "bandit",
-    "keyrings.alt",
     "mypy",
     "pre-commit",
     "pyinstaller",
