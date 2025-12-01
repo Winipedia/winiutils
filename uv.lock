@@ -360,6 +360,19 @@ wheels = [
 ]
 
 [[package]]
+name = "keyrings-alt"
+version = "5.0.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "jaraco-classes" },
+    { name = "jaraco-context" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/5c/7b/e3bf53326e0753bee11813337b1391179582ba5c6851b13e0d9502d15a50/keyrings_alt-5.0.2.tar.gz", hash = "sha256:8f097ebe9dc8b185106502b8cdb066c926d2180e13b4689fd4771a3eab7d69fb", size = 29229, upload-time = "2024-08-14T01:09:28.12Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/4a/0d/9c59313ab43d0858a9a665e80763bd830dc78d5f379afc3815e123c486c2/keyrings.alt-5.0.2-py3-none-any.whl", hash = "sha256:6be74693192f3f37bbb752bfac9b86e6177076b17d2ac12a390f1d6abff8ac7c", size = 17930, upload-time = "2024-08-14T01:09:26.785Z" },
+]
+
+[[package]]
 name = "librt"
 version = "0.6.3"
 source = { registry = "https://pypi.org/simple" }
@@ -860,7 +873,7 @@ wheels = [
 
 [[package]]
 name = "pyrig"
-version = "2.0.9"
+version = "2.0.11"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "dotenv" },
@@ -874,9 +887,9 @@ dependencies = [
     { name = "tomlkit" },
     { name = "typer" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/cd/ad/5e131a88f9e67181ac50b7b6e5f87c5321bea065d371b30d9efdb1ab8733/pyrig-2.0.9.tar.gz", hash = "sha256:a95f741b157ebbdd48315da8abe7d193db254640ad2bdebeb26ed20f8b2dc898", size = 64502, upload-time = "2025-12-01T12:48:37.389Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/90/ca/6ed8c12c1891eef08a2be28829022d9f5545b88a146d276cf56758574be2/pyrig-2.0.11.tar.gz", hash = "sha256:90db0ec5273a30f3ee8efdf2719668bd4c7b94abc6907ce95d010fdac1e10d87", size = 64558, upload-time = "2025-12-01T13:52:58.766Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/9a/05/754e44fc25a0964b7efad702c7bc565e32f742e78dc2f8e6d428282c87f6/pyrig-2.0.9-py3-none-any.whl", hash = "sha256:975f055259613e3e6f06cf3aaeb721aff0b0698e93ce21259ec4be3f2f1fb178", size = 90902, upload-time = "2025-12-01T12:48:38.159Z" },
+    { url = "https://files.pythonhosted.org/packages/de/7d/5f57915ebcd67bd7a2a5d35c5ea04aea2b62e8cf29b4a8249af1721cf66f/pyrig-2.0.11-py3-none-any.whl", hash = "sha256:3212ad8c6b3dea2b93de7c0d1eaffda44fce0533ffa1c0820565eb3f1fb18406", size = 90991, upload-time = "2025-12-01T13:53:00.153Z" },
 ]
 
 [[package]]
@@ -1221,6 +1234,7 @@ dependencies = [
 [package.dev-dependencies]
 dev = [
     { name = "bandit" },
+    { name = "keyrings-alt" },
     { name = "mypy" },
     { name = "pre-commit" },
     { name = "pyinstaller" },
@@ -1248,6 +1262,7 @@ requires-dist = [
 [package.metadata.requires-dev]
 dev = [
     { name = "bandit" },
+    { name = "keyrings-alt" },
     { name = "mypy" },
     { name = "pre-commit" },
     { name = "pyinstaller" },
