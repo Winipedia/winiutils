@@ -217,9 +217,12 @@ __marimo__/
 # vscode stuff
 .vscode/
 
-# winipedia_utils stuff
-# for walk_os_skipping_gitignore_patterns func
-.git/
-# for executing experimental code
-/experiment.py
 # pyrig stuff
+.git/
+.experiment.py
+# others
+.env
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.venv/
