@@ -801,7 +801,7 @@ wheels = [
 
 [[package]]
 name = "pyrig"
-version = "2.0.35"
+version = "2.0.36"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "dotenv" },
@@ -814,9 +814,9 @@ dependencies = [
     { name = "tomlkit" },
     { name = "typer" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/8e/8c/0cb391bbdf47af88ce1353b45960f910acc414e3fb8d1549acfd0dea7b9b/pyrig-2.0.35.tar.gz", hash = "sha256:4d55fc468b2d6e3948ee12127319a88ded3ee68ccbd1c72fd653c90241162e9d", size = 92156, upload-time = "2025-12-04T23:49:48.719Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/f6/49/61706a55813bc73b36a865297ce8e61d716df11ae82ba7e31d65144d2fab/pyrig-2.0.36.tar.gz", hash = "sha256:06b2758aec4f8e58c47be9eeb33a8cd591bbf0caa6d164e3b0a8dda1e8e058db", size = 92167, upload-time = "2025-12-05T02:52:20.843Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/2b/01/29d7d9e906ebc9c2a298c0b10798f1121797a2e47a5391c0a55832427ea5/pyrig-2.0.35-py3-none-any.whl", hash = "sha256:3828599a0c5d7e7a7767adeecda5a659482038fa2de1d7c0e707c7a754955d5a", size = 123197, upload-time = "2025-12-04T23:49:47.512Z" },
+    { url = "https://files.pythonhosted.org/packages/70/b3/8b141ecbb27a266120ef792388d67796d92595eaac00413a3d641ddb4754/pyrig-2.0.36-py3-none-any.whl", hash = "sha256:e0416b3bdcbe231588659fe245fdb007307d1b7e1e33eac91debeb055b136fc8", size = 123196, upload-time = "2025-12-05T02:52:21.841Z" },
 ]
 
 [[package]]
@@ -1135,7 +1135,7 @@ wheels = [
 
 [[package]]
 name = "winiutils"
-version = "2.2.12"
+version = "2.2.13"
 source = { editable = "." }
 dependencies = [
     { name = "cryptography" },
