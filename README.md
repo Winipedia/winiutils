@@ -1,6 +1,6 @@
 # winiutils
 
-(This project uses [pyrig](https://github.com/Winipedia/pyrig))
+[![built with pyrig](https://img.shields.io/badge/built%20with-pyrig-3776AB?logo=python&logoColor=white)](https://github.com/Winipedia/pyrig)
 
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
