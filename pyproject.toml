@@ -5,7 +5,7 @@ description = "A package with many utility functions"
 license = "MIT"
 requires-python = ">=3.12"
 authors = [
-    { name = "Winipedia", email = "win.steveker@gmx.de"},
+    { name = "Winipedia"},
 ]
 readme = "README.md"
 dependencies = [
