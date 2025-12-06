@@ -1,6 +1,6 @@
 [project]
 name = "winiutils"
-version = "2.2.21"
+version = "2.2.22"
 description = "A package with many utility functions"
 license = "MIT"
 requires-python = ">=3.12"
