@@ -1,10 +1,18 @@
 """Metaclass utilities for class behavior modification and enforcement.
 
-This module provides metaclasses that can be used to
-modify class behavior at creation time.
-These metaclasses can be used individually or combined to create classes
-with enhanced capabilities and stricter implementation requirements.
+This module provides metaclasses that can be used to modify class behavior
+at creation time. These metaclasses can be used individually or combined
+to create classes with enhanced capabilities and stricter implementation
+requirements.
 
+Example:
+    >>> from winiutils.src.oop.mixins.meta import ABCLoggingMeta
+    >>> class MyClass(metaclass=ABCLoggingMeta):
+    ...     def my_method(self, x):
+    ...         return x * 2
+    >>> obj = MyClass()
+    >>> obj.my_method(5)  # Logs: "MyClass - Calling my_method with ..."
+    10
 """
 
 import logging
@@ -24,9 +32,29 @@ logger = logging.getLogger(__name__)
 class ABCLoggingMeta(ABCMeta):
     """Metaclass that automatically adds logging to class methods.
 
-    Wraps non-magic methods with a logging decorator that tracks method calls,
-    arguments, execution time, and return values. Includes rate limiting to
-    prevent log flooding.
+    Wraps non-magic methods with a logging decorator that tracks method
+    calls, arguments, execution time, and return values. Includes rate
+    limiting to prevent log flooding.
+
+    This metaclass extends ``ABCMeta``, so classes using it can also define
+    abstract methods.
+
+    Attributes:
+        Inherits all attributes from ``ABCMeta``.
+
+    Example:
+        >>> class Calculator(metaclass=ABCLoggingMeta):
+        ...     def add(self, a, b):
+        ...         return a + b
+        >>> calc = Calculator()
+        >>> calc.add(2, 3)  # Logs method call and result
+        5
+
+    Note:
+        - Magic methods (``__init__``, ``__str__``, etc.) are not logged.
+        - Properties are not logged.
+        - Logging is rate-limited to once per second per method to prevent
+          log flooding.
     """
 
     def __new__(
@@ -37,15 +65,18 @@ class ABCLoggingMeta(ABCMeta):
     ) -> "ABCLoggingMeta":
         """Create a new class with logging-wrapped methods.
 
+        Intercepts class creation to wrap all non-magic methods with logging
+        functionality. Handles regular methods, class methods, and static
+        methods.
+
         Args:
-            mcs: The metaclass instance
-            name: The name of the class being created
-            bases: The base classes of the class being created
-            dct: The attribute dictionary of the class being created
+            mcs: The metaclass instance.
+            name: The name of the class being created.
+            bases: The base classes of the class being created.
+            dct: The attribute dictionary of the class being created.
 
         Returns:
-            A new class with logging functionality added to its methods
-
+            A new class with logging functionality added to its methods.
         """
         # Wrap all callables of the class with a logging wrapper
 
@@ -72,13 +103,20 @@ class ABCLoggingMeta(ABCMeta):
     def is_loggable_method(method: Callable[..., Any]) -> bool:
         """Determine if a method should have logging applied.
 
+        Checks whether a method is a valid candidate for logging. Methods
+        are logged if they are callable, have a name, and are not magic
+        methods (those starting with ``__``).
+
         Args:
-            method: The method to check, properties are not logged
-                as they are not callable and it turns out to be tricky with them
+            method: The method to check.
 
         Returns:
-            True if the method should be wrapped with logging, False otherwise
+            True if the method should be wrapped with logging, False
+            otherwise.
 
+        Note:
+            Properties are not logged as they are not callable in the
+            traditional sense and cause issues with the wrapping mechanism.
         """
         return (
             is_func(method)  # must be a method-like attribute
@@ -95,16 +133,23 @@ class ABCLoggingMeta(ABCMeta):
         """Wrap a function with logging functionality.
 
         Creates a wrapper that logs method calls, arguments, execution time,
-        and return values. Includes rate limiting to prevent excessive logging.
+        and return values. Includes rate limiting to prevent excessive
+        logging (once per second per method).
 
         Args:
-            func: The function to wrap with logging
-            class_name: The name of the class containing the function
-            call_times: Dictionary to track when methods were last called
+            func: The function to wrap with logging.
+            class_name: The name of the class containing the function. Used
+                in log messages.
+            call_times: Dictionary to track when methods were last called.
+                Used for rate limiting. This dictionary is mutated by the
+                wrapper.
 
         Returns:
-            A wrapped function with logging capabilities
+            A wrapped function with logging capabilities.
 
+        Note:
+            Arguments and return values are truncated to 20 characters in
+            log messages to prevent excessively long log lines.
         """
         time_time = time.time  # Cache the time.time function for performance
 

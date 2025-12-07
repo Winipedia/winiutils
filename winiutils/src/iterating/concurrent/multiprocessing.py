@@ -1,12 +1,26 @@
-"""Multiprocessing utilities for concurrent execution.
+"""Multiprocessing utilities for CPU-bound parallel execution.
 
-This module provides functions for parallel processing using both multiprocessing
-and multithreading approaches. It includes utilities for handling timeouts,
-managing process pools, and organizing parallel execution of functions.
+This module provides functions for parallel processing using Python's
+multiprocessing module. It includes utilities for handling timeouts,
+managing process pools, and organizing parallel execution of CPU-bound
+functions.
 
-Returns:
-    Various utility functions for concurrent processing.
+Use multiprocessing for CPU-bound tasks that benefit from true parallelism
+by bypassing Python's Global Interpreter Lock (GIL).
 
+Example:
+    >>> from winiutils.src.iterating.concurrent.multiprocessing import (
+    ...     multiprocess_loop,
+    ... )
+    >>> def square(x):
+    ...     return x * x
+    >>> results = multiprocess_loop(
+    ...     process_function=square,
+    ...     process_args=[[1], [2], [3]],
+    ...     process_args_len=3,
+    ... )
+    >>> results
+    [1, 4, 9]
 """
 
 import logging
@@ -22,42 +36,67 @@ logger = logging.getLogger(__name__)
 
 
 def get_spwan_pool(*args: Any, **kwargs: Any) -> Pool:
-    """Get a multiprocessing pool with the spawn context.
+    """Create a multiprocessing pool with the spawn context.
+
+    Uses the 'spawn' start method which creates a fresh Python interpreter
+    process. This is safer than 'fork' as it avoids issues with inherited
+    file descriptors and locks.
 
     Args:
-        *args: Positional arguments to pass to the Pool constructor
-        **kwargs: Keyword arguments to pass to the Pool constructor
+        *args: Positional arguments passed to ``Pool`` constructor.
+        **kwargs: Keyword arguments passed to ``Pool`` constructor.
 
     Returns:
-        A multiprocessing pool with the spawn context
+        A multiprocessing Pool configured with the spawn context.
 
+    Example:
+        >>> pool = get_spwan_pool(processes=4)
+        >>> with pool:
+        ...     results = pool.map(square, [1, 2, 3])
     """
     return multiprocessing.get_context("spawn").Pool(*args, **kwargs)
 
 
 def cancel_on_timeout(seconds: float, message: str) -> Callable[..., Any]:
-    """Cancel a function execution if it exceeds a specified timeout.
+    """Create a decorator that cancels function execution on timeout.
 
-    Creates a wrapper that executes the decorated function in a separate process
-    and terminates it if execution time exceeds the specified timeout.
+    Creates a wrapper that executes the decorated function in a separate
+    process and terminates it if execution time exceeds the specified
+    timeout.
 
     Args:
-        seconds: Maximum execution time in seconds before timeout
-        message: Error message to include in the raised TimeoutError
+        seconds: Maximum execution time in seconds before timeout.
+        message: Error message to include in the warning log when timeout
+            occurs.
 
     Returns:
-        A decorator function that wraps the target function with timeout functionality
+        A decorator function that wraps the target function with timeout
+        functionality.
 
     Raises:
-        multiprocessing.TimeoutError: When function execution exceeds the timeout
+        multiprocessing.TimeoutError: When function execution exceeds the
+            timeout.
 
-    Note:
-        Only works with functions that are pickle-able.
-        This means it may not work as a decorator.
-        Instaed you should use it as a wrapper function.
-        Like this:
-        my_func = cancel_on_timeout(seconds=2, message="Test timeout")(my_func)
+    Warning:
+        Only works with functions that are pickle-able. This means it may
+        not work as a decorator on methods or closures. Instead, use it as
+        a wrapper function::
 
+            my_func = cancel_on_timeout(
+                seconds=2,
+                message="Test timeout",
+            )(my_func)
+
+    Example:
+        >>> def slow_function():
+        ...     import time
+        ...     time.sleep(10)
+        ...     return "done"
+        >>> timed_func = cancel_on_timeout(
+        ...     seconds=1,
+        ...     message="Function took too long",
+        ... )(slow_function)
+        >>> timed_func()  # Raises TimeoutError after 1 second
     """
 
     def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
@@ -92,32 +131,50 @@ def multiprocess_loop(
     deepcopy_static_args: Iterable[Any] | None = None,
     process_args_len: int = 1,
 ) -> list[Any]:
-    """Process a loop using multiprocessing Pool for parallel execution.
+    """Execute a function in parallel using multiprocessing Pool.
 
-    Executes the given process_function with the provided arguments in parallel using
-    multiprocessing Pool, which is suitable for CPU-bound tasks.
+    Executes the given function with the provided arguments in parallel
+    using multiprocessing Pool, which is suitable for CPU-bound tasks.
 
     Args:
-        process_function: Function that processes the given process_args
-        process_args: List of args to be processed by the process_function
-                    e.g. [(1, 2, 3), (4, 5, 6), (7, 8, 9)]
-        process_args_static: Optional constant arguments passed to each function call
-        deepcopy_static_args: Optional arguments that should be
-                              deep-copied for each process
-        process_args_len: Optional length of process_args
-                          If not provided, it will ot be taken into account
-                          when calculating the max number of processes.
+        process_function: The function to execute in parallel. Must be
+            pickle-able.
+        process_args: Iterable of argument lists for each parallel call.
+            Each inner iterable contains the arguments for one function
+            call. Example: ``[(1, 2), (3, 4), (5, 6)]``
+        process_args_static: Optional constant arguments to append to each
+            call. These are shared across all calls without copying.
+            Defaults to None.
+        deepcopy_static_args: Optional arguments that should be deep-copied
+            for each process. Use this for mutable objects that should not
+            be shared between processes. Defaults to None.
+        process_args_len: Length of ``process_args``. Used for progress bar
+            and worker pool sizing. Defaults to 1.
 
     Returns:
-        List of results from the process_function executions
+        List of results from the function executions, in the original
+        submission order.
 
     Note:
-        Pool is used for CPU-bound tasks as it bypasses
-        Python's GIL by creating separate processes.
-        Multiprocessing is not safe for mutable objects unlike ThreadPoolExecutor.
-        When debugging, if ConnectionErrors occur, set max_processes to 1.
-        Also given functions must be pickle-able.
+        - Use multiprocessing for CPU-bound tasks as it bypasses Python's
+          GIL by creating separate processes.
+        - Multiprocessing is not safe for mutable objects; use
+          ``deepcopy_static_args`` for mutable data.
+        - If ConnectionErrors occur during debugging, try reducing the
+          number of processes.
+        - All functions and arguments must be pickle-able.
 
+    Example:
+        >>> def add(a, b, c):
+        ...     return a + b + c
+        >>> results = multiprocess_loop(
+        ...     process_function=add,
+        ...     process_args=[[1, 2], [3, 4]],
+        ...     process_args_static=[10],
+        ...     process_args_len=2,
+        ... )
+        >>> results
+        [13, 17]
     """
     return concurrent_loop(
         threading=False,

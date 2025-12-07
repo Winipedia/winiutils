@@ -1,12 +1,25 @@
 """Concurrent processing utilities for parallel execution.
 
-This module provides functions for concurrent processing using both multiprocessing
-and multithreading approaches. It includes utilities for handling timeouts,
-managing process pools, and organizing parallel execution of functions.
+This module provides core functions for concurrent processing using both
+multiprocessing and multithreading approaches. It includes utilities for
+handling timeouts, managing process pools, and organizing parallel execution
+of functions.
 
-Returns:
-    Various utility functions for concurrent processing.
+The main entry point is ``concurrent_loop()``, which provides a unified
+interface for both threading and multiprocessing execution.
 
+Example:
+    >>> from winiutils.src.iterating.concurrent.concurrent import concurrent_loop
+    >>> def square(x):
+    ...     return x * x
+    >>> results = concurrent_loop(
+    ...     threading=True,
+    ...     process_function=square,
+    ...     process_args=[[1], [2], [3]],
+    ...     process_args_len=3,
+    ... )
+    >>> results
+    [1, 4, 9]
 """
 
 import multiprocessing
@@ -33,18 +46,20 @@ logger = logging.getLogger(__name__)
 def get_order_and_func_result(
     func_order_args: tuple[Any, ...],
 ) -> tuple[int, Any]:
-    """Process function for imap with arguments unpacking.
+    """Execute a function and return its result with order index.
 
-    Helper function that gives back a function that can be used with imap_unordered
-    to execute a function with arguments unpacking.
+    Helper function used with ``imap_unordered`` to execute a function with
+    arguments unpacking while preserving the original order of results.
 
     Args:
-        func_order_args: Tuple containing the function to be executed,
-            the order index, and the arguments for the function
+        func_order_args: Tuple containing:
+            - The function to be executed
+            - The order index (int)
+            - The arguments for the function (unpacked)
 
     Returns:
-        A tuple containing the order index and the result of the function execution
-
+        A tuple of (order_index, result) where order_index is the original
+        position and result is the function's return value.
     """
     function, order, *args = func_order_args
     return order, function(*args)
@@ -60,24 +75,37 @@ def generate_process_args(
     """Prepare arguments for multiprocessing or multithreading execution.
 
     Converts input arguments into a format suitable for parallel processing,
-    organizing them for efficient unpacking during execution. The function:
-    1. Prepends process func and order indices to arguments
-    2. Handles static arguments (with optional deep copying)
-    3. Restructures arguments into tuples for unpacking
+    organizing them for efficient unpacking during execution.
+
+    The function performs the following transformations:
+        1. Prepends the process function and order index to each argument tuple
+        2. Appends static arguments to each call
+        3. Deep-copies specified arguments for each call (for mutable objects)
 
     Args:
-        process_function: Function to be executed
-        process_args: Iterable of argument lists for each parallel call
-        process_args_static: Optional constant arguments to add to each call
-        deepcopy_static_args: Optional constant arguments that should be deep-copied
+        process_function: The function to be executed in parallel.
+        process_args: Iterable of argument lists for each parallel call.
+            Each inner iterable contains the arguments for one function call.
+        process_args_static: Optional constant arguments to append to each
+            call. These are shared across all calls without copying.
+        deepcopy_static_args: Optional arguments that should be deep-copied
+            for each process. Use this for mutable objects that should not
+            be shared between processes.
 
-    Returns:
-        A Genrator that yields one args tuple for each function call
-        First is the process function
-        Second item in the tuple is the order index
-        Second item in the tuple is the function
-        Rest of the items are the arguments for the function
-        The length of the generator
+    Yields:
+        Tuples formatted as: (process_function, order_index, *args,
+        *static_args, *deepcopied_args)
+
+    Example:
+        >>> def add(a, b, c):
+        ...     return a + b + c
+        >>> args = generate_process_args(
+        ...     process_function=add,
+        ...     process_args=[[1], [2]],
+        ...     process_args_static=[10],
+        ... )
+        >>> list(args)
+        [(add, 0, 1, 10), (add, 1, 2, 10)]
     """
     process_args_static = (
         () if process_args_static is None else tuple(process_args_static)
@@ -105,20 +133,24 @@ def get_multiprocess_results_with_tqdm(
     *,
     threads: bool,
 ) -> list[Any]:
-    """Get multiprocess results with tqdm progress tracking.
+    """Collect parallel execution results with progress tracking.
 
-    Processes results from parallel execution with a progress bar and ensures
-    they are returned in the original order.
+    Processes results from parallel execution with a tqdm progress bar and
+    ensures they are returned in the original submission order.
 
     Args:
-        results: Iterable of results from parallel execution
-        process_func: Function that was executed in parallel
-        process_args_len: Number of items to process in parallel
-        threads: Whether threading (True) or multiprocessing (False) was used
+        results: Iterable of (order_index, result) tuples from parallel
+            execution.
+        process_func: The function that was executed in parallel. Used for
+            the progress bar description.
+        process_args_len: Total number of items being processed. Used for
+            the progress bar total.
+        threads: Whether threading (True) or multiprocessing (False) was
+            used. Affects the progress bar description.
 
     Returns:
-        list[Any]: Results from parallel execution in original order
-
+        List of results from parallel execution, sorted by original
+        submission order.
     """
     results = tqdm(
         results,
@@ -139,18 +171,27 @@ def find_max_pools(
     threads: bool,
     process_args_len: int | None = None,
 ) -> int:
-    """Find optimal number of worker processes or threads for parallel execution.
+    """Determine optimal number of workers for parallel execution.
 
-    Determines the maximum number of worker processes or threads based on system
-    resources, active tasks, and the number of items to process.
+    Calculates the maximum number of worker processes or threads based on
+    system resources, currently active tasks, and the number of items to
+    process.
 
     Args:
-        threads: Whether to use threading (True) or multiprocessing (False)
-        process_args_len: Number of items to process in parallel
+        threads: Whether to use threading (True) or multiprocessing (False).
+            Threading allows up to 4x CPU count, while multiprocessing is
+            limited to CPU count.
+        process_args_len: Number of items to process in parallel. If
+            provided, the result will not exceed this value.
 
     Returns:
-        int: Maximum number of worker processes or threads to use
+        Maximum number of worker processes or threads to use. Always at
+        least 1.
 
+    Note:
+        For threading, the maximum is ``cpu_count * 4`` minus active threads.
+        For multiprocessing, the maximum is ``cpu_count`` minus active
+        child processes.
     """
     # use tee to find length of process_args
     cpu_count = os.cpu_count() or 1
@@ -185,29 +226,38 @@ def concurrent_loop(  # noqa: PLR0913
     deepcopy_static_args: Iterable[Any] | None = None,
     process_args_len: int = 1,
 ) -> list[Any]:
-    """Execute a function concurrently with multiple arguments using a pool executor.
+    """Execute a function concurrently with multiple argument sets.
 
-    This function is a helper function for multiprocess_loop and multithread_loop.
-    It is not meant to be used directly.
+    Core function that provides a unified interface for both multiprocessing
+    and multithreading execution. This is the internal implementation used
+    by ``multiprocess_loop()`` and ``multithread_loop()``.
 
     Args:
-        threading (bool):
-            Whether to use threading (True) or multiprocessing (False)
-        pool_executor (Pool | ThreadPoolExecutor):
-            Pool executor to use for concurrent execution
-        process_function (Callable[..., Any]):
-            Function to be executed concurrently
-        process_args (Iterable[Iterable[Any]]):
-            Arguments for each process
-        process_args_static (Iterable[Any] | None, optional):
-            Static arguments to pass to each process. Defaults to None.
-        deepcopy_static_args (Iterable[Any] | None, optional):
-            Arguments that should be deep-copied for each process. Defaults to None.
-        process_args_len (int | None, optional):
-            Length of process_args. Defaults to None.
+        threading: Whether to use threading (True) or multiprocessing
+            (False). Use threading for I/O-bound tasks and multiprocessing
+            for CPU-bound tasks.
+        process_function: The function to execute concurrently. Must be
+            pickle-able for multiprocessing.
+        process_args: Iterable of argument lists for each parallel call.
+            Each inner iterable contains the arguments for one function
+            call.
+        process_args_static: Optional constant arguments to append to each
+            call. These are shared across all calls without copying.
+            Defaults to None.
+        deepcopy_static_args: Optional arguments that should be deep-copied
+            for each process. Use this for mutable objects that should not
+            be shared between processes. Defaults to None.
+        process_args_len: Length of ``process_args``. Used for progress bar
+            and worker pool sizing. Defaults to 1.
 
     Returns:
-        list[Any]: Results from the process_function executions
+        List of results from the function executions, in the original
+        submission order.
+
+    Note:
+        This function is not meant to be used directly. Use
+        ``multiprocess_loop()`` for CPU-bound tasks or ``multithread_loop()``
+        for I/O-bound tasks instead.
     """
     from winiutils.src.iterating.concurrent.multiprocessing import (  # noqa: PLC0415  # avoid circular import
         get_spwan_pool,
