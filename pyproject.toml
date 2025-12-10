@@ -29,6 +29,7 @@ dev = [
     "pre-commit",
     "pyinstaller",
     "pytest",
+    "pytest-cov",
     "pytest-mock",
     "ruff",
     "types-defusedxml",
@@ -86,6 +87,7 @@ files = "."
 testpaths = [
     "tests",
 ]
+addopts = "--cov=winiutils --cov-report=term-missing --cov-fail-under=80"
 
 [tool.bandit]
 exclude_dirs = [
