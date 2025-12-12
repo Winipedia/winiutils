@@ -286,9 +286,7 @@ class TestCleaningDF:
         def get_incomplete_map() -> dict[str, type[pl.DataType]]:
             return incomplete_map
 
-        with pytest.raises(
-            KeyError, match=f"{get_incomplete_map.__name__}: {missing_keys}"
-        ):
+        with pytest.raises(KeyError, match=f"{get_incomplete_map}: {missing_keys}"):
             MyCleaningDF.raise_on_missing_cols(get_incomplete_map)
 
     def test_drop_cols(self) -> None:
