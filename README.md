@@ -1,16 +1,30 @@
 # winiutils
 
-[![built with pyrig](https://img.shields.io/badge/built%20with-pyrig-3776AB?logo=python&logoColor=white)](https://github.com/Winipedia/pyrig)
-[![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
-[![Type checked: mypy](https://img.shields.io/badge/type%20checked-mypy-blue.svg)](https://mypy-lang.org/)
+<!-- tooling -->
+[![pyrig](https://img.shields.io/badge/built%20with-pyrig-3776AB?logo=buildkite&logoColor=black)](https://github.com/Winipedia/pyrig)
+[![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://pre-commit.com/)
+<!-- code-quality -->
+[![ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![mypy](https://img.shields.io/badge/type%20checked-mypy-039dfc.svg)](https://mypy-lang.org/)
+[![security: bandit](https://img.shields.io/badge/security-bandit-yellow.svg)](https://github.com/PyCQA/bandit)
+[![pytest](https://img.shields.io/badge/tested%20with-pytest-46a2f1.svg?logo=pytest)](https://pytest.org/)
+[![codecov](https://codecov.io/gh/Winipedia/winiutils/branch/main/graph/badge.svg)](https://codecov.io/gh/Winipedia/winiutils)
+<!-- package-info -->
+[![PyPI](https://img.shields.io/pypi/v/winiutils?logo=pypi&logoColor=white)](https://pypi.org/project/winiutils/)
+[![Python](https://img.shields.io/badge/python-3.12|3.13|3.14-blue.svg?logo=python&logoColor=white)](https://www.python.org/)
+[![License](https://img.shields.io/github/license/Winipedia/winiutils)](https://github.com/Winipedia/winiutils/blob/main/LICENSE)
+<!-- ci/cd -->
+[![CI](https://img.shields.io/github/actions/workflow/status/Winipedia/winiutils/health_check.yaml?label=CI&logo=github)](https://github.com/Winipedia/winiutils/actions/workflows/health_check.yaml)
+[![CD](https://img.shields.io/github/actions/workflow/status/Winipedia/winiutils/release.yaml?label=CD&logo=github)](https://github.com/Winipedia/winiutils/actions/workflows/release.yaml)
 
-A comprehensive Python utility library providing production-ready tools for data processing, concurrent execution, security, and object-oriented programming patterns.
-
-> Built with [pyrig](https://github.com/Winipedia/pyrig)
 
 ---
+
+> A package with many utility functions
+
+---
+
 
 ## Table of Contents
 
