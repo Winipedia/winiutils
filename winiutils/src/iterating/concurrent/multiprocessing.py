@@ -110,7 +110,7 @@ def cancel_on_timeout(seconds: float, message: str) -> Callable[..., Any]:
                 except multiprocessing.TimeoutError:
                     logger.warning(
                         "%s -> Execution exceeded %s seconds: %s",
-                        func.__name__,
+                        func,
                         seconds,
                         message,
                     )

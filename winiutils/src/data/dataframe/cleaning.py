@@ -417,7 +417,7 @@ class CleaningDF(ABCLoggingMixin):
         col_names = cls.get_col_names()
         missing_cols = set(col_names) - set(map_func().keys())
         if missing_cols:
-            msg = f"Missing columns in {map_func.__name__}: {missing_cols}"
+            msg = f"Missing columns in {map_func}: {missing_cols}"
             raise KeyError(msg)
 
     def rename_cols(self, temp_df: pl.DataFrame) -> pl.DataFrame:
@@ -512,7 +512,7 @@ class CleaningDF(ABCLoggingMixin):
                     converter, return_dtype=self.get_col_dtype_map()[col_name]
                 )
                 for col_name, converter in self.get_col_converter_map().items()
-                if converter.__name__ != self.skip_col_converter.__name__
+                if converter.__name__ != self.skip_col_converter.__name__  # ty:ignore[unresolved-attribute]
             ]
         )
 

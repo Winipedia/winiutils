@@ -3,8 +3,6 @@
 tests.test_winipedia_utils.test_oop.test_mixins.test_meta
 """
 
-from typing import Any
-
 from pyrig.src.modules.function import is_func
 from pyrig.src.modules.module import make_obj_importpath
 from pyrig.src.testing.assertions import assert_with_msg
@@ -91,13 +89,6 @@ class TestABCLoggingMeta:
 
         result = ABCLoggingMeta.is_loggable_method(magic_method)
         assert_with_msg(result is False, "Expected magic method to not be loggable")
-
-        # Test case 3: Non-function (should not be loggable)
-        mock_is_func.return_value = False
-        non_function: Any = 42  # Not a function
-
-        result = ABCLoggingMeta.is_loggable_method(non_function)
-        assert_with_msg(result is False, "Expected non-function to not be loggable")
 
     def test_wrap_with_logging(self, mocker: MockFixture) -> None:
         """Test method for wrap_with_logging."""

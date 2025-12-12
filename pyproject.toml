@@ -1,7 +1,7 @@
 [project]
 name = "winiutils"
 version = "2.3.7"
-description = "A package with many utility functions"
+description = "A utility library for Python development"
 license = "MIT"
 requires-python = ">=3.12"
 authors = [
@@ -37,6 +37,7 @@ dev = [
     "pytest-cov",
     "pytest-mock",
     "ruff",
+    "ty",
     "types-defusedxml",
     "types-pyinstaller",
     "types-pyyaml",

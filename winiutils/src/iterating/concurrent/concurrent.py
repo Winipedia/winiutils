@@ -155,7 +155,7 @@ def get_multiprocess_results_with_tqdm(
     results = tqdm(
         results,
         total=process_args_len,
-        desc=f"Multi{'threading' if threads else 'processing'} {process_func.__name__}",
+        desc=f"Multi{'threading' if threads else 'processing'} {process_func}",
         unit=f" {'threads' if threads else 'processes'}",
     )
     results_list = list(results)

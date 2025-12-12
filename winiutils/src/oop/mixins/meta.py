@@ -120,8 +120,9 @@ class ABCLoggingMeta(ABCMeta):
         """
         return (
             is_func(method)  # must be a method-like attribute
-            and hasattr(method, "__name__")  # must have a name
-            and not method.__name__.startswith("__")  # must not be a magic method
+            and not getattr(method, "__name__", "__").startswith(
+                "__"
+            )  # must not be a magic method
         )
 
     @staticmethod
@@ -159,7 +160,7 @@ class ABCLoggingMeta(ABCMeta):
             # we only log if the time since the last call is greater than the threshold
             # this is to avoid spamming the logs
 
-            func_name = func.__name__
+            func_name = func.__name__  # ty:ignore[unresolved-attribute]
 
             threshold = 1
 
