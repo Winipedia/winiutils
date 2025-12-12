@@ -5,7 +5,7 @@ description = "A utility library for Python development"
 license = "MIT"
 requires-python = ">=3.12"
 authors = [
-    { name = "Winipedia"},
+    {name = "Winipedia"},
 ]
 readme = "README.md"
 dependencies = [
@@ -21,6 +21,9 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
+]
+license-files = [
+    "LICENSE",
 ]
 
 [project.scripts]
