@@ -33,13 +33,20 @@ winiutils = "pyrig.dev.cli.cli:main"
 [dependency-groups]
 dev = [
     "bandit",
+    "dotenv",
     "mypy",
+    "pillow",
     "pre-commit",
+    "pygithub",
     "pyinstaller",
     "pytest",
     "pytest-cov",
     "pytest-mock",
+    "pyyaml",
     "ruff",
+    "setuptools",
+    "tenacity",
+    "tomlkit",
     "ty",
     "types-defusedxml",
     "types-pyinstaller",
@@ -82,6 +89,9 @@ fixable = [
 "tests/**/*.py" = [
     "S101",
 ]
+"**/tests/**/*.py" = [
+    "S101",
+]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
@@ -105,5 +115,6 @@ exclude_dirs = [
 
 [tool.bandit.assert_used]
 skips = [
+    "*/tests/*.py",
     "*test_*.py",
 ]

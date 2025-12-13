@@ -875,23 +875,14 @@ wheels = [
 
 [[package]]
 name = "pyrig"
-version = "2.1.33"
+version = "2.1.35"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "dotenv" },
-    { name = "packaging" },
-    { name = "pathspec" },
-    { name = "pillow" },
-    { name = "pygithub" },
-    { name = "pyyaml" },
-    { name = "setuptools" },
-    { name = "tenacity" },
-    { name = "tomlkit" },
     { name = "typer" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/43/c7/d1f20baaceba7ae9c116a74e2762af5aa2a99e46aa735f8d00cd8df3b504/pyrig-2.1.33.tar.gz", hash = "sha256:c22c3bfc6ee18a5cd4daa50e2ef832fa6bfc5a3f60bb77d1ad841d882403537e", size = 84215, upload-time = "2025-12-13T01:08:29.802Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/c4/d3/dff54854f3982dd533c637c770fc63c0107a931dafa9412e555d16023b3f/pyrig-2.1.35.tar.gz", hash = "sha256:398625c3469375f34a084ab5b39a9176351b4ce3c50ee8ebe9777bf0222bbfe9", size = 84292, upload-time = "2025-12-13T21:33:54.016Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a2/44/84a446cd051f4d90e9c38899d1be4f855662e6c5c4b17bb0745f437cd2df/pyrig-2.1.33-py3-none-any.whl", hash = "sha256:93da3173a4105f3d53b6a0a439f669cdbfeefb732ed20171ca8eccfd1452c194", size = 123706, upload-time = "2025-12-13T01:08:27.423Z" },
+    { url = "https://files.pythonhosted.org/packages/83/39/93bacad828e60bf00965965fbcc86f4c0005ec5d685051d3dc6d42fdc01b/pyrig-2.1.35-py3-none-any.whl", hash = "sha256:d4c9048c284fd3ee933a7188490c9ab5f4eaa3385f8b5dd54fe1d6df65cb48f6", size = 123092, upload-time = "2025-12-13T21:33:52.773Z" },
 ]
 
 [[package]]
@@ -1273,13 +1264,20 @@ dependencies = [
 [package.dev-dependencies]
 dev = [
     { name = "bandit" },
+    { name = "dotenv" },
     { name = "mypy" },
+    { name = "pillow" },
     { name = "pre-commit" },
+    { name = "pygithub" },
     { name = "pyinstaller" },
     { name = "pytest" },
     { name = "pytest-cov" },
     { name = "pytest-mock" },
+    { name = "pyyaml" },
     { name = "ruff" },
+    { name = "setuptools" },
+    { name = "tenacity" },
+    { name = "tomlkit" },
     { name = "ty" },
     { name = "types-defusedxml" },
     { name = "types-pyinstaller" },
@@ -1302,13 +1300,20 @@ requires-dist = [
 [package.metadata.requires-dev]
 dev = [
     { name = "bandit" },
+    { name = "dotenv" },
     { name = "mypy" },
+    { name = "pillow" },
     { name = "pre-commit" },
+    { name = "pygithub" },
     { name = "pyinstaller" },
     { name = "pytest" },
     { name = "pytest-cov" },
     { name = "pytest-mock" },
+    { name = "pyyaml" },
     { name = "ruff" },
+    { name = "setuptools" },
+    { name = "tenacity" },
+    { name = "tomlkit" },
     { name = "ty" },
     { name = "types-defusedxml" },
     { name = "types-pyinstaller" },
