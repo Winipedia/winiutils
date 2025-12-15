@@ -19,7 +19,6 @@
 [![CI](https://img.shields.io/github/actions/workflow/status/Winipedia/winiutils/health_check.yaml?label=CI&logo=github)](https://github.com/Winipedia/winiutils/actions/workflows/health_check.yaml)
 [![CD](https://img.shields.io/github/actions/workflow/status/Winipedia/winiutils/release.yaml?label=CD&logo=github)](https://github.com/Winipedia/winiutils/actions/workflows/release.yaml)
 
-
 ---
 
 > A utility library for Python development
