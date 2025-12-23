@@ -22,7 +22,7 @@ from collections.abc import Callable
 import keyring
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
-from pyrig.src.git.git import running_in_github_actions
+from pyrig.src.git import running_in_github_actions
 
 if running_in_github_actions():
     from keyrings.alt.file import PlaintextKeyring  # type: ignore[import-untyped]
