@@ -1,6 +1,8 @@
 # Data Processing
 
-The `winiutils.src.data` package provides utilities for data manipulation, including a comprehensive DataFrame cleaning pipeline and data structure helpers.
+The `winiutils.src.data` package provides utilities for data manipulation,
+including a comprehensive DataFrame cleaning pipeline
+and data structure helpers.
 
 ---
 
@@ -8,7 +10,8 @@ The `winiutils.src.data` package provides utilities for data manipulation, inclu
 
 **Module:** `winiutils.src.data.dataframe.cleaning`
 
-The `CleaningDF` abstract base class provides an extensible framework for cleaning and standardizing Polars DataFrames.
+The `CleaningDF` abstract base class provides an extensible framework
+for cleaning and standardizing Polars DataFrames.
 
 ### Pipeline Stages
 
@@ -17,8 +20,10 @@ The cleaning pipeline executes in the following order:
 1. **Column Renaming** — Standardize column names from raw input
 2. **Column Dropping** — Remove columns not in schema
 3. **Null Filling** — Fill null values with configurable defaults
-4. **Type Conversion** — Convert to correct data types with custom transformations
-5. **Null Subset Dropping** — Remove rows where specified column groups are all null
+4. **Type Conversion**
+    — Convert to correct data types with custom transformations
+5. **Null Subset Dropping**
+    — Remove rows where specified column groups are all null
 6. **Duplicate Handling** — Aggregate duplicate rows and sum specified columns
 7. **Sorting** — Multi-column sorting with per-column direction control
 8. **Validation** — Enforce data quality (correct dtypes, no nulls, no NaN)
@@ -85,7 +90,9 @@ class UserDataCleaner(CleaningDF):
         }
 
     @classmethod
-    def get_col_converter_map(cls) -> dict[str, Callable[[pl.Series], pl.Series]]:
+    def get_col_converter_map(
+        cls
+    ) -> dict[str, Callable[[pl.Series], pl.Series]]:
         return {
             cls.USER_ID: cls.skip_col_converter,
             cls.EMAIL: lambda s: s.str.to_lowercase(),
@@ -132,7 +139,8 @@ print(cleaned.df)
 
 ### Key Features
 
-- **Kahan Summation** — Compensated rounding for floats to prevent accumulation errors
+- **Kahan Summation**
+    — Compensated rounding for floats to prevent accumulation errors
 - **Automatic Logging** — Built-in method logging via `ABCLoggingMixin`
 - **NaN Handling** — Automatic NaN to null conversion
 - **Type Safety** — Full Polars type enforcement with validation
@@ -181,7 +189,9 @@ from winiutils.src.data.structures.text.string import (
 )
 
 # Truncate long strings
-truncated = value_to_truncated_string({"key": "very long value..."}, max_length=20)
+truncated = value_to_truncated_string(
+    {"key": "very long value..."}, max_length=20
+)
 
 # Generate consistent hash
 hash_value = get_reusable_hash({"user_id": 123, "action": "login"})
@@ -191,4 +201,3 @@ xml = '<root xmlns:ns="http://example.com/ns">...</root>'
 namespaces = find_xml_namespaces(xml)
 # {"ns": "http://example.com/ns"}
 ```
-

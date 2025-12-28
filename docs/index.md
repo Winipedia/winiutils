@@ -8,10 +8,11 @@
 [![MkDocs](https://img.shields.io/badge/MkDocs-Documentation-326CE5?logo=mkdocs&logoColor=white)](https://www.mkdocs.org/)
 <!-- code-quality -->
 [![ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-[![ty](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ty/main/assets/badge/v0.json)](https://github.com/astral-sh/ty)[![mypy](https://img.shields.io/badge/type%20checked-mypy-039dfc.svg)](https://mypy-lang.org/)
+[![ty](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ty/main/assets/badge/v0.json)](https://github.com/astral-sh/ty)
 [![security: bandit](https://img.shields.io/badge/security-bandit-yellow.svg)](https://github.com/PyCQA/bandit)
 [![pytest](https://img.shields.io/badge/tested%20with-pytest-46a2f1.svg?logo=pytest)](https://pytest.org/)
 [![codecov](https://codecov.io/gh/Winipedia/winiutils/branch/main/graph/badge.svg)](https://codecov.io/gh/Winipedia/winiutils)
+[![rumdl](https://img.shields.io/badge/markdown-rumdl-darkgreen)](https://github.com/rvben/rumdl)
 <!-- package-info -->
 [![PyPI](https://img.shields.io/pypi/v/winiutils?logo=pypi&logoColor=white)](https://pypi.org/project/winiutils)
 [![Python](https://img.shields.io/badge/python-3.12|3.13|3.14-blue.svg?logo=python&logoColor=white)](https://www.python.org/)
@@ -28,7 +29,8 @@
 
 ---
 
-Welcome to the winiutils documentation. This library provides production-ready utilities for Python development.
+Welcome to the winiutils documentation.
+This library provides production-ready utilities for Python development.
 
 ---
 
@@ -38,7 +40,8 @@ Welcome to the winiutils documentation. This library provides production-ready u
 
 Tools for data manipulation and cleaning:
 
-- **DataFrame Cleaning Pipeline** — Extensible Polars DataFrame cleaning with an 8-step pipeline
+- **DataFrame Cleaning Pipeline**
+    — Extensible Polars DataFrame cleaning with an 8-step pipeline
 - **Data Structures** — Dictionary utilities and text/string manipulation
 
 ### [Iterating & Concurrency](./iterating.md)
@@ -61,7 +64,8 @@ Object-oriented programming patterns:
 Cryptography and credential management:
 
 - **AES-GCM Encryption** — Authenticated encryption with automatic IV handling
-- **Keyring Integration** — Secure key storage using OS-native credential managers
+- **Keyring Integration**
+    — Secure key storage using OS-native credential managers
 
 ---
 

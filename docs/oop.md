@@ -1,6 +1,7 @@
 # OOP Utilities
 
-The `winiutils.src.oop` package provides metaclasses and mixins for automatic method instrumentation and class composition.
+The `winiutils.src.oop` package provides metaclasses and mixins
+for automatic method instrumentation and class composition.
 
 ---
 
@@ -12,7 +13,8 @@ Automatic method logging with performance tracking, zero boilerplate required.
 
 **Module:** `winiutils.src.oop.mixins.meta`
 
-A metaclass that automatically wraps all non-magic methods with logging functionality.
+A metaclass that automatically wraps
+all non-magic methods with logging functionality.
 
 ```python
 from winiutils.src.oop.mixins.meta import ABCLoggingMeta
@@ -26,7 +28,7 @@ class MyAbstractService(metaclass=ABCLoggingMeta):
 class ConcreteService(MyAbstractService):
     def execute(self) -> None:
         print("Executing...")
-    
+
     def process(self, data: list) -> int:
         return len(data)
 
@@ -34,7 +36,8 @@ class ConcreteService(MyAbstractService):
 service = ConcreteService()
 service.execute()
 # Logs: "ConcreteService - Calling execute with () and {}"
-# Logs: "ConcreteService - execute finished with 0.001 seconds -> returning None"
+# Logs: "ConcreteService 
+# - execute finished with 0.001 seconds -> returning None"
 ```
 
 **Features:**
@@ -76,7 +79,7 @@ result = service.process_data([1, 2, 3])
 
 The metaclass intercepts class creation and wraps methods at definition time:
 
-```
+```text
 Class Definition
        ↓
 ABCLoggingMeta.__new__()
@@ -104,9 +107,10 @@ For each method call:
 
 ## Log Output
 
-```
+```text
 INFO - MyService - Calling process_data with ([1, 2, 3],) and {}
-INFO - MyService - process_data finished with 0.001234 seconds -> returning {'processed': 3}
+INFO - MyService - process_data finished with 0.001234 seconds 
+    -> returning {'processed': 3}
 INFO - MyService - Calling validate with ('test',) and {}
 INFO - MyService - validate finished with 0.000123 seconds -> returning True
 ```
@@ -117,7 +121,8 @@ INFO - MyService - validate finished with 0.000123 seconds -> returning True
 
 ### Rate Limiting
 
-Logging is rate-limited to prevent spam in tight loops. The threshold is 1 second between identical method calls.
+Logging is rate-limited to prevent spam in tight loops.
+The threshold is 1 second between identical method calls.
 
 ### Truncation
 
@@ -150,11 +155,11 @@ class CleaningDF(ABCLoggingMixin):
     def rename_cols(self, df):
         # Automatically logged
         ...
-    
+
     def fill_nulls(self):
         # Automatically logged
         ...
-    
+
     def clean(self):
         # Each step logged with timing
         self.rename_cols()
@@ -164,7 +169,8 @@ class CleaningDF(ABCLoggingMixin):
 ```
 
 Output during cleaning:
-```
+
+```text
 INFO - CleaningDF - Calling rename_cols with (...) and {}
 INFO - CleaningDF - rename_cols finished with 0.002 seconds -> ...
 INFO - CleaningDF - Calling fill_nulls with (...) and {}
@@ -187,16 +193,19 @@ INFO - CleaningDF - fill_nulls finished with 0.001 seconds -> ...
 
 ## Best Practices
 
-1. **Use the mixin for simplicity:** `ABCLoggingMixin` is the easiest way to add logging
+1. **Use the mixin for simplicity:**
+    `ABCLoggingMixin` is the easiest way to add logging
 
-2. **Use metaclass for abstract classes:** When defining abstract base classes with logging
+2. **Use metaclass for abstract classes:**
+    When defining abstract base classes with logging
 
-3. **Combine with other mixins:** `ABCLoggingMixin` works well in multiple inheritance
+3. **Combine with other mixins:**
+    `ABCLoggingMixin` works well in multiple inheritance
 
-4. **Configure logging level:** Set logging level appropriately to control output
+4. **Configure logging level:**
+    Set logging level appropriately to control output
 
 ```python
 import logging
 logging.getLogger("winiutils.src.oop.mixins.meta").setLevel(logging.WARNING)
 ```
-

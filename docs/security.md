@@ -1,6 +1,7 @@
 # Security
 
-The `winiutils.src.security` package provides cryptography utilities and secure credential storage.
+The `winiutils.src.security` package provides cryptography utilities
+and secure credential storage.
 
 ---
 
@@ -178,14 +179,16 @@ assert decrypted == plaintext
 1. **Never hardcode keys** — Always use keyring for key storage
 
 2. **Use AAD for context binding** — Bind encrypted data to its context:
+
    ```python
    aad = f"user:{user_id}:timestamp:{time.time()}".encode()
    ```
 
 3. **Handle decryption errors** — `InvalidTag` indicates tampering:
+
    ```python
    from cryptography.exceptions import InvalidTag
-   
+
    try:
        decrypted = decrypt_with_aes_gcm(aes_gcm, data, aad)
    except InvalidTag:
@@ -195,7 +198,8 @@ assert decrypted == plaintext
 
 4. **Rotate keys periodically** — Delete old keyring entry and re-encrypt data
 
-5. **Limit keyring access** — Ensure only authorized users can access system keyring
+5. **Limit keyring access**
+    — Ensure only authorized users can access system keyring
 
 ---
 
@@ -205,7 +209,7 @@ assert decrypted == plaintext
 
 Service names are automatically modified to prevent key collisions:
 
-```
+```text
 "my_app" + Fernet → "my_app_Fernet"
 "my_app" + AESGCM → "my_app_AESGCM"
 ```
@@ -229,4 +233,3 @@ if running_in_github_actions():
 - API key storage and retrieval
 - Multi-user applications with per-user encryption
 - Compliance with data protection regulations (GDPR, HIPAA)
-

@@ -8,10 +8,11 @@
 [![MkDocs](https://img.shields.io/badge/MkDocs-Documentation-326CE5?logo=mkdocs&logoColor=white)](https://www.mkdocs.org/)
 <!-- code-quality -->
 [![ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-[![ty](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ty/main/assets/badge/v0.json)](https://github.com/astral-sh/ty)[![mypy](https://img.shields.io/badge/type%20checked-mypy-039dfc.svg)](https://mypy-lang.org/)
+[![ty](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ty/main/assets/badge/v0.json)](https://github.com/astral-sh/ty)
 [![security: bandit](https://img.shields.io/badge/security-bandit-yellow.svg)](https://github.com/PyCQA/bandit)
 [![pytest](https://img.shields.io/badge/tested%20with-pytest-46a2f1.svg?logo=pytest)](https://pytest.org/)
 [![codecov](https://codecov.io/gh/Winipedia/winiutils/branch/main/graph/badge.svg)](https://codecov.io/gh/Winipedia/winiutils)
+[![rumdl](https://img.shields.io/badge/markdown-rumdl-darkgreen)](https://github.com/rvben/rumdl)
 <!-- package-info -->
 [![PyPI](https://img.shields.io/pypi/v/winiutils?logo=pypi&logoColor=white)](https://pypi.org/project/winiutils)
 [![Python](https://img.shields.io/badge/python-3.12|3.13|3.14-blue.svg?logo=python&logoColor=white)](https://www.python.org/)
@@ -42,9 +43,13 @@
 
 ## Features
 
-- **DataFrame Cleaning Pipeline** — Extensible Polars DataFrame cleaning with an 8-step pipeline
-- **Concurrent Processing** — Unified multiprocessing and multithreading with automatic resource optimization
-- **OOP Utilities** — Metaclasses and mixins for automatic method logging and instrumentation
+- **DataFrame Cleaning Pipeline**
+    Extensible Polars DataFrame cleaning with an 8-step pipeline
+- **Concurrent Processing**
+    Unified multiprocessing and multithreading
+    with automatic resource optimization
+- **OOP Utilities**
+    Metaclasses and mixins for automatic method logging and instrumentation
 - **Security Tools** — OS keyring integration and AES-GCM encryption utilities
 - **Type Safety** — Full type hints with strict mypy compliance
 - **Production Ready** — Comprehensive test coverage and logging integration
@@ -96,7 +101,9 @@ class UserDataCleaner(CleaningDF):
 
     @classmethod
     def get_col_dtype_map(cls):
-        return {cls.USER_ID: pl.Int64, cls.EMAIL: pl.Utf8, cls.SCORE: pl.Float64}
+        return {
+            cls.USER_ID: pl.Int64, cls.EMAIL: pl.Utf8, cls.SCORE: pl.Float64
+        }
 
     # ... implement other abstract methods
 
@@ -152,7 +159,10 @@ class MyService(ABCLoggingMixin):
 
 ```python
 from winiutils.src.security.keyring import get_or_create_aes_gcm
-from winiutils.src.security.cryptography import encrypt_with_aes_gcm, decrypt_with_aes_gcm
+from winiutils.src.security.cryptography import (
+    encrypt_with_aes_gcm, 
+    decrypt_with_aes_gcm
+)
 
 # Get or create encryption key (stored in OS keyring)
 aes_gcm, key = get_or_create_aes_gcm("my_app", "user@example.com")
@@ -168,7 +178,8 @@ decrypted = decrypt_with_aes_gcm(aes_gcm, encrypted)
 
 Full documentation is available in the [docs](./docs/) folder:
 
-- [**Data Processing**](./docs/data.md) — DataFrame cleaning pipeline and data structures
+- [**Data Processing**](./docs/data.md)
+    DataFrame cleaning pipeline and data structures
 - [**Iterating & Concurrency**](./docs/iterating.md) — Parallel processing utilities
 - [**OOP Utilities**](./docs/oop.md) — Metaclasses and mixins
 - [**Security**](./docs/security.md) — Encryption and keyring integration
@@ -226,7 +237,7 @@ uv run pre-commit run --all-files
 
 ## Project Structure
 
-```
+```text
 winiutils/
 ├── src/                          # Main source code
 │   ├── data/                     # Data processing
@@ -250,7 +261,8 @@ winiutils/
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License.
+See the [LICENSE](LICENSE) file for details.
 
 ---
 

@@ -61,7 +61,6 @@ module-root = ""
 [tool.ruff]
 exclude = [
     ".*",
-    "**/migrations/*.py",
 ]
 
 [tool.ruff.lint]
@@ -114,3 +113,6 @@ skips = [
 
 [tool.ty.terminal]
 error-on-warning = true
+
+[tool.rumdl]
+respect_gitignore = true
