@@ -6,8 +6,6 @@ This module tests the functionality of the concurrent processing utilities.
 import os
 from typing import Any
 
-from pyrig.src.testing.assertions import assert_with_msg
-
 from winiutils.src.iterating.concurrent.concurrent import (
     concurrent_loop,
     find_max_pools,
@@ -32,10 +30,9 @@ def test_get_order_and_func_result() -> None:
     add_func_order_args = (simple_add, 0, 5, 3)
     order, result = get_order_and_func_result(add_func_order_args)
 
-    assert_with_msg(order == 0, f"Expected order 0, got {order}")
-    assert_with_msg(
-        result == expected_add_result,
-        f"Expected result {expected_add_result}, got {result}",
+    assert order == 0, f"Expected order 0, got {order}"
+    assert result == expected_add_result, (
+        f"Expected result {expected_add_result}, got {result}"
     )
 
     # Test with different function and order
@@ -45,13 +42,11 @@ def test_get_order_and_func_result() -> None:
     multiply_func_order_args = (multiply, expected_multiply_order, 2, 3, 4)
     order, result = get_order_and_func_result(multiply_func_order_args)
 
-    assert_with_msg(
-        order == expected_multiply_order,
-        f"Expected order {expected_multiply_order}, got {order}",
+    assert order == expected_multiply_order, (
+        f"Expected order {expected_multiply_order}, got {order}"
     )
-    assert_with_msg(
-        result == expected_multiply_result,
-        f"Expected result {expected_multiply_result}, got {result}",
+    assert result == expected_multiply_result, (
+        f"Expected result {expected_multiply_result}, got {result}"
     )
 
     # Test with string function
@@ -61,11 +56,10 @@ def test_get_order_and_func_result() -> None:
     string_func_order_args = (concat_strings, expected_string_order, "hello", "world")
     order, result = get_order_and_func_result(string_func_order_args)
 
-    assert_with_msg(
-        order == expected_string_order,
-        f"Expected order {expected_string_order}, got {order}",
+    assert order == expected_string_order, (
+        f"Expected order {expected_string_order}, got {order}"
     )
-    assert_with_msg(result == "helloworld", f"Expected 'helloworld', got {result}")
+    assert result == "helloworld", f"Expected 'helloworld', got {result}"
 
     # Test with no additional arguments
     def no_args_func() -> str:
@@ -74,11 +68,10 @@ def test_get_order_and_func_result() -> None:
     no_args_func_order_args = (no_args_func, expected_no_args_order)
     order, result = get_order_and_func_result(no_args_func_order_args)
 
-    assert_with_msg(
-        order == expected_no_args_order,
-        f"Expected order {expected_no_args_order}, got {order}",
+    assert order == expected_no_args_order, (
+        f"Expected order {expected_no_args_order}, got {order}"
     )
-    assert_with_msg(result == "no_args", f"Expected 'no_args', got {result}")
+    assert result == "no_args", f"Expected 'no_args', got {result}"
 
 
 def test_generate_process_args() -> None:
@@ -98,23 +91,20 @@ def test_generate_process_args() -> None:
     )
     results = list(result_generator)
 
-    assert_with_msg(
-        len(results) == expected_count,
-        f"Expected {expected_count} results, got {len(results)}",
+    assert len(results) == expected_count, (
+        f"Expected {expected_count} results, got {len(results)}"
     )
 
     # Check structure: (function, order, *args)
-    assert_with_msg(
-        results[0][0] == test_func,
-        f"Expected function {test_func}, got {results[0][0]}",
+    assert results[0][0] == test_func, (
+        f"Expected function {test_func}, got {results[0][0]}"
     )
-    assert_with_msg(results[0][1] == 0, f"Expected order 0, got {results[0][1]}")
-    assert_with_msg(results[0][2] == 1, f"Expected arg 1, got {results[0][2]}")
+    assert results[0][1] == 0, f"Expected order 0, got {results[0][1]}"
+    assert results[0][2] == 1, f"Expected arg 1, got {results[0][2]}"
 
-    assert_with_msg(results[1][1] == 1, f"Expected order 1, got {results[1][1]}")
-    assert_with_msg(
-        results[1][2] == expected_second_arg,
-        f"Expected arg {expected_second_arg}, got {results[1][2]}",
+    assert results[1][1] == 1, f"Expected order 1, got {results[1][1]}"
+    assert results[1][2] == expected_second_arg, (
+        f"Expected arg {expected_second_arg}, got {results[1][2]}"
     )
 
     # Test with static arguments
@@ -128,16 +118,14 @@ def test_generate_process_args() -> None:
     results = list(result_generator)
 
     # Check that static args are appended
-    assert_with_msg(
-        len(results[0]) == expected_static_elements,
-        f"Expected {expected_static_elements} elements, got {len(results[0])}",
+    assert len(results[0]) == expected_static_elements, (
+        f"Expected {expected_static_elements} elements, got {len(results[0])}"
     )  # func, order, arg, static1, static2
-    assert_with_msg(
-        results[0][3] == expected_static_int,
-        f"Expected static arg {expected_static_int}, got {results[0][3]}",
+    assert results[0][3] == expected_static_int, (
+        f"Expected static arg {expected_static_int}, got {results[0][3]}"
     )
-    assert_with_msg(
-        results[0][4] == "static", f"Expected static arg 'static', got {results[0][4]}"
+    assert results[0][4] == "static", (
+        f"Expected static arg 'static', got {results[0][4]}"
     )
 
     # Test with deepcopy static arguments
@@ -154,21 +142,17 @@ def test_generate_process_args() -> None:
     first_deepcopy_arg = results[0][3]
     second_deepcopy_arg = results[1][3]
 
-    assert_with_msg(
-        first_deepcopy_arg == mutable_list,
-        f"Expected {mutable_list}, got {first_deepcopy_arg}",
+    assert first_deepcopy_arg == mutable_list, (
+        f"Expected {mutable_list}, got {first_deepcopy_arg}"
     )
-    assert_with_msg(
-        second_deepcopy_arg == mutable_list,
-        f"Expected {mutable_list}, got {second_deepcopy_arg}",
+    assert second_deepcopy_arg == mutable_list, (
+        f"Expected {mutable_list}, got {second_deepcopy_arg}"
     )
-    assert_with_msg(
-        first_deepcopy_arg is not mutable_list,
-        "Expected deepcopy to create different object",
+    assert first_deepcopy_arg is not mutable_list, (
+        "Expected deepcopy to create different object"
     )
-    assert_with_msg(
-        first_deepcopy_arg is not second_deepcopy_arg,
-        "Expected different deepcopy objects",
+    assert first_deepcopy_arg is not second_deepcopy_arg, (
+        "Expected different deepcopy objects"
     )
 
     # Test with both static and deepcopy arguments
@@ -184,16 +168,11 @@ def test_generate_process_args() -> None:
     results = list(result_generator)
 
     expected_length = 5  # func, order, arg, static, deepcopy
-    assert_with_msg(
-        len(results[0]) == expected_length,
-        f"Expected {expected_length} elements, got {len(results[0])}",
+    assert len(results[0]) == expected_length, (
+        f"Expected {expected_length} elements, got {len(results[0])}"
     )
-    assert_with_msg(
-        results[0][3] == "static", f"Expected 'static', got {results[0][3]}"
-    )
-    assert_with_msg(
-        results[0][4] == {"key": "value"}, f"Expected dict, got {results[0][4]}"
-    )
+    assert results[0][3] == "static", f"Expected 'static', got {results[0][3]}"
+    assert results[0][4] == {"key": "value"}, f"Expected dict, got {results[0][4]}"
 
 
 def test_get_multiprocess_results_with_tqdm() -> None:
@@ -216,17 +195,14 @@ def test_get_multiprocess_results_with_tqdm() -> None:
 
     # Results should be sorted by order
     expected_results = ["first", "second", "third"]
-    assert_with_msg(
-        len(sorted_results) == expected_count,
-        f"Expected {expected_count} results, got {len(sorted_results)}",
+    assert len(sorted_results) == expected_count, (
+        f"Expected {expected_count} results, got {len(sorted_results)}"
     )
 
     for i, (result, expected) in enumerate(
         zip(sorted_results, expected_results, strict=False)
     ):
-        assert_with_msg(
-            result == expected, f"At index {i}: expected {expected}, got {result}"
-        )
+        assert result == expected, f"At index {i}: expected {expected}, got {result}"
 
     # Test with threading=False (multiprocessing) - using different data types
     int_results = [(1, 100), (0, 50), (2, 150)]
@@ -241,9 +217,8 @@ def test_get_multiprocess_results_with_tqdm() -> None:
     for i, (result_2, expected_2) in enumerate(
         zip(int_sorted_results, expected_int_results, strict=False)
     ):
-        assert_with_msg(
-            result_2 == expected_2,
-            f"At index {i}: expected {expected_2}, got {result_2}",
+        assert result_2 == expected_2, (
+            f"At index {i}: expected {expected_2}, got {result_2}"
         )
 
     # Test with single result
@@ -255,12 +230,8 @@ def test_get_multiprocess_results_with_tqdm() -> None:
         threads=True,
     )
 
-    assert_with_msg(
-        len(sorted_single) == 1, f"Expected 1 result, got {len(sorted_single)}"
-    )
-    assert_with_msg(
-        sorted_single[0] == "only", f"Expected 'only', got {sorted_single[0]}"
-    )
+    assert len(sorted_single) == 1, f"Expected 1 result, got {len(sorted_single)}"
+    assert sorted_single[0] == "only", f"Expected 'only', got {sorted_single[0]}"
 
     # Test with empty results
     empty_results: list[tuple[int, Any]] = []
@@ -268,10 +239,8 @@ def test_get_multiprocess_results_with_tqdm() -> None:
         results=empty_results, process_func=dummy_func, process_args_len=0, threads=True
     )
 
-    assert_with_msg(
-        len(sorted_empty) == 0, f"Expected 0 results, got {len(sorted_empty)}"
-    )
-    assert_with_msg(sorted_empty == [], f"Expected empty list, got {sorted_empty}")
+    assert len(sorted_empty) == 0, f"Expected 0 results, got {len(sorted_empty)}"
+    assert sorted_empty == [], f"Expected empty list, got {sorted_empty}"
 
 
 def test_find_max_pools() -> None:
@@ -280,45 +249,38 @@ def test_find_max_pools() -> None:
     threading_pools = find_max_pools(threads=True)
 
     # Should return at least 1
-    assert_with_msg(
-        threading_pools >= 1, f"Expected at least 1 thread pool, got {threading_pools}"
+    assert threading_pools >= 1, (
+        f"Expected at least 1 thread pool, got {threading_pools}"
     )
 
     # Should be reasonable based on CPU count
     cpu_count = os.cpu_count() or 1
     max_expected_threads = cpu_count * 4
-    assert_with_msg(
-        threading_pools <= max_expected_threads,
-        f"Expected at most {max_expected_threads} thread pools, got {threading_pools}",
+    assert threading_pools <= max_expected_threads, (
+        f"Expected at most {max_expected_threads} thread pools, got {threading_pools}"
     )
 
     # Test multiprocessing mode
     multiprocessing_pools = find_max_pools(threads=False)
 
-    assert_with_msg(
-        multiprocessing_pools >= 1,
-        f"Expected at least 1 process pool, got {multiprocessing_pools}",
+    assert multiprocessing_pools >= 1, (
+        f"Expected at least 1 process pool, got {multiprocessing_pools}"
     )
-    assert_with_msg(
-        multiprocessing_pools <= cpu_count,
-        f"Expected at most {cpu_count} process pools, got {multiprocessing_pools}",
+    assert multiprocessing_pools <= cpu_count, (
+        f"Expected at most {cpu_count} process pools, got {multiprocessing_pools}"
     )
 
     # Test with process_args_len constraint
     small_task_pools = find_max_pools(threads=True, process_args_len=2)
 
     # Should not exceed the number of tasks
-    assert_with_msg(
-        small_task_pools >= 1, f"Expected at least 1 pool, got {small_task_pools}"
-    )
+    assert small_task_pools >= 1, f"Expected at least 1 pool, got {small_task_pools}"
     # Note: The actual constraint depends on available tasks vs process_args_len
 
     # Test with large process_args_len
     large_task_pools = find_max_pools(threads=False, process_args_len=1000)
 
-    assert_with_msg(
-        large_task_pools >= 1, f"Expected at least 1 pool, got {large_task_pools}"
-    )
+    assert large_task_pools >= 1, f"Expected at least 1 pool, got {large_task_pools}"
 
 
 def test_concurrent_loop() -> None:
@@ -335,17 +297,14 @@ def test_concurrent_loop() -> None:
 
     expected_results = [1, 4, 9, 16]
     expected_count = 4
-    assert_with_msg(
-        len(results) == expected_count,
-        f"Expected {expected_count} results, got {len(results)}",
+    assert len(results) == expected_count, (
+        f"Expected {expected_count} results, got {len(results)}"
     )
 
     for i, (result, expected) in enumerate(
         zip(results, expected_results, strict=False)
     ):
-        assert_with_msg(
-            result == expected, f"At index {i}: expected {expected}, got {result}"
-        )
+        assert result == expected, f"At index {i}: expected {expected}, got {result}"
 
     # Test with static arguments
     def add_func(x: int, y: int) -> int:
@@ -364,9 +323,7 @@ def test_concurrent_loop() -> None:
     for i, (result, expected) in enumerate(
         zip(results, expected_results, strict=False)
     ):
-        assert_with_msg(
-            result == expected, f"At index {i}: expected {expected}, got {result}"
-        )
+        assert result == expected, f"At index {i}: expected {expected}, got {result}"
 
     # Test with process_args_len parameter
     def identity_func(x: str) -> str:
@@ -384,9 +341,8 @@ def test_concurrent_loop() -> None:
     for idx, (result_2, expected_2) in enumerate(
         zip(string_results, expected_string_results, strict=False)
     ):
-        assert_with_msg(
-            result_2 == expected_2,
-            f"At index {idx}: expected {expected_2}, got {result_2}",
+        assert result_2 == expected_2, (
+            f"At index {idx}: expected {expected_2}, got {result_2}"
         )
 
     # Test edge case with single item
@@ -396,12 +352,9 @@ def test_concurrent_loop() -> None:
     )
 
     expected_single_result = 1764
-    assert_with_msg(
-        len(single_results) == 1, f"Expected 1 result, got {len(single_results)}"
-    )
-    assert_with_msg(
-        single_results[0] == expected_single_result,
-        f"Expected {expected_single_result}, got {single_results[0]}",
+    assert len(single_results) == 1, f"Expected 1 result, got {len(single_results)}"
+    assert single_results[0] == expected_single_result, (
+        f"Expected {expected_single_result}, got {single_results[0]}"
     )
 
     # Test edge case with empty args
@@ -410,10 +363,8 @@ def test_concurrent_loop() -> None:
         threading=True, process_function=square_func, process_args=empty_process_args
     )
 
-    assert_with_msg(
-        len(empty_results) == 0, f"Expected 0 results, got {len(empty_results)}"
-    )
-    assert_with_msg(empty_results == [], f"Expected empty list, got {empty_results}")
+    assert len(empty_results) == 0, f"Expected 0 results, got {len(empty_results)}"
+    assert empty_results == [], f"Expected empty list, got {empty_results}"
 
 
 # Note: test_get_order_and_func_result_func() is not needed as

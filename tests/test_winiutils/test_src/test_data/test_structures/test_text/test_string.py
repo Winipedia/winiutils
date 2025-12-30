@@ -4,7 +4,6 @@ import hashlib
 from io import StringIO
 
 from pyrig.src.modules.module import make_obj_importpath
-from pyrig.src.testing.assertions import assert_with_msg
 from pytest_mock import MockFixture
 
 from winiutils.src.data.structures.text import string
@@ -39,10 +38,7 @@ def test_ask_for_input_with_timeout(mocker: MockFixture) -> None:
 
     result = ask_for_input_with_timeout("Enter something: ", timeout_seconds)
 
-    assert_with_msg(
-        result == "test input",
-        f"Expected 'test input', got '{result}'",
-    )
+    assert result == "test input", f"Expected 'test input', got '{result}'"
     mock_input.assert_called_once_with("Enter something: ")
 
     # Test with different input
@@ -51,10 +47,7 @@ def test_ask_for_input_with_timeout(mocker: MockFixture) -> None:
     short_timeout = 1
 
     result = ask_for_input_with_timeout("Enter something: ", short_timeout)
-    assert_with_msg(
-        result == "different input",
-        f"Expected 'different input', got '{result}'",
-    )
+    assert result == "different input", f"Expected 'different input', got '{result}'"
 
 
 def test_find_xml_namespaces() -> None:
@@ -75,19 +68,13 @@ def test_find_xml_namespaces() -> None:
         "ns2": "http://example.com/ns2",
     }
 
-    assert_with_msg(
-        result == expected,
-        f"Expected {expected}, got {result}",
-    )
+    assert result == expected, f"Expected {expected}, got {result}"
 
     # Test with StringIO XML
     xml_stringio = StringIO(xml_string)
     result = find_xml_namespaces(xml_stringio)
 
-    assert_with_msg(
-        result == expected,
-        f"Expected {expected}, got {result}",
-    )
+    assert result == expected, f"Expected {expected}, got {result}"
 
     # Test with XML without namespaces
     simple_xml = """<?xml version="1.0"?>
@@ -97,10 +84,7 @@ def test_find_xml_namespaces() -> None:
 
     result = find_xml_namespaces(simple_xml)
 
-    assert_with_msg(
-        result == {},
-        f"Expected empty dict, got {result}",
-    )
+    assert result == {}, f"Expected empty dict, got {result}"
 
     # Test with XML containing only default namespace
     default_ns_xml = """<?xml version="1.0"?>
@@ -110,9 +94,8 @@ def test_find_xml_namespaces() -> None:
 
     result = find_xml_namespaces(default_ns_xml)
 
-    assert_with_msg(
-        result == {},
-        f"Expected empty dict (default namespace excluded), got {result}",
+    assert result == {}, (
+        f"Expected empty dict (default namespace excluded), got {result}"
     )
 
 
@@ -127,57 +110,46 @@ def test_value_to_truncated_string() -> None:
     short_text = "Hello"
     result = value_to_truncated_string(short_text, 10)
 
-    assert_with_msg(
-        result == "Hello",
-        f"Expected 'Hello', got '{result}'",
-    )
+    assert result == "Hello", f"Expected 'Hello', got '{result}'"
 
     # Test with long string that needs truncation
     long_text = "This is a very long string that should be truncated"
     result = value_to_truncated_string(long_text, truncate_length_large)
 
-    assert_with_msg(
-        len(result) <= truncate_length_large,
-        f"Expected result length <= {truncate_length_large}, got {len(result)}",
+    assert len(result) <= truncate_length_large, (
+        f"Expected result length <= {truncate_length_large}, got {len(result)}"
     )
-    assert_with_msg(
-        result.endswith("..."),
-        f"Expected truncated string to end with '...', got '{result}'",
+    assert result.endswith("..."), (
+        f"Expected truncated string to end with '...', got '{result}'"
     )
 
     # Test with non-string object
     test_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     result = value_to_truncated_string(test_list, truncate_length_medium)
 
-    assert_with_msg(
-        len(result) <= truncate_length_medium,
-        f"Expected result length <= {truncate_length_medium}, got {len(result)}",
+    assert len(result) <= truncate_length_medium, (
+        f"Expected result length <= {truncate_length_medium}, got {len(result)}"
     )
 
     # Test with exact length
     exact_text = "Exactly20Characters!"
     result = value_to_truncated_string(exact_text, truncate_length_large)
 
-    assert_with_msg(
-        result == exact_text,
-        f"Expected '{exact_text}', got '{result}'",
-    )
+    assert result == exact_text, f"Expected '{exact_text}', got '{result}'"
 
     # Test with very small max_length
     result = value_to_truncated_string("Hello World", truncate_length_small)
 
-    assert_with_msg(
-        len(result) <= truncate_length_small,
-        f"Expected result length <= {truncate_length_small}, got {len(result)}",
+    assert len(result) <= truncate_length_small, (
+        f"Expected result length <= {truncate_length_small}, got {len(result)}"
     )
 
     # Test with very small max_length (minimum is 4 for textwrap.shorten with "...")
     min_width = 4  # Must be larger than placeholder length
     result = value_to_truncated_string("Hello World", min_width)
 
-    assert_with_msg(
-        len(result) <= min_width,
-        f"Expected result length <= {min_width}, got {len(result)}",
+    assert len(result) <= min_width, (
+        f"Expected result length <= {min_width}, got {len(result)}"
     )
 
 
@@ -191,9 +163,8 @@ def test_get_reusable_hash() -> None:
     result = get_reusable_hash(test_string)
 
     # Verify it's a valid hex string
-    assert_with_msg(
-        len(result) == sha256_hex_length,
-        f"Expected {sha256_hex_length}-character hash, got {len(result)} characters",
+    assert len(result) == sha256_hex_length, (
+        f"Expected {sha256_hex_length}-character hash, got {len(result)} characters"
     )
 
     # Verify it's actually hex
@@ -203,54 +174,41 @@ def test_get_reusable_hash() -> None:
     except ValueError:
         is_valid_hex = False
 
-    assert_with_msg(
-        is_valid_hex,
-        f"Expected valid hex string, got '{result}'",
-    )
+    assert is_valid_hex, f"Expected valid hex string, got '{result}'"
 
     # Test consistency - same input should produce same hash
     result2 = get_reusable_hash(test_string)
-    assert_with_msg(
-        result == result2,
-        f"Expected consistent hash, got {result} and {result2}",
-    )
+    assert result == result2, f"Expected consistent hash, got {result} and {result2}"
 
     # Test with different input produces different hash
     different_result = get_reusable_hash("Different string")
-    assert_with_msg(
-        result != different_result,
-        "Expected different inputs to produce different hashes",
+    assert result != different_result, (
+        "Expected different inputs to produce different hashes"
     )
 
     # Test with non-string objects
     test_list = [1, 2, 3]
     list_hash = get_reusable_hash(test_list)
 
-    assert_with_msg(
-        len(list_hash) == sha256_hex_length,
-        f"Expected {sha256_hex_length}-character hash for list, got {len(list_hash)}",
+    assert len(list_hash) == sha256_hex_length, (
+        f"Expected {sha256_hex_length}-character hash for list, got {len(list_hash)}"
     )
 
     # Test with number
     number_hash = get_reusable_hash(42)
 
-    assert_with_msg(
-        len(number_hash) == sha256_hex_length,
-        f"Expected {sha256_hex_length}-char hash for number, got {len(number_hash)}",
+    assert len(number_hash) == sha256_hex_length, (
+        f"Expected {sha256_hex_length}-char hash for number, got {len(number_hash)}"
     )
 
     # Verify the hash matches manual calculation
     expected_hash = hashlib.sha256(test_string.encode("utf-8")).hexdigest()
-    assert_with_msg(
-        result == expected_hash,
-        f"Expected {expected_hash}, got {result}",
-    )
+    assert result == expected_hash, f"Expected {expected_hash}, got {result}"
 
     # Test with None
     none_hash = get_reusable_hash(None)
     expected_none_hash = hashlib.sha256(b"None").hexdigest()
 
-    assert_with_msg(
-        none_hash == expected_none_hash,
-        f"Expected {expected_none_hash}, got {none_hash}",
+    assert none_hash == expected_none_hash, (
+        f"Expected {expected_none_hash}, got {none_hash}"
     )

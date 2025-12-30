@@ -5,7 +5,6 @@ tests.test_winipedia_utils.test_oop.test_mixins.test_meta
 
 from pyrig.src.modules.function import is_func
 from pyrig.src.modules.module import make_obj_importpath
-from pyrig.src.testing.assertions import assert_with_msg
 from pytest_mock import MockFixture
 
 from winiutils.src.data.structures.text.string import value_to_truncated_string
@@ -27,18 +26,14 @@ class TestABCLoggingMeta:
                 return "test"
 
         # Verify the class was created successfully
-        assert_with_msg(
-            type(TestClass).__name__ == f"{ABCLoggingMeta.__name__}",
-            "Expected TestClass to be created with LoggingMeta",
+        assert type(TestClass).__name__ == f"{ABCLoggingMeta.__name__}", (
+            "Expected TestClass to be created with LoggingMeta"
         )
 
         # Verify that methods are wrapped (they should have different behavior)
         instance = TestClass()
         result = instance.test_method()
-        assert_with_msg(
-            result == "test",
-            f"Expected method to return 'test', got {result}",
-        )
+        assert result == "test", f"Expected method to return 'test', got {result}"
 
     def test___new___skips_non_loggable_methods(self, mocker: MockFixture) -> None:
         """Test that __new__ skips non-loggable methods."""
@@ -54,9 +49,8 @@ class TestABCLoggingMeta:
                 pass
 
         # Verify the class was created successfully
-        assert_with_msg(
-            type(TestClass) is ABCLoggingMeta,
-            "Expected TestClass to be created with LoggingMeta",
+        assert type(TestClass) is ABCLoggingMeta, (
+            "Expected TestClass to be created with LoggingMeta"
         )
 
         # Verify is_loggable_method was called
@@ -78,7 +72,7 @@ class TestABCLoggingMeta:
         mock_is_func.return_value = True
 
         result = ABCLoggingMeta.is_loggable_method(regular_method)
-        assert_with_msg(result is True, "Expected regular method to be loggable")
+        assert result is True, "Expected regular method to be loggable"
 
         # Test case 2: Magic method (should not be loggable)
         def magic_method() -> None:
@@ -88,7 +82,7 @@ class TestABCLoggingMeta:
         mock_is_func.return_value = True
 
         result = ABCLoggingMeta.is_loggable_method(magic_method)
-        assert_with_msg(result is False, "Expected magic method to not be loggable")
+        assert result is False, "Expected magic method to not be loggable"
 
     def test_wrap_with_logging(self, mocker: MockFixture) -> None:
         """Test method for wrap_with_logging."""
@@ -122,23 +116,20 @@ class TestABCLoggingMeta:
         result = wrapped_func(mock_self, "hello", arg2=100)
 
         # Verify the result
-        assert_with_msg(
-            result == "result_hello_100",
-            f"Expected 'result_hello_100', got {result}",
+        assert result == "result_hello_100", (
+            f"Expected 'result_hello_100', got {result}"
         )
 
         # Verify logging was called (should log because it's the first call)
         expected_log_calls = 2  # start and end logging
         actual_log_calls = mock_logger.info.call_count
-        assert_with_msg(
-            actual_log_calls == expected_log_calls,
-            f"Expected {expected_log_calls} log calls, got {actual_log_calls}",
+        assert actual_log_calls == expected_log_calls, (
+            f"Expected {expected_log_calls} log calls, got {actual_log_calls}"
         )
 
         # Verify call time was recorded
-        assert_with_msg(
-            "test_func" in call_times,
-            "Expected call time to be recorded for test_func",
+        assert "test_func" in call_times, (
+            "Expected call time to be recorded for test_func"
         )
 
     def test_wrap_with_logging_rate_limiting(self, mocker: MockFixture) -> None:
@@ -173,7 +164,6 @@ class TestABCLoggingMeta:
         second_call_count = mock_logger.info.call_count
 
         # Verify rate limiting worked
-        assert_with_msg(
-            second_call_count == first_call_count,
-            "Expected no additional logging due to rate limiting",
+        assert second_call_count == first_call_count, (
+            "Expected no additional logging due to rate limiting"
         )

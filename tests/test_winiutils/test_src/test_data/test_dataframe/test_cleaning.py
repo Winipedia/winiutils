@@ -7,7 +7,6 @@ from typing import Any
 import polars as pl
 import pytest
 from polars.exceptions import ColumnNotFoundError
-from pyrig.src.testing.assertions import assert_with_msg
 from pytest_mock import MockerFixture
 
 from winiutils.src.data.dataframe.cleaning import CleaningDF
@@ -126,16 +125,14 @@ class TestCleaningDF:
             len(get_dirty_data()[next(iter(get_dirty_data().keys()))]),
             len(get_dirty_data()),
         )
-        assert_with_msg(
-            c_df.df.shape == expected,
-            f"Expected df shape {expected}, got {c_df.df.shape}",
+        assert c_df.df.shape == expected, (
+            f"Expected df shape {expected}, got {c_df.df.shape}"
         )
         # test init works with empty data
         data: dict[str, list[Any]] = {k: [] for k in get_dirty_data()}
         c_df = MyCleaningDF(data)
-        assert_with_msg(
-            c_df.df.shape == (0, len(MyCleaningDF.get_col_names())),
-            f"Expected df shape (0, 0), got {c_df.df.shape}",
+        assert c_df.df.shape == (0, len(MyCleaningDF.get_col_names())), (
+            f"Expected df shape (0, 0), got {c_df.df.shape}"
         )
 
         # assert raises when data is missing a column
@@ -146,106 +143,86 @@ class TestCleaningDF:
     def test_get_rename_map(self) -> None:
         """Test method for rename_map."""
         rename_map = MyCleaningDF.get_rename_map()
-        assert_with_msg(
-            all(isinstance(c, str) for c in rename_map),
-            "Expected all keys and values to be strings",
+        assert all(isinstance(c, str) for c in rename_map), (
+            "Expected all keys and values to be strings"
         )
 
     def test_get_col_dtype_map(self) -> None:
         """Test method for col_cls_map."""
         col_cls_map = MyCleaningDF.get_col_dtype_map()
         # assert all types are polars types
-        assert_with_msg(
-            all(issubclass(t, pl.DataType) for t in col_cls_map.values()),
-            "Expected all types to be polars types",
+        assert all(issubclass(t, pl.DataType) for t in col_cls_map.values()), (
+            "Expected all types to be polars types"
         )
         # assert all colnames are strings
-        assert_with_msg(
-            all(isinstance(c, str) for c in col_cls_map),
-            "Expected all column names to be strings",
+        assert all(isinstance(c, str) for c in col_cls_map), (
+            "Expected all column names to be strings"
         )
 
     def test_get_drop_null_subsets(self) -> None:
         """Test method for drop_null_subsets."""
         # assert it returns a tuple of tuples with colnames that are in col_names
         drop_null_subsets = MyCleaningDF.get_drop_null_subsets()
-        assert_with_msg(
-            all(
-                c in MyCleaningDF.get_col_dtype_map()
-                for t in drop_null_subsets
-                for c in t
-            ),
-            "Expected all elements in the tuples to be column names",
-        )
-        assert_with_msg(
-            all(isinstance(t, tuple) for t in drop_null_subsets),
-            "Expected drop_null_subsets to return a tuple of tuples",
+        assert all(
+            c in MyCleaningDF.get_col_dtype_map() for t in drop_null_subsets for c in t
+        ), "Expected all elements in the tuples to be column names"
+        assert all(isinstance(t, tuple) for t in drop_null_subsets), (
+            "Expected drop_null_subsets to return a tuple of tuples"
         )
 
     def test_get_fill_null_map(self) -> None:
         """Test method for fill_null_map."""
         fill_null_map = MyCleaningDF.get_fill_null_map()
-        assert_with_msg(
-            all(c in MyCleaningDF.get_col_dtype_map() for c in fill_null_map),
-            "Expected all keys to be column names",
+        assert all(c in MyCleaningDF.get_col_dtype_map() for c in fill_null_map), (
+            "Expected all keys to be column names"
         )
-        assert_with_msg(
-            all(isinstance(v, (int, float, str, bool)) for v in fill_null_map.values()),
-            "Expected all values to be int, float, str or bool",
-        )
+        assert all(
+            isinstance(v, (int, float, str, bool)) for v in fill_null_map.values()
+        ), "Expected all values to be int, float, str or bool"
 
     def test_get_sort_cols(self) -> None:
         """Test method for sort_cols."""
         sort_cols = MyCleaningDF.get_sort_cols()
-        assert_with_msg(
-            all(c in MyCleaningDF.get_col_dtype_map() for c, _ in sort_cols),
-            "Expected all elements in the tuples to be column names",
+        assert all(c in MyCleaningDF.get_col_dtype_map() for c, _ in sort_cols), (
+            "Expected all elements in the tuples to be column names"
         )
 
     def test_get_unique_subsets(self) -> None:
         """Test method for unique_subsets."""
         unique_subsets = MyCleaningDF.get_unique_subsets()
-        assert_with_msg(
-            all(
-                c in MyCleaningDF.get_col_dtype_map() for t in unique_subsets for c in t
-            ),
-            "Expected all elements in the tuples to be column names",
-        )
+        assert all(
+            c in MyCleaningDF.get_col_dtype_map() for t in unique_subsets for c in t
+        ), "Expected all elements in the tuples to be column names"
 
     def test_get_no_null_cols(self) -> None:
         """Test method for not_null_cols."""
         not_null_cols = MyCleaningDF.get_no_null_cols()
-        assert_with_msg(
-            all(c in MyCleaningDF.get_col_dtype_map() for c in not_null_cols),
-            "Expected all elements to be column names",
+        assert all(c in MyCleaningDF.get_col_dtype_map() for c in not_null_cols), (
+            "Expected all elements to be column names"
         )
 
     def test_get_col_converter_map(self) -> None:
         """Test method for col_converter_map."""
         col_converter_map = MyCleaningDF.get_col_converter_map()
-        assert_with_msg(
-            all(c in MyCleaningDF.get_col_dtype_map() for c in col_converter_map),
-            "Expected all keys to be column names",
+        assert all(c in MyCleaningDF.get_col_dtype_map() for c in col_converter_map), (
+            "Expected all keys to be column names"
         )
 
     def test_get_add_on_duplicate_cols(self) -> None:
         """Test method for add_on_duplicate_cols."""
         add_on_duplicate_cols = MyCleaningDF.get_add_on_duplicate_cols()
-        assert_with_msg(
-            all(c in MyCleaningDF.get_col_dtype_map() for c in add_on_duplicate_cols),
-            "Expected all elements to be column names",
-        )
+        assert all(
+            c in MyCleaningDF.get_col_dtype_map() for c in add_on_duplicate_cols
+        ), "Expected all elements to be column names"
 
     def test_get_col_precision_map(self) -> None:
         """Test method for col_precision_map."""
         col_precision_map = MyCleaningDF.get_col_precision_map()
-        assert_with_msg(
-            all(c in MyCleaningDF.get_col_dtype_map() for c in col_precision_map),
-            "Expected all keys to be column names",
+        assert all(c in MyCleaningDF.get_col_dtype_map() for c in col_precision_map), (
+            "Expected all keys to be column names"
         )
-        assert_with_msg(
-            all(isinstance(v, int) for v in col_precision_map.values()),
-            "Expected all values to be integers",
+        assert all(isinstance(v, int) for v in col_precision_map.values()), (
+            "Expected all values to be integers"
         )
 
     def test_clean(self) -> None:
@@ -255,26 +232,23 @@ class TestCleaningDF:
             len(get_dirty_data()[next(iter(get_dirty_data().keys()))]),
             len(get_dirty_data()),
         )
-        assert_with_msg(
-            c_df.df.shape == expected,
-            f"Expected df shape {expected}, got {c_df.df.shape}",
+        assert c_df.df.shape == expected, (
+            f"Expected df shape {expected}, got {c_df.df.shape}"
         )
 
     def test_rename_cols(self) -> None:
         """Test method for rename_cols."""
         c_df = get_cleaning_df()
-        assert_with_msg(
-            all(c in c_df.df.columns for c in MyCleaningDF.get_col_dtype_map()),
-            "Expected all column names to be renamed",
+        assert all(c in c_df.df.columns for c in MyCleaningDF.get_col_dtype_map()), (
+            "Expected all column names to be renamed"
         )
 
     def test_get_col_names(self) -> None:
         """Test method for get_col_names."""
         col_names = MyCleaningDF.get_col_names()
         expected = tuple(MyCleaningDF.get_col_dtype_map().keys())
-        assert_with_msg(
-            col_names == expected,
-            f"Expected col_names to be {expected}, got {col_names}",
+        assert col_names == expected, (
+            f"Expected col_names to be {expected}, got {col_names}"
         )
 
     def test_raise_on_missing_cols(self) -> None:
@@ -294,9 +268,7 @@ class TestCleaningDF:
         dirty_data = get_dirty_data()
         dirty_data["new_col"] = [1, 2, 3]
         c_df = MyCleaningDF(dirty_data)
-        assert_with_msg(
-            "new_col" not in c_df.df.columns, "Expected new_col to be dropped"
-        )
+        assert "new_col" not in c_df.df.columns, "Expected new_col to be dropped"
 
     def test_fill_nulls(self) -> None:
         """Test method for fill_nulls."""
@@ -307,9 +279,8 @@ class TestCleaningDF:
         c_df = MyCleaningDF(dirty_data)
         # assert no nulls in the whole df
         null_counts = c_df.df.null_count()
-        assert_with_msg(
-            null_counts.sum_horizontal().item() == 0,
-            f"Expected no nulls, got {null_counts}",
+        assert null_counts.sum_horizontal().item() == 0, (
+            f"Expected no nulls, got {null_counts}"
         )
 
         # add a null row to the df attr
@@ -320,9 +291,8 @@ class TestCleaningDF:
         # assert all the nulls are filled with the fill value
         for col, fill_value in MyCleaningDF.get_fill_null_map().items():
             last_val = last_row.select(pl.col(col)).item()
-            assert_with_msg(
-                last_val == fill_value,
-                f"Expected {col} to be filled with {fill_value}, got {last_val}",
+            assert last_val == fill_value, (
+                f"Expected {col} to be filled with {fill_value}, got {last_val}"
             )
 
     @pytest.mark.skip(reason="Only calls other methods")
@@ -339,9 +309,8 @@ class TestCleaningDF:
         c_df = MyCleaningDF(dirty_data)
         # assert all vals in the string col are stripped
         str_col = c_df.df.select(pl.col(MyCleaningDF.STR_COL)).to_series()
-        assert_with_msg(
-            all(s == s.strip() for s in str_col),
-            "Expected all vals in the string col to be stripped",
+        assert all(s == s.strip() for s in str_col), (
+            "Expected all vals in the string col to be stripped"
         )
 
     def test_custom_convert_cols(self) -> None:
@@ -351,9 +320,8 @@ class TestCleaningDF:
         before = get_dirty_data()[MyCleaningDF.INT_COL + "_old"]
         after = c_df.df.select(pl.col(MyCleaningDF.INT_COL)).to_series()
         # check overall sum bc of sorting
-        assert_with_msg(
-            after.sum() == sum(before) + len(before),
-            f"Expected sum {sum(before) + len(before)}, got {after.sum()}",
+        assert after.sum() == sum(before) + len(before), (
+            f"Expected sum {sum(before) + len(before)}, got {after.sum()}"
         )
 
         # call standard convert cols and assert the int col is again increased by 1
@@ -361,9 +329,7 @@ class TestCleaningDF:
         before = after.to_list()
         after = c_df.df.select(pl.col(MyCleaningDF.INT_COL)).to_series()
         for a, b in zip(after, before, strict=True):
-            assert_with_msg(
-                a == b + 1, f"Expected {a} to be {b} + 1, got {a} == {b + 1}"
-            )
+            assert a == b + 1, f"Expected {a} to be {b} + 1, got {a} == {b + 1}"
 
     def test_strip_col(self) -> None:
         """Test method for strip_col."""
@@ -372,9 +338,8 @@ class TestCleaningDF:
         # strip the whitespace
         without_whitespace = MyCleaningDF.strip_col(with_whitespace)
         # assert all vals are stripped
-        assert_with_msg(
-            all(s == s.strip() for s in without_whitespace),
-            "Expected all vals to be stripped",
+        assert all(s == s.strip() for s in without_whitespace), (
+            "Expected all vals to be stripped"
         )
 
     def test_lower_col(self) -> None:
@@ -384,8 +349,8 @@ class TestCleaningDF:
         # lower the case
         lowercase = MyCleaningDF.lower_col(with_uppercase)
         # assert all vals are lowercase
-        assert_with_msg(
-            all(s == s.lower() for s in lowercase), "Expected all vals to be lowercase"
+        assert all(s == s.lower() for s in lowercase), (
+            "Expected all vals to be lowercase"
         )
 
     def test_round_col(self) -> None:
@@ -402,16 +367,13 @@ class TestCleaningDF:
         # round the floats
         rounded = MyCleaningDF.round_col(with_floats, precision=None, compensate=True)
         # assert all vals are rounded
-        assert_with_msg(
-            all(s == round(s, 2) for s in rounded), "Expected all vals to be rounded"
-        )
+        assert all(s == round(s, 2) for s in rounded), "Expected all vals to be rounded"
         # assert the diff in sum is smaller
         # than the smallest number possible with precision in get_col_precision_map
         precision = MyCleaningDF.get_col_precision_map()[MyCleaningDF.FLOAT_COL]
         diff = abs(with_floats.sum() - rounded.sum())
-        assert_with_msg(
-            diff < 10**-(precision),
-            f"Expected diff to be < 10**-(precision), got {diff}",
+        assert diff < 10**-(precision), (
+            f"Expected diff to be < 10**-(precision), got {diff}"
         )
 
     def test_skip_col_converter(self) -> None:
@@ -439,14 +401,10 @@ class TestCleaningDF:
             c_df = MyCleaningDF(dirty_data)
             # assert the last rows are dropped and shape is the same as before
         og_dirty_data = get_dirty_data()
-        assert_with_msg(
-            c_df.df.shape
-            == (
-                len(og_dirty_data[next(iter(og_dirty_data))]),
-                len(MyCleaningDF.get_col_names()),
-            ),
-            "Expected last rows to be dropped",
-        )
+        assert c_df.df.shape == (
+            len(og_dirty_data[next(iter(og_dirty_data))]),
+            len(MyCleaningDF.get_col_names()),
+        ), "Expected last rows to be dropped"
 
     def test_handle_duplicates(self, mocker: MockerFixture) -> None:
         """Test method for handle_duplicates."""
@@ -462,14 +420,10 @@ class TestCleaningDF:
         c_df.handle_duplicates()
         # assert the last row is dropped and the values are added together
         # assert df shape is the same as before
-        assert_with_msg(
-            c_df.df.shape
-            == (
-                len(get_dirty_data()[next(iter(get_dirty_data()))]),
-                len(MyCleaningDF.get_col_names()),
-            ),
-            "Expected df shape to be the same as before",
-        )
+        assert c_df.df.shape == (
+            len(get_dirty_data()[next(iter(get_dirty_data()))]),
+            len(MyCleaningDF.get_col_names()),
+        ), "Expected df shape to be the same as before"
 
         # order is not maintained
         # get last_row_after via string col of last row
@@ -478,11 +432,10 @@ class TestCleaningDF:
             == last_row.select(pl.col(MyCleaningDF.STR_COL)).item()
         )
         for col in MyCleaningDF.get_add_on_duplicate_cols():
-            assert_with_msg(
+            assert (
                 last_row_after.select(pl.col(col)).item()
-                == last_row.select(pl.col(col)).item() * 2,
-                f"Expected {col} to be added together",
-            )
+                == last_row.select(pl.col(col)).item() * 2
+            ), f"Expected {col} to be added together"
 
     def test_sort_cols(self, mocker: MockerFixture) -> None:
         """Test method for sort_cols."""
@@ -501,10 +454,7 @@ class TestCleaningDF:
         c_df.sort_cols()
         # assert the first row after sort is the new row
         first_row_after = c_df.df.head(1)
-        assert_with_msg(
-            first_row_after.equals(new_row),
-            "Expected first row to be the new row",
-        )
+        assert first_row_after.equals(new_row), "Expected first row to be the new row"
 
     @pytest.mark.skip(reason="Only calls other methods")
     def test_check(self) -> None:

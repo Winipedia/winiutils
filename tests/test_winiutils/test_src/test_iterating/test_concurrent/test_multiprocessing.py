@@ -4,7 +4,7 @@ import multiprocessing
 import time
 from typing import Any
 
-from pyrig.src.testing.assertions import assert_with_msg
+import pytest
 
 from winiutils.src.iterating.concurrent.multiprocessing import (
     cancel_on_timeout,
@@ -66,7 +66,7 @@ def test_get_spwan_pool() -> None:
     with get_spwan_pool(processes=1) as pool:
         ctx = getattr(pool, "_ctx", None)
         method = getattr(ctx, "get_start_method", lambda: None)()
-        assert_with_msg(method == "spawn", "Expected spawn context")
+        assert method == "spawn", "Expected spawn context"
 
 
 def test_cancel_on_timeout() -> None:
@@ -79,38 +79,30 @@ def test_cancel_on_timeout() -> None:
         quick_function
     )
     result = wrapped_func(5, y=15)
-    assert_with_msg(result == expected_sum, f"Expected {expected_sum}, got {result}")
+    assert result == expected_sum, f"Expected {expected_sum}, got {result}"
 
     # Test timeout behavior
     wrapped_slow_func = cancel_on_timeout(seconds=0.5, message="Slow function timeout")(
         slow_function
     )
 
-    try:
+    with pytest.raises(multiprocessing.TimeoutError):
         wrapped_slow_func()
-        assert_with_msg(expr=False, msg="Expected TimeoutError to be raised")
-    except multiprocessing.TimeoutError:
-        pass  # Expected behavior
 
     # Test with different argument types
     wrapped_args_func = cancel_on_timeout(seconds=1.0, message="Args test timeout")(
         function_with_args
     )
     result = wrapped_args_func("test", 5, multiplier=2.0)
-    assert_with_msg(
-        result == expected_result, f"Expected '{expected_result}', got {result}"
-    )
+    assert result == expected_result, f"Expected '{expected_result}', got {result}"
 
     # Test edge case with zero timeout (should timeout immediately)
     wrapped_instant = cancel_on_timeout(seconds=0.0, message="Zero timeout")(
         instant_function
     )
 
-    try:
+    with pytest.raises(multiprocessing.TimeoutError):
         wrapped_instant()
-        assert_with_msg(expr=False, msg="Expected TimeoutError with zero timeout")
-    except multiprocessing.TimeoutError:
-        pass  # Expected behavior
 
 
 def test_multiprocess_loop() -> None:
@@ -121,18 +113,15 @@ def test_multiprocess_loop() -> None:
         process_function=square_function, process_args=process_args
     )
     expected_results = [1, 4, 9, 16, 25]
-    assert_with_msg(
-        len(results) == len(expected_results),
-        f"Expected {len(expected_results)} results, got {len(results)}",
+    assert len(results) == len(expected_results), (
+        f"Expected {len(expected_results)} results, got {len(results)}"
     )
 
     # Results should be in original order
     for i, (result, expected) in enumerate(
         zip(results, expected_results, strict=False)
     ):
-        assert_with_msg(
-            result == expected, f"At index {i}: expected {expected}, got {result}"
-        )
+        assert result == expected, f"At index {i}: expected {expected}, got {result}"
 
     # Test with static arguments
     process_args = [[1], [2], [3]]
@@ -143,17 +132,14 @@ def test_multiprocess_loop() -> None:
         process_args_static=static_args,
     )
     expected_results = [11, 12, 13]
-    assert_with_msg(
-        len(results) == len(expected_results),
-        f"Expected {len(expected_results)} results, got {len(results)}",
+    assert len(results) == len(expected_results), (
+        f"Expected {len(expected_results)} results, got {len(results)}"
     )
 
     for i, (result, expected) in enumerate(
         zip(results, expected_results, strict=False)
     ):
-        assert_with_msg(
-            result == expected, f"At index {i}: expected {expected}, got {result}"
-        )
+        assert result == expected, f"At index {i}: expected {expected}, got {result}"
 
     # Test with multiple arguments per function call
     process_args = [[1, 2, 3], [2, 3, 4], [3, 4, 5]]
@@ -161,28 +147,24 @@ def test_multiprocess_loop() -> None:
         process_function=multiply_function, process_args=process_args
     )
     expected_results = [6, 24, 60]  # 1*2*3, 2*3*4, 3*4*5
-    assert_with_msg(
-        len(results) == len(expected_results),
-        f"Expected {len(expected_results)} results, got {len(results)}",
+    assert len(results) == len(expected_results), (
+        f"Expected {len(expected_results)} results, got {len(results)}"
     )
 
     for i, (result, expected) in enumerate(
         zip(results, expected_results, strict=False)
     ):
-        assert_with_msg(
-            result == expected, f"At index {i}: expected {expected}, got {result}"
-        )
+        assert result == expected, f"At index {i}: expected {expected}, got {result}"
 
     # Test edge case with single item
     single_process_args = [[42]]
     results = multiprocess_loop(
         process_function=square_function, process_args=single_process_args
     )
-    assert_with_msg(len(results) == 1, f"Expected 1 result, got {len(results)}")
+    assert len(results) == 1, f"Expected 1 result, got {len(results)}"
     expected_square_of_42 = 1764
-    assert_with_msg(
-        results[0] == expected_square_of_42,
-        f"Expected {expected_square_of_42} (42^2), got {results[0]}",
+    assert results[0] == expected_square_of_42, (
+        f"Expected {expected_square_of_42} (42^2), got {results[0]}"
     )
 
     # Test edge case with empty args (should return empty list)
@@ -190,7 +172,7 @@ def test_multiprocess_loop() -> None:
     results = multiprocess_loop(
         process_function=square_function, process_args=empty_process_args
     )
-    assert_with_msg(results == [], f"Expected empty list, got {results}")
+    assert results == [], f"Expected empty list, got {results}"
 
 
 def test_multiprocess_loop_with_deepcopy_args() -> None:
@@ -206,17 +188,14 @@ def test_multiprocess_loop_with_deepcopy_args() -> None:
         deepcopy_static_args=deepcopy_args,
     )
     expected_results: list[list[str]] = [["a"], ["b"], ["c"]]
-    assert_with_msg(
-        len(results) == len(expected_results),
-        f"Expected {len(expected_results)} results, got {len(results)}",
+    assert len(results) == len(expected_results), (
+        f"Expected {len(expected_results)} results, got {len(results)}"
     )
 
     for i, (result, expected) in enumerate(
         zip(results, expected_results, strict=False)
     ):
-        assert_with_msg(
-            result == expected, f"At index {i}: expected {expected}, got {result}"
-        )
+        assert result == expected, f"At index {i}: expected {expected}, got {result}"
 
 
 def test_multiprocess_loop_with_process_args_len() -> None:
@@ -227,14 +206,11 @@ def test_multiprocess_loop_with_process_args_len() -> None:
         process_function=simple_identity, process_args=process_args, process_args_len=2
     )
     expected_results: list[str] = ["test1", "test2"]
-    assert_with_msg(
-        len(results) == len(expected_results),
-        f"Expected {len(expected_results)} results, got {len(results)}",
+    assert len(results) == len(expected_results), (
+        f"Expected {len(expected_results)} results, got {len(results)}"
     )
 
     for i, (result, expected) in enumerate(
         zip(results, expected_results, strict=False)
     ):
-        assert_with_msg(
-            result == expected, f"At index {i}: expected {expected}, got {result}"
-        )
+        assert result == expected, f"At index {i}: expected {expected}, got {result}"
