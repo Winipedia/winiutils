@@ -7,7 +7,7 @@ from pyrig.src.modules.function import is_func
 from pyrig.src.modules.module import make_obj_importpath
 from pytest_mock import MockFixture
 
-from winiutils.src.data.structures.text.string import value_to_truncated_string
+from winiutils.src.data.structures.text.string_ import value_to_truncated_string
 from winiutils.src.oop.mixins import meta
 from winiutils.src.oop.mixins.meta import (
     ABCLoggingMeta,

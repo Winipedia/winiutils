@@ -172,7 +172,7 @@ reversed_dict = reverse_dict(original)
 
 ### Text/String Utilities
 
-**Module:** `winiutils.src.data.structures.text.string`
+**Module:** `winiutils.src.data.structures.text.string_`
 
 | Function | Description |
 |----------|-------------|
@@ -182,7 +182,7 @@ reversed_dict = reverse_dict(original)
 | `get_reusable_hash(value)` | Generate consistent SHA-256 hash for any object |
 
 ```python
-from winiutils.src.data.structures.text.string import (
+from winiutils.src.data.structures.text.string_ import (
     value_to_truncated_string,
     get_reusable_hash,
     find_xml_namespaces,
