@@ -18,8 +18,8 @@
 [![Python](https://img.shields.io/badge/python-3.12|3.13|3.14-blue.svg?logo=python&logoColor=white)](https://www.python.org/)
 [![License](https://img.shields.io/github/license/Winipedia/winiutils)](https://github.com/Winipedia/winiutils/blob/main/LICENSE)
 <!-- ci/cd -->
-[![CI](https://img.shields.io/github/actions/workflow/status/Winipedia/winiutils/health_check.yaml?label=CI&logo=github)](https://github.com/Winipedia/winiutils/actions/workflows/health_check.yaml)
-[![CD](https://img.shields.io/github/actions/workflow/status/Winipedia/winiutils/release.yaml?label=CD&logo=github)](https://github.com/Winipedia/winiutils/actions/workflows/release.yaml)
+[![CI](https://img.shields.io/github/actions/workflow/status/Winipedia/winiutils/health_check.yml?label=CI&logo=github)](https://github.com/Winipedia/winiutils/actions/workflows/health_check.yml)
+[![CD](https://img.shields.io/github/actions/workflow/status/Winipedia/winiutils/release.yml?label=CD&logo=github)](https://github.com/Winipedia/winiutils/actions/workflows/release.yml)
 <!-- documentation -->
 [![Documentation](https://img.shields.io/badge/Docs-GitHub%20Pages-black?style=for-the-badge&logo=github&logoColor=white)](https://Winipedia.github.io/winiutils)
 
