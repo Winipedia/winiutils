@@ -52,9 +52,7 @@ def get_or_create_fernet(service_name: str, username: str) -> tuple[Fernet, byte
         >>> fernet.decrypt(encrypted)
         b'hello'
     """
-    return get_or_create_key(
-        service_name, username, Fernet, lambda: Fernet.generate_key()
-    )
+    return get_or_create_key(service_name, username, Fernet, Fernet.generate_key)
 
 
 def get_or_create_aes_gcm(service_name: str, username: str) -> tuple[AESGCM, bytes]:
