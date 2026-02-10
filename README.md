@@ -252,7 +252,7 @@ winiutils/
 │   └── security/                 # Security utilities
 │       ├── cryptography.py       # AES-GCM encryption
 │       └── keyring.py            # OS keyring integration
-├── dev/                          # Development tools
+├── rig/                          # Development tools
 │   ├── cli/                      # CLI subcommands
 │   └── tests/fixtures/           # Test fixtures
 ├── docs/                         # Documentation

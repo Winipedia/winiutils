@@ -4,9 +4,6 @@ version = "2.3.61"
 description = "A utility library for Python development"
 license = "MIT"
 requires-python = ">=3.12"
-authors = [
-    {name = "Winipedia"},
-]
 readme = "README.md"
 dependencies = [
     "cryptography",
@@ -27,14 +24,15 @@ classifiers = [
 license-files = [
     "LICENSE",
 ]
-maintainers = [
-    {name = "Winipedia"},
-]
 keywords = []
 
+[[project.authors]]
+name = "Winipedia"
+
+[[project.maintainers]]
+name = "Winipedia"
 [project.scripts]
-winipedia-utils = "pyrig.dev.cli.cli:main"
-winiutils = "pyrig.dev.cli.cli:main"
+winiutils = "pyrig.rig.cli.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/Winipedia/winiutils"
