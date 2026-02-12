@@ -1,29 +1,32 @@
 # winiutils
 
-<!-- rumdl-disable MD013 -->
+<!-- security -->
+[![bandit](https://img.shields.io/badge/security-bandit-yellow.svg)](https://github.com/PyCQA/bandit)
+[![pip-audit](https://img.shields.io/badge/security-pip--audit-blue?logo=python)](https://github.com/pypa/pip-audit)
 <!-- tooling -->
+[![git](https://img.shields.io/badge/Git-F05032?logo=git&logoColor=white)](https://git-scm.com)
+[![github](https://img.shields.io/github/stars/Winipedia/winiutils?style=social)](https://github.com/Winipedia/winiutils)
+[![podman](https://img.shields.io/badge/Container-Podman-A23CD6?logo=podman&logoColor=grey&colorA=0D1F3F&colorB=A23CD6)](https://podman.io)
 [![pyrig](https://img.shields.io/badge/built%20with-pyrig-3776AB?logo=buildkite&logoColor=black)](https://github.com/Winipedia/pyrig)
 [![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
-[![Container](https://img.shields.io/badge/Container-Podman-A23CD6?logo=podman&logoColor=grey&colorA=0D1F3F&colorB=A23CD6)](https://podman.io/)
-[![prek](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/j178/prek/master/docs/assets/badge-v0.json)](https://github.com/j178/prek)
-[![MkDocs](https://img.shields.io/badge/MkDocs-Documentation-326CE5?logo=mkdocs&logoColor=white)](https://www.mkdocs.org/)
+<!-- documentation -->
+[![mkdocs](https://img.shields.io/badge/MkDocs-Documentation-326CE5?logo=mkdocs&logoColor=white)](https://www.mkdocs.org)
+[![Documentation](https://img.shields.io/badge/Docs-GitHub%20Pages-black?style=for-the-badge&logo=github&logoColor=white)](https://Winipedia.github.io/winiutils)
 <!-- code-quality -->
+[![prek](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/j178/prek/master/docs/assets/badge-v0.json)](https://github.com/j178/prek)
 [![ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-[![ty](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ty/main/assets/badge/v0.json)](https://github.com/astral-sh/ty)
-[![security: bandit](https://img.shields.io/badge/security-bandit-yellow.svg)](https://github.com/PyCQA/bandit)
-[![pytest](https://img.shields.io/badge/tested%20with-pytest-46a2f1.svg?logo=pytest)](https://pytest.org/)
-[![codecov](https://codecov.io/gh/Winipedia/winiutils/branch/main/graph/badge.svg)](https://codecov.io/gh/Winipedia/winiutils)
 [![rumdl](https://img.shields.io/badge/markdown-rumdl-darkgreen)](https://github.com/rvben/rumdl)
-<!-- package-info -->
-[![PyPI](https://img.shields.io/pypi/v/winiutils?logo=pypi&logoColor=white)](https://pypi.org/project/winiutils)
-[![Python](https://img.shields.io/badge/python-3.12|3.13|3.14-blue.svg?logo=python&logoColor=white)](https://www.python.org/)
+[![ty](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ty/main/assets/badge/v0.json)](https://github.com/astral-sh/ty)
+<!-- project-info -->
+[![pypi](https://img.shields.io/pypi/v/winiutils?logo=pypi&logoColor=white)](https://pypi.org/project/winiutils)
+[![python](https://img.shields.io/badge/python-3.12|3.13|3.14-blue.svg?logo=python&logoColor=white)](https://www.python.org)
 [![License](https://img.shields.io/github/license/Winipedia/winiutils)](https://github.com/Winipedia/winiutils/blob/main/LICENSE)
+<!-- testing -->
+[![pytest](https://img.shields.io/badge/tested%20with-pytest-46a2f1.svg?logo=pytest)](https://pytest.org)
+[![pytest-cov](https://codecov.io/gh/Winipedia/winiutils/branch/main/graph/badge.svg)](https://codecov.io/gh/Winipedia/winiutils)
 <!-- ci/cd -->
 [![CI](https://img.shields.io/github/actions/workflow/status/Winipedia/winiutils/health_check.yml?label=CI&logo=github)](https://github.com/Winipedia/winiutils/actions/workflows/health_check.yml)
 [![CD](https://img.shields.io/github/actions/workflow/status/Winipedia/winiutils/release.yml?label=CD&logo=github)](https://github.com/Winipedia/winiutils/actions/workflows/release.yml)
-<!-- documentation -->
-[![Documentation](https://img.shields.io/badge/Docs-GitHub%20Pages-black?style=for-the-badge&logo=github&logoColor=white)](https://Winipedia.github.io/winiutils)
-<!-- rumdl-enable MD013 -->
 
 ---
 
@@ -31,249 +34,22 @@
 
 ---
 
-## Table of Contents
-
-- [Features](#features)
-- [Installation](#installation)
-- [Quick Start](#quick-start)
-- [Documentation](#documentation)
-- [Modules](#modules)
-- [Development](#development)
-- [License](#license)
-
----
-
-## Features
-
-- **DataFrame Cleaning Pipeline**
-    Extensible Polars DataFrame cleaning with an 8-step pipeline
-- **Concurrent Processing**
-    Unified multiprocessing and multithreading
-    with automatic resource optimization
-- **OOP Utilities**
-    Metaclasses and mixins for automatic method logging and instrumentation
-- **Security Tools** — OS keyring integration and AES-GCM encryption utilities
-- **Type Safety** — Full type hints with strict mypy compliance
-- **Production Ready** — Comprehensive test coverage and logging integration
-
----
-
 ## Installation
-
-### Using uv (recommended)
-
-```bash
-uv add winiutils
-```
-
-### Using pip
 
 ```bash
 pip install winiutils
 ```
 
-### From source
+## Features
 
-```bash
-git clone https://github.com/Winipedia/winiutils.git
-cd winiutils
-uv sync
-```
-
----
-
-## Quick Start
-
-### DataFrame Cleaning
-
-```python
-from winiutils.src.data.dataframe.cleaning import CleaningDF
-import polars as pl
-
-class UserDataCleaner(CleaningDF):
-    """Clean and standardize user data."""
-
-    USER_ID = "user_id"
-    EMAIL = "email"
-    SCORE = "score"
-
-    @classmethod
-    def get_rename_map(cls):
-        return {cls.USER_ID: "UserId", cls.EMAIL: "Email", cls.SCORE: "Score"}
-
-    @classmethod
-    def get_col_dtype_map(cls):
-        return {
-            cls.USER_ID: pl.Int64, cls.EMAIL: pl.Utf8, cls.SCORE: pl.Float64
-        }
-
-    # ... implement other abstract methods
-
-# Usage
-cleaned = UserDataCleaner(raw_dataframe)
-result = cleaned.df
-```
-
-### Concurrent Processing
-
-```python
-from winiutils.src.iterating.concurrent.multiprocessing import multiprocess_loop
-from winiutils.src.iterating.concurrent.multithreading import multithread_loop
-
-# CPU-bound tasks (multiprocessing)
-def process_chunk(data, config):
-    return heavy_computation(data, config)
-
-results = multiprocess_loop(
-    process_function=process_chunk,
-    process_args=[(chunk,) for chunk in data_chunks],
-    process_args_static=(config,),
-    process_args_len=len(data_chunks),
-)
-
-# I/O-bound tasks (multithreading)
-def fetch_url(url, headers):
-    return requests.get(url, headers=headers)
-
-results = multithread_loop(
-    process_function=fetch_url,
-    process_args=[(url,) for url in urls],
-    process_args_static=(headers,),
-    process_args_len=len(urls),
-)
-```
-
-### Automatic Method Logging
-
-```python
-from winiutils.src.oop.mixins.mixin import ABCLoggingMixin
-
-class MyService(ABCLoggingMixin):
-    def process_data(self, data: list) -> dict:
-        # Automatically logged with timing
-        return {"processed": len(data)}
-
-# Logs: "MyService - Calling process_data with (...) and {...}"
-# Logs: "MyService - process_data finished with 0.5 seconds -> returning {...}"
-```
-
-### Encryption with Keyring
-
-```python
-from winiutils.src.security.keyring import get_or_create_aes_gcm
-from winiutils.src.security.cryptography import (
-    encrypt_with_aes_gcm, 
-    decrypt_with_aes_gcm
-)
-
-# Get or create encryption key (stored in OS keyring)
-aes_gcm, key = get_or_create_aes_gcm("my_app", "user@example.com")
-
-# Encrypt and decrypt
-encrypted = encrypt_with_aes_gcm(aes_gcm, b"Secret message")
-decrypted = decrypt_with_aes_gcm(aes_gcm, encrypted)
-```
-
----
+- **Data Processing**: DataFrame cleaning pipelines and data structure utilities
+- **Concurrency**: Unified framework for multiprocessing and multithreading
+- **OOP Tools**: Metaclasses and mixins for automatic method instrumentation
+- **Security**: AES-GCM encryption and secure credential management
+- **Type-Safe**: Full type hints throughout the library
 
 ## Documentation
 
-Full documentation is available in the [docs](./docs/) folder:
+Full documentation is available at [https://Winipedia.github.io/winiutils](https://Winipedia.github.io/winiutils)
 
-- [**Data Processing**](./docs/data.md)
-    DataFrame cleaning pipeline and data structures
-- [**Iterating & Concurrency**](./docs/iterating.md) — Parallel processing utilities <!-- rumdl-disable-line MD013 -->
-- [**OOP Utilities**](./docs/oop.md) — Metaclasses and mixins
-- [**Security**](./docs/security.md) — Encryption and keyring integration
-
----
-
-## Modules
-
-| Module | Description |
-|--------|-------------|
-| [`winiutils.src.data`](./docs/data.md) | DataFrame cleaning pipeline and data structure utilities |
-| [`winiutils.src.iterating`](./docs/iterating.md) | Concurrent processing with multiprocessing and multithreading |
-| [`winiutils.src.oop`](./docs/oop.md) | Metaclasses and mixins for automatic method logging |
-| [`winiutils.src.security`](./docs/security.md) | AES-GCM encryption and OS keyring integration |
-
----
-
-## Development
-
-### Setup
-
-```bash
-git clone https://github.com/Winipedia/winiutils.git
-cd winiutils
-uv sync --all-groups
-```
-
-### Running Tests
-
-```bash
-uv run pytest
-```
-
-### Code Quality
-
-```bash
-# Linting
-uv run ruff check .
-
-# Type checking
-uv run mypy .
-
-# Security scanning
-uv run bandit -r winiutils/
-```
-
-### Pre-commit Hooks
-
-```bash
-uv run pre-commit install
-uv run pre-commit run --all-files
-```
-
----
-
-## Project Structure
-
-```text
-winiutils/
-├── src/                          # Main source code
-│   ├── data/                     # Data processing
-│   │   ├── dataframe/            # Polars DataFrame cleaning
-│   │   └── structures/           # Dicts, text utilities
-│   ├── iterating/                # Iteration utilities
-│   │   └── concurrent/           # Multiprocessing & multithreading
-│   ├── oop/                      # OOP patterns
-│   │   └── mixins/               # Logging metaclass & mixin
-│   └── security/                 # Security utilities
-│       ├── cryptography.py       # AES-GCM encryption
-│       └── keyring.py            # OS keyring integration
-├── rig/                          # Development tools
-│   ├── cli/                      # CLI subcommands
-│   └── tests/fixtures/           # Test fixtures
-├── docs/                         # Documentation
-└── tests/                        # Test suite
-```
-
----
-
-## License
-
-This project is licensed under the MIT License.
-See the [LICENSE](LICENSE) file for details.
-
----
-
-## Contributing
-
-Contributions are welcome! Please ensure:
-
-1. All tests pass (`uv run pytest`)
-2. Code passes linting (`uv run ruff check .`)
-3. Types are correct (`uv run mypy .`)
-4. New features include tests
-5. Documentation is updated for API changes
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development guidelines.

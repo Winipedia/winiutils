@@ -1,29 +1,32 @@
 # winiutils Documentation
 
-<!-- rumdl-disable MD013 -->
+<!-- security -->
+[![bandit](https://img.shields.io/badge/security-bandit-yellow.svg)](https://github.com/PyCQA/bandit)
+[![pip-audit](https://img.shields.io/badge/security-pip--audit-blue?logo=python)](https://github.com/pypa/pip-audit)
 <!-- tooling -->
+[![git](https://img.shields.io/badge/Git-F05032?logo=git&logoColor=white)](https://git-scm.com)
+[![github](https://img.shields.io/github/stars/Winipedia/winiutils?style=social)](https://github.com/Winipedia/winiutils)
+[![podman](https://img.shields.io/badge/Container-Podman-A23CD6?logo=podman&logoColor=grey&colorA=0D1F3F&colorB=A23CD6)](https://podman.io)
 [![pyrig](https://img.shields.io/badge/built%20with-pyrig-3776AB?logo=buildkite&logoColor=black)](https://github.com/Winipedia/pyrig)
 [![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
-[![Container](https://img.shields.io/badge/Container-Podman-A23CD6?logo=podman&logoColor=grey&colorA=0D1F3F&colorB=A23CD6)](https://podman.io/)
-[![prek](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/j178/prek/master/docs/assets/badge-v0.json)](https://github.com/j178/prek)
-[![MkDocs](https://img.shields.io/badge/MkDocs-Documentation-326CE5?logo=mkdocs&logoColor=white)](https://www.mkdocs.org/)
+<!-- documentation -->
+[![mkdocs](https://img.shields.io/badge/MkDocs-Documentation-326CE5?logo=mkdocs&logoColor=white)](https://www.mkdocs.org)
+[![Documentation](https://img.shields.io/badge/Docs-GitHub%20Pages-black?style=for-the-badge&logo=github&logoColor=white)](https://Winipedia.github.io/winiutils)
 <!-- code-quality -->
+[![prek](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/j178/prek/master/docs/assets/badge-v0.json)](https://github.com/j178/prek)
 [![ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-[![ty](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ty/main/assets/badge/v0.json)](https://github.com/astral-sh/ty)
-[![security: bandit](https://img.shields.io/badge/security-bandit-yellow.svg)](https://github.com/PyCQA/bandit)
-[![pytest](https://img.shields.io/badge/tested%20with-pytest-46a2f1.svg?logo=pytest)](https://pytest.org/)
-[![codecov](https://codecov.io/gh/Winipedia/winiutils/branch/main/graph/badge.svg)](https://codecov.io/gh/Winipedia/winiutils)
 [![rumdl](https://img.shields.io/badge/markdown-rumdl-darkgreen)](https://github.com/rvben/rumdl)
-<!-- package-info -->
-[![PyPI](https://img.shields.io/pypi/v/winiutils?logo=pypi&logoColor=white)](https://pypi.org/project/winiutils)
-[![Python](https://img.shields.io/badge/python-3.12|3.13|3.14-blue.svg?logo=python&logoColor=white)](https://www.python.org/)
+[![ty](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ty/main/assets/badge/v0.json)](https://github.com/astral-sh/ty)
+<!-- project-info -->
+[![pypi](https://img.shields.io/pypi/v/winiutils?logo=pypi&logoColor=white)](https://pypi.org/project/winiutils)
+[![python](https://img.shields.io/badge/python-3.12|3.13|3.14-blue.svg?logo=python&logoColor=white)](https://www.python.org)
 [![License](https://img.shields.io/github/license/Winipedia/winiutils)](https://github.com/Winipedia/winiutils/blob/main/LICENSE)
+<!-- testing -->
+[![pytest](https://img.shields.io/badge/tested%20with-pytest-46a2f1.svg?logo=pytest)](https://pytest.org)
+[![pytest-cov](https://codecov.io/gh/Winipedia/winiutils/branch/main/graph/badge.svg)](https://codecov.io/gh/Winipedia/winiutils)
 <!-- ci/cd -->
 [![CI](https://img.shields.io/github/actions/workflow/status/Winipedia/winiutils/health_check.yml?label=CI&logo=github)](https://github.com/Winipedia/winiutils/actions/workflows/health_check.yml)
 [![CD](https://img.shields.io/github/actions/workflow/status/Winipedia/winiutils/release.yml?label=CD&logo=github)](https://github.com/Winipedia/winiutils/actions/workflows/release.yml)
-<!-- documentation -->
-[![Documentation](https://img.shields.io/badge/Docs-GitHub%20Pages-black?style=for-the-badge&logo=github&logoColor=white)](https://Winipedia.github.io/winiutils)
-<!-- rumdl-enable MD013 -->
 
 ---
 
@@ -31,67 +34,18 @@
 
 ---
 
-Welcome to the winiutils documentation.
-This library provides production-ready utilities for Python development.
+## Documentation
 
----
-
-## Modules
-
-### [Data Processing](./data.md)
-
-Tools for data manipulation and cleaning:
-
-- **DataFrame Cleaning Pipeline**
-    — Extensible Polars DataFrame cleaning with an 8-step pipeline
-- **Data Structures** — Dictionary utilities and text/string manipulation
-
-### [Iterating & Concurrency](./iterating.md)
-
-Parallel execution framework:
-
-- **Multiprocessing** — CPU-bound parallel processing with spawn context
-- **Multithreading** — I/O-bound concurrent execution with ThreadPoolExecutor
-- **Timeout Handling** — Decorator for enforcing execution time limits
-
-### [OOP Utilities](./oop.md)
-
-Object-oriented programming patterns:
-
-- **ABCLoggingMeta** — Metaclass for automatic method logging
-- **ABCLoggingMixin** — Ready-to-use mixin with built-in logging
-
-### [Security](./security.md)
-
-Cryptography and credential management:
-
-- **AES-GCM Encryption** — Authenticated encryption with automatic IV handling
-- **Keyring Integration**
-    — Secure key storage using OS-native credential managers
-
----
+- [**Data Processing**](data.md) —
+DataFrame cleaning pipelines and data structure utilities
+- [**Iterating & Concurrency**](iterating.md) —
+Parallel execution with multiprocessing and multithreading
+- [**OOP Utilities**](oop.md) — Metaclasses and mixins for automatic instrumentation
+- [**Security**](security.md) — Cryptography and credential storage
+- [**API Reference**](api.md) — Complete API documentation
 
 ## Quick Links
 
-| Resource | Description |
-|----------|-------------|
-| [GitHub Repository](https://github.com/Winipedia/winiutils) | Source code and issues |
-| [PyPI Package](https://pypi.org/project/winiutils/) | Installation via pip |
-| [README](../README.md) | Project overview and quick start |
-
----
-
-## Requirements
-
-- Python 3.12+
-- See `pyproject.toml` for full dependency list
-
-## Installation
-
-```bash
-# Using uv (recommended)
-uv add winiutils
-
-# Using pip
-pip install winiutils
-```
+- [GitHub Repository](https://github.com/Winipedia/winiutils)
+- [PyPI Package](https://pypi.org/project/winiutils)
+- [Issue Tracker](https://github.com/Winipedia/winiutils/issues)
