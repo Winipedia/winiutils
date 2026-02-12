@@ -8,6 +8,6 @@ class TestPyrigger:
 
     def test_get_dev_dependencies(self) -> None:
         """Test method."""
-        result = Pyrigger.get_dev_dependencies()
+        result = Pyrigger.dev_dependencies()
         assert "types-tqdm" in result
         assert "types-defusedxml" in result
