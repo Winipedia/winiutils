@@ -6,7 +6,6 @@ from pyrig.rig.tools.pyrigger import Pyrigger as BasePyrigger
 class Pyrigger(BasePyrigger):
     """Override pyrig's Pyrigger to add custom dev dependencies."""
 
-    @classmethod
-    def dev_dependencies(cls) -> list[str]:
+    def dev_dependencies(self) -> list[str]:
         """Add custom dev dependencies to pyrig's default list."""
         return [*super().dev_dependencies(), "types-tqdm", "types-defusedxml"]
