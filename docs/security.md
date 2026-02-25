@@ -186,15 +186,15 @@ assert decrypted == plaintext
 
 3. **Handle decryption errors** — `InvalidTag` indicates tampering:
 
-   ```python
-   from cryptography.exceptions import InvalidTag
+```python
+from cryptography.exceptions import InvalidTag
 
-   try:
-       decrypted = decrypt_with_aes_gcm(aes_gcm, data, aad)
-   except InvalidTag:
-       # Data was tampered with or wrong AAD
-       raise SecurityError("Decryption failed")
-   ```
+try:
+    decrypted = decrypt_with_aes_gcm(aes_gcm, data, aad)
+except InvalidTag:
+    # Data was tampered with or wrong AAD
+    raise SecurityError("Decryption failed")
+```
 
 4. **Rotate keys periodically** — Delete old keyring entry and re-encrypt data
 
