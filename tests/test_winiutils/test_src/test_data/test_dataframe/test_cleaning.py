@@ -371,7 +371,9 @@ class TestCleaningDF:
         # assert the diff in sum is smaller
         # than the smallest number possible with precision in get_col_precision_map
         precision = MyCleaningDF.get_col_precision_map()[MyCleaningDF.FLOAT_COL]
-        diff = abs(with_floats.sum() - rounded.sum())
+        with_floats_sum = float(with_floats.sum())
+        rounded_sum = float(rounded.sum())
+        diff = abs(with_floats_sum - rounded_sum)
         assert diff < 10**-(precision), (
             f"Expected diff to be < 10**-(precision), got {diff}"
         )
