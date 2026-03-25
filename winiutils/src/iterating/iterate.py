@@ -37,7 +37,7 @@ def get_len_with_default(iterable: Iterable[Any], default: int | None = None) ->
         10
     """
     try:
-        return len(iterable)  # type: ignore[arg-type]
+        return len(iterable)  # type: ignore[arg-type]  # ty:ignore[invalid-argument-type]
     except TypeError as e:
         if default is None:
             msg = "Can't get length of iterable and no default value provided"
