@@ -22,9 +22,9 @@ from collections.abc import Callable
 import keyring
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
-from pyrig.src.git import running_in_github_actions
+from pyrig.rig.tools.remote_version_controller import RemoteVersionController
 
-if running_in_github_actions():
+if RemoteVersionController().running_in_ci():
     from keyrings.alt.file import PlaintextKeyring
 
     keyring.set_keyring(PlaintextKeyring())
