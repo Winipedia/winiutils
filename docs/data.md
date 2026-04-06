@@ -1,6 +1,6 @@
 # Data Processing
 
-The `winiutils.src.data` package provides utilities for data manipulation,
+The `winiutils.core.data` package provides utilities for data manipulation,
 including a comprehensive DataFrame cleaning pipeline
 and data structure helpers.
 
@@ -8,7 +8,7 @@ and data structure helpers.
 
 ## DataFrame Cleaning Pipeline
 
-**Module:** `winiutils.src.data.dataframe.cleaning`
+**Module:** `winiutils.core.data.dataframe.cleaning`
 
 The `CleaningDF` abstract base class provides an extensible framework
 for cleaning and standardizing Polars DataFrames.
@@ -21,9 +21,9 @@ The cleaning pipeline executes in the following order:
 2. **Column Dropping** — Remove columns not in schema
 3. **Null Filling** — Fill null values with configurable defaults
 4. **Type Conversion**
-    — Convert to correct data types with custom transformations
+   — Convert to correct data types with custom transformations
 5. **Null Subset Dropping**
-    — Remove rows where specified column groups are all null
+   — Remove rows where specified column groups are all null
 6. **Duplicate Handling** — Aggregate duplicate rows and sum specified columns
 7. **Sorting** — Multi-column sorting with per-column direction control
 8. **Validation** — Enforce data quality (correct dtypes, no nulls, no NaN)
@@ -48,7 +48,7 @@ Subclasses must implement these methods to configure the cleaning behavior:
 ### Usage Example
 
 ```python
-from winiutils.src.data.dataframe.cleaning import CleaningDF
+from winiutils.core.data.dataframe.cleaning import CleaningDF
 import polars as pl
 from typing import Any
 from collections.abc import Callable
@@ -140,7 +140,7 @@ print(cleaned.df)
 ### Key Features
 
 - **Kahan Summation**
-    — Compensated rounding for floats to prevent accumulation errors
+  — Compensated rounding for floats to prevent accumulation errors
 - **Automatic Logging** — Built-in method logging via `ABCLoggingMixin`
 - **NaN Handling** — Automatic NaN to null conversion
 - **Type Safety** — Full Polars type enforcement with validation
@@ -160,10 +160,10 @@ print(cleaned.df)
 
 ### Dictionary Utilities
 
-**Module:** `winiutils.src.data.structures.dicts`
+**Module:** `winiutils.core.data.structures.dicts`
 
 ```python
-from winiutils.src.data.structures.dicts import reverse_dict
+from winiutils.core.data.structures.dicts import reverse_dict
 
 original = {"a": 1, "b": 2, "c": 3}
 reversed_dict = reverse_dict(original)
@@ -172,7 +172,7 @@ reversed_dict = reverse_dict(original)
 
 ### Text/String Utilities
 
-**Module:** `winiutils.src.data.structures.text.string_`
+**Module:** `winiutils.core.data.structures.text.string_`
 
 | Function | Description |
 |----------|-------------|
@@ -182,7 +182,7 @@ reversed_dict = reverse_dict(original)
 | `get_reusable_hash(value)` | Generate consistent SHA-256 hash for any object |
 
 ```python
-from winiutils.src.data.structures.text.string_ import (
+from winiutils.core.data.structures.text.string_ import (
     value_to_truncated_string,
     get_reusable_hash,
     find_xml_namespaces,

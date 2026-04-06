@@ -69,10 +69,6 @@ requires = [
 ]
 build-backend = "uv_build"
 
-[tool.uv.build-backend]
-module-name = "winiutils"
-module-root = ""
-
 [tool.ruff]
 exclude = [
     ".*",

@@ -1,13 +1,13 @@
 # Security
 
-The `winiutils.src.security` package provides cryptography utilities
+The `winiutils.core.security` package provides cryptography utilities
 and secure credential storage.
 
 ---
 
 ## Cryptography
 
-**Module:** `winiutils.src.security.cryptography`
+**Module:** `winiutils.core.security.cryptography`
 
 AES-GCM authenticated encryption with automatic IV handling.
 
@@ -17,7 +17,7 @@ Encrypt data using AES-GCM (Galois/Counter Mode).
 
 ```python
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
-from winiutils.src.security.cryptography import encrypt_with_aes_gcm
+from winiutils.core.security.cryptography import encrypt_with_aes_gcm
 
 # Create cipher
 key = AESGCM.generate_key(bit_length=256)
@@ -44,7 +44,7 @@ encrypted = encrypt_with_aes_gcm(aes_gcm, plaintext, aad)
 Decrypt AES-GCM encrypted data.
 
 ```python
-from winiutils.src.security.cryptography import decrypt_with_aes_gcm
+from winiutils.core.security.cryptography import decrypt_with_aes_gcm
 
 decrypted = decrypt_with_aes_gcm(aes_gcm, encrypted, aad)
 assert decrypted == plaintext
@@ -64,7 +64,7 @@ assert decrypted == plaintext
 
 ## Keyring Integration
 
-**Module:** `winiutils.src.security.keyring`
+**Module:** `winiutils.core.security.keyring`
 
 Secure key storage using OS-native credential managers.
 
@@ -81,7 +81,7 @@ Secure key storage using OS-native credential managers.
 Get or create a 256-bit AES-GCM key stored in the system keyring.
 
 ```python
-from winiutils.src.security.keyring import get_or_create_aes_gcm
+from winiutils.core.security.keyring import get_or_create_aes_gcm
 
 aes_gcm, raw_key = get_or_create_aes_gcm(
     service_name="my_app",
@@ -103,7 +103,7 @@ aes_gcm, raw_key = get_or_create_aes_gcm(
 Get or create a Fernet key stored in the system keyring.
 
 ```python
-from winiutils.src.security.keyring import get_or_create_fernet
+from winiutils.core.security.keyring import get_or_create_fernet
 
 fernet, raw_key = get_or_create_fernet(
     service_name="my_app",
@@ -120,7 +120,7 @@ original = fernet.decrypt(token)
 Generic function for custom key types.
 
 ```python
-from winiutils.src.security.keyring import get_or_create_key
+from winiutils.core.security.keyring import get_or_create_key
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
 # Custom key generation
@@ -137,8 +137,8 @@ cipher, key = get_or_create_key(
 ## Complete Example
 
 ```python
-from winiutils.src.security.keyring import get_or_create_aes_gcm
-from winiutils.src.security.cryptography import (
+from winiutils.core.security.keyring import get_or_create_aes_gcm
+from winiutils.core.security.cryptography import (
     encrypt_with_aes_gcm,
     decrypt_with_aes_gcm,
 )
@@ -199,7 +199,7 @@ except InvalidTag:
 4. **Rotate keys periodically** — Delete old keyring entry and re-encrypt data
 
 5. **Limit keyring access**
-    — Ensure only authorized users can access system keyring
+   — Ensure only authorized users can access system keyring
 
 ---
 

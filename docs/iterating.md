@@ -1,6 +1,6 @@
 # Iterating & Concurrency
 
-The `winiutils.src.iterating` package provides utilities
+The `winiutils.core.iterating` package provides utilities
 for iteration and parallel execution.
 
 ---
@@ -13,7 +13,7 @@ with automatic resource optimization.
 
 ### Multiprocessing
 
-**Module:** `winiutils.src.iterating.concurrent.multiprocessing`
+**Module:** `winiutils.core.iterating.concurrent.multiprocessing`
 
 For CPU-bound tasks that benefit from bypassing Python's GIL.
 
@@ -22,7 +22,7 @@ For CPU-bound tasks that benefit from bypassing Python's GIL.
 Execute a function in parallel using a process pool.
 
 ```python
-from winiutils.src.iterating.concurrent.multiprocessing import multiprocess_loop
+from winiutils.core.iterating.concurrent.multiprocessing import multiprocess_loop
 
 def process_chunk(data, config):
     """CPU-intensive computation."""
@@ -51,7 +51,7 @@ results = multiprocess_loop(
 Decorator/wrapper to enforce execution time limits.
 
 ```python
-from winiutils.src.iterating.concurrent.multiprocessing import cancel_on_timeout
+from winiutils.core.iterating.concurrent.multiprocessing import cancel_on_timeout
 import multiprocessing
 
 # As a wrapper (recommended for pickle-able functions)
@@ -77,7 +77,7 @@ in a separate process and is terminated if it exceeds the timeout.
 Create a multiprocessing pool with spawn context (safer than fork).
 
 ```python
-from winiutils.src.iterating.concurrent.multiprocessing import get_spwan_pool
+from winiutils.core.iterating.concurrent.multiprocessing import get_spwan_pool
 
 with get_spwan_pool(processes=4) as pool:
     results = pool.map(my_function, items)
@@ -87,7 +87,7 @@ with get_spwan_pool(processes=4) as pool:
 
 ### Multithreading
 
-**Module:** `winiutils.src.iterating.concurrent.multithreading`
+**Module:** `winiutils.core.iterating.concurrent.multithreading`
 
 For I/O-bound tasks like network requests, file I/O, or database queries.
 
@@ -96,7 +96,7 @@ For I/O-bound tasks like network requests, file I/O, or database queries.
 Execute a function concurrently using a thread pool.
 
 ```python
-from winiutils.src.iterating.concurrent.multithreading import multithread_loop
+from winiutils.core.iterating.concurrent.multithreading import multithread_loop
 
 def fetch_url(url, headers):
     """I/O-bound operation."""
@@ -115,7 +115,7 @@ responses = multithread_loop(
 Apply a function to items in parallel, yielding results as they complete.
 
 ```python
-from winiutils.src.iterating.concurrent.multithreading import imap_unordered
+from winiutils.core.iterating.concurrent.multithreading import imap_unordered
 from concurrent.futures import ThreadPoolExecutor
 
 with ThreadPoolExecutor(max_workers=4) as executor:
@@ -128,7 +128,7 @@ with ThreadPoolExecutor(max_workers=4) as executor:
 Yield results from futures as they complete.
 
 ```python
-from winiutils.src.iterating.concurrent.multithreading import (
+from winiutils.core.iterating.concurrent.multithreading import (
     get_future_results_as_completed
 )
 
@@ -141,14 +141,14 @@ for result in get_future_results_as_completed(futures):
 
 ### Shared Utilities
 
-**Module:** `winiutils.src.iterating.concurrent.concurrent`
+**Module:** `winiutils.core.iterating.concurrent.concurrent`
 
 #### `find_max_pools()`
 
 Calculate optimal worker pool size based on system resources.
 
 ```python
-from winiutils.src.iterating.concurrent.concurrent import find_max_pools
+from winiutils.core.iterating.concurrent.concurrent import find_max_pools
 
 # For multiprocessing
 max_processes = find_max_pools(threads=False, process_args_len=100)
@@ -168,14 +168,14 @@ max_threads = find_max_pools(threads=True, process_args_len=100)
 
 ## Iteration Utilities
 
-**Module:** `winiutils.src.iterating.iterate`
+**Module:** `winiutils.core.iterating.iterate`
 
 ### `get_len_with_default()`
 
 Get the length of an iterable with a fallback default.
 
 ```python
-from winiutils.src.iterating.iterate import get_len_with_default
+from winiutils.core.iterating.iterate import get_len_with_default
 
 # Works with sized iterables
 length = get_len_with_default([1, 2, 3], default=0)  # 3
@@ -205,14 +205,14 @@ length = get_len_with_default(gen(), default=10)  # 10
 
 1. **Choose the right executor:**
    - Use `multiprocess_loop` for CPU-bound tasks
-        (image processing, ML inference)
+     (image processing, ML inference)
    - Use `multithread_loop` for I/O-bound tasks (API calls, file I/O)
 
 2. **Provide length hints:**
-    Pass `process_args_len` for better worker optimization
+   Pass `process_args_len` for better worker optimization
 
 3. **Use deep-copy for mutables:**
-    Use `deepcopy_static_args` for mutable objects in multiprocessing
+   Use `deepcopy_static_args` for mutable objects in multiprocessing
 
 4. **Handle timeouts:**
-    Wrap potentially slow operations with `cancel_on_timeout`
+   Wrap potentially slow operations with `cancel_on_timeout`

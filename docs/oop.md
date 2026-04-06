@@ -1,6 +1,6 @@
 # OOP Utilities
 
-The `winiutils.src.oop` package provides metaclasses and mixins
+The `winiutils.core.oop` package provides metaclasses and mixins
 for automatic method instrumentation and class composition.
 
 ---
@@ -11,13 +11,13 @@ Automatic method logging with performance tracking, zero boilerplate required.
 
 ### ABCLoggingMeta
 
-**Module:** `winiutils.src.oop.mixins.meta`
+**Module:** `winiutils.core.oop.mixins.meta`
 
 A metaclass that automatically wraps
 all non-magic methods with logging functionality.
 
 ```python
-from winiutils.src.oop.mixins.meta import ABCLoggingMeta
+from winiutils.core.oop.mixins.meta import ABCLoggingMeta
 from abc import abstractmethod
 
 class MyAbstractService(metaclass=ABCLoggingMeta):
@@ -49,12 +49,12 @@ service.execute()
 
 ### ABCLoggingMixin
 
-**Module:** `winiutils.src.oop.mixins.mixin`
+**Module:** `winiutils.core.oop.mixins.mixin`
 
 A ready-to-use mixin class with `ABCLoggingMeta` pre-configured.
 
 ```python
-from winiutils.src.oop.mixins.mixin import ABCLoggingMixin
+from winiutils.core.oop.mixins.mixin import ABCLoggingMixin
 
 class MyService(ABCLoggingMixin):
     def process_data(self, data: list) -> dict:
@@ -149,7 +149,7 @@ Magic methods (starting with `__`) are not wrapped:
 The `CleaningDF` class uses `ABCLoggingMixin` for automatic pipeline logging:
 
 ```python
-from winiutils.src.oop.mixins.mixin import ABCLoggingMixin
+from winiutils.core.oop.mixins.mixin import ABCLoggingMixin
 
 class CleaningDF(ABCLoggingMixin):
     def rename_cols(self, df):
@@ -194,18 +194,18 @@ INFO - CleaningDF - fill_nulls finished with 0.001 seconds -> ...
 ## Best Practices
 
 1. **Use the mixin for simplicity:**
-    `ABCLoggingMixin` is the easiest way to add logging
+   `ABCLoggingMixin` is the easiest way to add logging
 
 2. **Use metaclass for abstract classes:**
-    When defining abstract base classes with logging
+   When defining abstract base classes with logging
 
 3. **Combine with other mixins:**
-    `ABCLoggingMixin` works well in multiple inheritance
+   `ABCLoggingMixin` works well in multiple inheritance
 
 4. **Configure logging level:**
-    Set logging level appropriately to control output
+   Set logging level appropriately to control output
 
 ```python
 import logging
-logging.getLogger("winiutils.src.oop.mixins.meta").setLevel(logging.WARNING)
+logging.getLogger("winiutils.core.oop.mixins.meta").setLevel(logging.WARNING)
 ```
