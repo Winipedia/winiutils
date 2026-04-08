@@ -1876,7 +1876,7 @@ wheels = [
 
 [[package]]
 name = "winiutils"
-version = "2.3.75"
+version = "2.3.76"
 source = { editable = "." }
 dependencies = [
     { name = "cryptography" },
