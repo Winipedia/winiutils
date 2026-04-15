@@ -3,8 +3,8 @@
 tests.test_winipedia_utils.test_oop.test_mixins.test_meta
 """
 
-from pyrig.core.modules.function import is_func
-from pyrig.core.modules.module import make_obj_importpath
+from pyrig.core.introspection import functions
+from pyrig.core.introspection.functions import is_func
 from pytest_mock import MockFixture
 
 from winiutils.core.data.structures.text.string_ import value_to_truncated_string
@@ -62,7 +62,7 @@ class TestABCLoggingMeta:
     def test_is_loggable_method(self, mocker: MockFixture) -> None:
         """Test method for is_loggable_method."""
         # Mock is_func to control its behavior
-        mock_is_func = mocker.patch(make_obj_importpath(is_func))
+        mock_is_func = mocker.patch(functions.__name__ + "." + is_func.__name__)
 
         # Test case 1: Regular method (should be loggable)
         def regular_method() -> None:
@@ -87,10 +87,12 @@ class TestABCLoggingMeta:
     def test_wrap_with_logging(self, mocker: MockFixture) -> None:
         """Test method for wrap_with_logging."""
         # Mock dependencies
-        mock_logger = mocker.patch(make_obj_importpath(meta) + ".logger")
+        mock_logger = mocker.patch(meta.__name__ + ".logger")
         mock_time = mocker.patch("time.time")
         mock_value_to_truncated_string = mocker.patch(
-            make_obj_importpath(value_to_truncated_string)
+            value_to_truncated_string.__module__
+            + "."
+            + value_to_truncated_string.__name__
         )
 
         # Set up time mock to simulate passage of time
@@ -135,7 +137,7 @@ class TestABCLoggingMeta:
     def test_wrap_with_logging_rate_limiting(self, mocker: MockFixture) -> None:
         """Test that wrap_with_logging implements rate limiting."""
         # Mock dependencies
-        mock_logger = mocker.patch(make_obj_importpath(meta) + ".logger")
+        mock_logger = mocker.patch(meta.__name__ + ".logger")
         mock_time = mocker.patch("time.time")
 
         # Set up time mock to simulate rapid calls (within threshold)

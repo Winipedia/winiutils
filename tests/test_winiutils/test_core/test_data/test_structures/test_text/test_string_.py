@@ -3,7 +3,6 @@
 import hashlib
 from io import StringIO
 
-from pyrig.core.modules.module import make_obj_importpath
 from pytest_mock import MockFixture
 
 from winiutils.core.data.structures.text import string_
@@ -19,9 +18,7 @@ def test_ask_for_input_with_timeout(mocker: MockFixture) -> None:
     """Test func for ask_for_input_with_timeout."""
     # Mock the cancel_on_timeout decorator to avoid multiprocessing issues in tests
     # Must patch where it's used, not where it's defined
-    mock_cancel_on_timeout = mocker.patch(
-        make_obj_importpath(string_) + ".cancel_on_timeout"
-    )
+    mock_cancel_on_timeout = mocker.patch(string_.__name__ + ".cancel_on_timeout")
 
     # Create a simple decorator that just calls the function
     def simple_decorator(_timeout_val: int, _msg: str) -> object:

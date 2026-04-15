@@ -22,7 +22,7 @@ from collections.abc import Callable
 from functools import wraps
 from typing import Any
 
-from pyrig.core.modules.function import is_func
+from pyrig.core.introspection.functions import is_func
 
 from winiutils.core.data.structures.text.string_ import value_to_truncated_string
 
