@@ -22,7 +22,7 @@ from collections.abc import Callable
 from functools import wraps
 from typing import Any
 
-from pyrig.core.introspection.functions import is_func
+from pyrig.core.introspection.functions import is_funclike
 
 from winiutils.core.data.structures.text.string_ import value_to_truncated_string
 
@@ -119,7 +119,7 @@ class ABCLoggingMeta(ABCMeta):
             traditional sense and cause issues with the wrapping mechanism.
         """
         return (
-            is_func(method)  # must be a method-like attribute
+            is_funclike(method)  # must be a method-like attribute
             and not getattr(method, "__name__", "__").startswith(
                 "__"
             )  # must not be a magic method

@@ -4,7 +4,7 @@ tests.test_winipedia_utils.test_oop.test_mixins.test_meta
 """
 
 from pyrig.core.introspection import functions
-from pyrig.core.introspection.functions import is_func
+from pyrig.core.introspection.functions import is_funclike
 from pytest_mock import MockFixture
 
 from winiutils.core.data.structures.text.string_ import value_to_truncated_string
@@ -61,15 +61,15 @@ class TestABCLoggingMeta:
 
     def test_is_loggable_method(self, mocker: MockFixture) -> None:
         """Test method for is_loggable_method."""
-        # Mock is_func to control its behavior
-        mock_is_func = mocker.patch(functions.__name__ + "." + is_func.__name__)
+        # Mock is_funclike to control its behavior
+        mock_is_funclike = mocker.patch(functions.__name__ + "." + is_funclike.__name__)
 
         # Test case 1: Regular method (should be loggable)
         def regular_method() -> None:
             pass
 
         regular_method.__name__ = "regular_method"
-        mock_is_func.return_value = True
+        mock_is_funclike.return_value = True
 
         result = ABCLoggingMeta.is_loggable_method(regular_method)
         assert result is True, "Expected regular method to be loggable"
@@ -79,7 +79,7 @@ class TestABCLoggingMeta:
             pass
 
         magic_method.__name__ = "__init__"
-        mock_is_func.return_value = True
+        mock_is_funclike.return_value = True
 
         result = ABCLoggingMeta.is_loggable_method(magic_method)
         assert result is False, "Expected magic method to not be loggable"
