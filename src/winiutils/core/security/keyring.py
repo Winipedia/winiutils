@@ -22,7 +22,7 @@ from collections.abc import Callable
 import keyring
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
-from pyrig.rig.tools.remote_version_controller import RemoteVersionController
+from pyrig.rig.tools.version_control.remote import RemoteVersionController
 
 if RemoteVersionController().running_in_ci():
     from keyrings.alt.file import PlaintextKeyring
