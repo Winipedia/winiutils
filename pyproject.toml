@@ -1,6 +1,6 @@
 [project]
 name = "winiutils"
-version = "2.4.2"
+version = "2.4.3"
 description = "A utility library for Python development"
 license = "MIT"
 requires-python = ">=3.12"
@@ -101,7 +101,7 @@ files = "."
 testpaths = [
     "tests",
 ]
-addopts = "--cov=winiutils --cov-report=term-missing --cov-fail-under=90"
+addopts = "--cov=winiutils --cov-branch --cov-report=term-missing --cov-fail-under=90"
 
 [tool.ty.terminal]
 error-on-warning = true
