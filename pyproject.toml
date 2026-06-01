@@ -1,6 +1,6 @@
 [project]
 name = "winiutils"
-version = "2.4.4"
+version = "2.4.5"
 description = "A utility library for Python development"
 license = "MIT"
 requires-python = ">=3.12"
@@ -33,7 +33,7 @@ name = "Winipedia"
 name = "Winipedia"
 
 [project.scripts]
-winiutils = "pyrig.rig.cli.cli:main"
+winiutils = "pyrig.rig.cli.main:main"
 
 [project.urls]
 Homepage = "https://github.com/Winipedia/winiutils"
