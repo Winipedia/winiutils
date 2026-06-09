@@ -1,6 +1,6 @@
 [project]
 name = "winiutils"
-version = "2.6.1"
+version = "2.6.2"
 description = "A utility library for Python development"
 license = "MIT"
 requires-python = ">=3.12"
@@ -18,11 +18,17 @@ license-files = [
     "LICENSE",
 ]
 classifiers = [
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
     "Operating System :: OS Independent",
     "Typing :: Typed",
+]
+keywords = [
+    "pyrig",
 ]
 
 [[project.authors]]
