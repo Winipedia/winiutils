@@ -35,7 +35,7 @@ from winiutils.core.iterating.concurrent.concurrent import concurrent_loop
 logger = logging.getLogger(__name__)
 
 
-def get_spwan_pool(*args: Any, **kwargs: Any) -> Pool:
+def get_spawn_pool(*args: Any, **kwargs: Any) -> Pool:
     """Create a multiprocessing pool with the spawn context.
 
     Uses the 'spawn' start method which creates a fresh Python interpreter
@@ -50,7 +50,7 @@ def get_spwan_pool(*args: Any, **kwargs: Any) -> Pool:
         A multiprocessing Pool configured with the spawn context.
 
     Example:
-        >>> pool = get_spwan_pool(processes=4)
+        >>> pool = get_spawn_pool(processes=4)
         >>> with pool:
         ...     results = pool.map(square, [1, 2, 3])
     """
@@ -102,7 +102,7 @@ def cancel_on_timeout(seconds: float, message: str) -> Callable[..., Any]:
     def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
         @wraps(func)
         def wrapper(*args: object, **kwargs: object) -> object:
-            spawn_pool = get_spwan_pool(processes=1)
+            spawn_pool = get_spawn_pool(processes=1)
             with spawn_pool as pool:
                 async_result = pool.apply_async(func, args, kwargs)
                 try:

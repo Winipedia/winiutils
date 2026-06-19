@@ -8,7 +8,7 @@ import pytest
 
 from winiutils.core.iterating.concurrent.multiprocessing import (
     cancel_on_timeout,
-    get_spwan_pool,
+    get_spawn_pool,
     multiprocess_loop,
 )
 
@@ -61,9 +61,9 @@ def simple_identity(x: str) -> str:
     return x
 
 
-def test_get_spwan_pool() -> None:
-    """Test func for get_spwan_pool."""
-    with get_spwan_pool(processes=1) as pool:
+def test_get_spawn_pool() -> None:
+    """Test func for get_spawn_pool."""
+    with get_spawn_pool(processes=1) as pool:
         ctx = getattr(pool, "_ctx", None)
         method = getattr(ctx, "get_start_method", lambda: None)()
         assert method == "spawn", "Expected spawn context"

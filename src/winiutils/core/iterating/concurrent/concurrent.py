@@ -260,7 +260,7 @@ def concurrent_loop(  # noqa: PLR0913
         for I/O-bound tasks instead.
     """
     from winiutils.core.iterating.concurrent.multiprocessing import (  # noqa: PLC0415  # avoid circular import
-        get_spwan_pool,
+        get_spawn_pool,
     )
     from winiutils.core.iterating.concurrent.multithreading import (  # noqa: PLC0415  # avoid circular import
         imap_unordered,
@@ -277,7 +277,7 @@ def concurrent_loop(  # noqa: PLR0913
     pool_executor = (
         ThreadPoolExecutor(max_workers=max_workers)
         if threading
-        else get_spwan_pool(processes=max_workers)
+        else get_spawn_pool(processes=max_workers)
     )
     with pool_executor as pool:
         map_func: Callable[[Callable[..., Any], Iterable[Any]], Any]

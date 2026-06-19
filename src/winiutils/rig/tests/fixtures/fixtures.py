@@ -9,7 +9,7 @@ by pyrig via the pytest_plugins mechanism.
 from collections.abc import Callable, Iterator
 
 import keyring
-import pytest
+import pytest  # deptry: ignore[DEP004]
 
 
 @pytest.fixture

@@ -72,14 +72,14 @@ except multiprocessing.TimeoutError:
 **Note:** Only works with pickle-able functions. The function runs
 in a separate process and is terminated if it exceeds the timeout.
 
-#### `get_spwan_pool()`
+#### `get_spawn_pool()`
 
 Create a multiprocessing pool with spawn context (safer than fork).
 
 ```python
-from winiutils.core.iterating.concurrent.multiprocessing import get_spwan_pool
+from winiutils.core.iterating.concurrent.multiprocessing import get_spawn_pool
 
-with get_spwan_pool(processes=4) as pool:
+with get_spawn_pool(processes=4) as pool:
     results = pool.map(my_function, items)
 ```
 
