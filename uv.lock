@@ -1688,6 +1688,7 @@ dependencies = [
     { name = "keyring" },
     { name = "keyrings-alt" },
     { name = "polars" },
+    { name = "pyrig" },
     { name = "pyrig-runtime" },
     { name = "tqdm" },
 ]
@@ -1722,6 +1723,7 @@ requires-dist = [
     { name = "keyring" },
     { name = "keyrings-alt" },
     { name = "polars" },
+    { name = "pyrig", specifier = ">=15.28.0" },
     { name = "pyrig-runtime" },
     { name = "tqdm" },
 ]
