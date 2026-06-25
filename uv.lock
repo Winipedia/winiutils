@@ -1688,7 +1688,7 @@ dependencies = [
     { name = "keyring" },
     { name = "keyrings-alt" },
     { name = "polars" },
-    { name = "pyrig" },
+    { name = "pyrig-runtime" },
     { name = "tqdm" },
 ]
 
@@ -1702,6 +1702,7 @@ dev = [
     { name = "mkdocstrings", extra = ["python"] },
     { name = "pip-audit" },
     { name = "prek" },
+    { name = "pyrig" },
     { name = "pyrig-fixtures" },
     { name = "pyrig-pypi" },
     { name = "pytest" },
@@ -1721,7 +1722,7 @@ requires-dist = [
     { name = "keyring" },
     { name = "keyrings-alt" },
     { name = "polars" },
-    { name = "pyrig" },
+    { name = "pyrig-runtime" },
     { name = "tqdm" },
 ]
 
@@ -1735,6 +1736,7 @@ dev = [
     { name = "mkdocstrings", extras = ["python"], specifier = ">=1.0.3" },
     { name = "pip-audit", specifier = ">=2.10.0" },
     { name = "prek", specifier = ">=0.3.2" },
+    { name = "pyrig" },
     { name = "pyrig-fixtures", specifier = ">=0.9.0" },
     { name = "pyrig-pypi", specifier = ">=1.0.1" },
     { name = "pytest", specifier = ">=9.0.2" },
