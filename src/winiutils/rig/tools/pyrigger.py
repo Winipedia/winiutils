@@ -1,6 +1,6 @@
 """Override pyrig's Pyrigger to add custom dev dependencies."""
 
-from pyrig.rig.tools.pyrigger import Pyrigger as BasePyrigger
+from pyrig.rig.tools.pyrigger import Pyrigger as BasePyrigger  # deptry: ignore[DEP004]
 
 
 class Pyrigger(BasePyrigger):

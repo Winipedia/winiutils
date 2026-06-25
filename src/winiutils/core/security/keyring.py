@@ -16,15 +16,15 @@ Example:
     b'secret data'
 """
 
+import os
 from base64 import b64decode, b64encode
 from collections.abc import Callable
 
 import keyring
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
-from pyrig.rig.tools.version_control.remote import RemoteVersionController
 
-if RemoteVersionController().running_in_ci():
+if os.getenv("GITHUB_ACTIONS", "false") == "true":
     from keyrings.alt.file import PlaintextKeyring
 
     keyring.set_keyring(PlaintextKeyring())

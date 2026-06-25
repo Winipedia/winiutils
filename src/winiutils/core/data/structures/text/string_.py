@@ -18,7 +18,6 @@ Example:
 """
 
 import hashlib
-import logging
 import textwrap
 from io import StringIO
 
@@ -27,8 +26,6 @@ from defusedxml import ElementTree as DefusedElementTree
 from winiutils.core.iterating.concurrent.multiprocessing import (
     cancel_on_timeout,
 )
-
-logger = logging.getLogger(__name__)
 
 
 def ask_for_input_with_timeout(prompt: str, timeout: int) -> str:

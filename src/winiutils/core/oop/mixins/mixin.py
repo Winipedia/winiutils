@@ -17,11 +17,7 @@ Example:
     'HELLO'
 """
 
-import logging
-
 from winiutils.core.oop.mixins.meta import ABCLoggingMeta
-
-logger = logging.getLogger(__name__)
 
 
 class ABCLoggingMixin(metaclass=ABCLoggingMeta):

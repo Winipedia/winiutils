@@ -1,6 +1,6 @@
 [project]
 name = "winiutils"
-version = "2.10.0"
+version = "2.12.0"
 description = "A utility library for Python development"
 license = "MIT"
 requires-python = ">=3.12"
@@ -11,7 +11,7 @@ dependencies = [
     "keyring",
     "keyrings-alt",
     "polars",
-    "pyrig",
+    "pyrig-runtime",
     "tqdm",
 ]
 license-files = [
@@ -38,7 +38,7 @@ name = "Winipedia"
 name = "Winipedia"
 
 [project.scripts]
-winiutils = "pyrig.rig.cli.main:main"
+winiutils = "pyrig_runtime.rig.cli.main:main"
 
 [project.urls]
 Homepage = "https://github.com/Winipedia/winiutils"
@@ -57,7 +57,7 @@ dev = [
     "mkdocstrings[python]>=1.0.3",
     "pip-audit>=2.10.0",
     "prek>=0.3.2",
-    "pyrig-dev",
+    "pyrig",
     "pyrig-fixtures>=0.9.0",
     "pyrig-pypi>=1.0.1",
     "pytest-cov>=7.0.0",
@@ -124,5 +124,5 @@ root = "src"
 
 [tool.deptry.per_rule_ignores]
 DEP002 = [
-    "pyrig",
+    "pyrig-runtime",
 ]
