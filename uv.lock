@@ -1128,7 +1128,7 @@ wheels = [
 
 [[package]]
 name = "pyrig"
-version = "15.37.0"
+version = "15.42.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "inquirerpy" },
@@ -1139,50 +1139,34 @@ dependencies = [
     { name = "tomlkit" },
     { name = "typer" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/7f/44/c4eeda69c32c4d4b08de780b6c87376f5d82b95fd084056df7ad500bf950/pyrig-15.37.0.tar.gz", hash = "sha256:5a9ee8293ea9c1980f84a08e79e7c743629983f9b1c70fb38159372c4a198483", size = 99669, upload-time = "2026-06-27T16:17:24.764Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ea/6d/c5d4d22d277ef2b7fcf0e27b46722cdfe6f948394291154a0cdbc8394e88/pyrig-15.42.0.tar.gz", hash = "sha256:57bfbd9b508d40f95da1346ce0d5f2bde2a512da45ab13f7c5e2a1b3277266ca", size = 99660, upload-time = "2026-06-27T17:20:05.66Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/8b/39/7264047e2dcd0be0f67005940639c7b20ca26b9af9d9b31ca17399012321/pyrig-15.37.0-py3-none-any.whl", hash = "sha256:7438b9ae46f7f27d2b56898868856385989f3616395cda5fcc4e0beab825bf5d", size = 148297, upload-time = "2026-06-27T16:17:22.919Z" },
-]
-
-[[package]]
-name = "pyrig-fixtures"
-version = "0.20.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "pyrig" },
-    { name = "pyrig-runtime" },
-    { name = "pytest" },
-    { name = "pytest-mock" },
-    { name = "typer" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/39/9f/533b18c5608319aadf6f1e538ea4183478037b3ac3c8969041d5d8ea1e99/pyrig_fixtures-0.20.0.tar.gz", hash = "sha256:b193b0ddb0c040df8521289249d915942868fe79d34bc10b60c717388c9b216b", size = 9322, upload-time = "2026-06-27T16:23:10.917Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/87/39/78402cb1757d916b7a768df04add884f4d8586036cac6f32379c2af59ac3/pyrig_fixtures-0.20.0-py3-none-any.whl", hash = "sha256:675e6c0dfe779ee91c732ad8fb60a0e084af0085166bcda5e2e2a29d08f82903", size = 15729, upload-time = "2026-06-27T16:23:09.968Z" },
+    { url = "https://files.pythonhosted.org/packages/6b/8d/ebe399cde82a845d09ddaf05a554efe2af378a0f0c92c9102b458e6df605/pyrig-15.42.0-py3-none-any.whl", hash = "sha256:20068c896a1f06eb6b3c125f1281454205b4b63fc533932df2ec1597462dfd11", size = 148238, upload-time = "2026-06-27T17:20:03.937Z" },
 ]
 
 [[package]]
 name = "pyrig-pypi"
-version = "1.16.0"
+version = "1.21.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pyrig" },
     { name = "pyrig-runtime" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/81/19/1b187206df1849a4a4611f4c6452bac6470bf645c49b42a6f0e4b6f17174/pyrig_pypi-1.16.0.tar.gz", hash = "sha256:105ff400870001e6ee9b76d1f403be4bea1f4df29574cdec76de72177222767c", size = 6332, upload-time = "2026-06-27T10:49:33.909Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/68/42/aecfe45fd90ae4e7fe41e08ab4fd62c91af7837cfe57a6b99e7c2f684ef8/pyrig_pypi-1.21.0.tar.gz", hash = "sha256:b6e2fec4ac2707264a88fbb0c1435826a7555094d8dafa19016311a46dfa5083", size = 6323, upload-time = "2026-06-27T17:28:18.524Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a6/45/ded2764c558e64a171912235480c1033cf0a9e1420e6f261e9c6c736ab35/pyrig_pypi-1.16.0-py3-none-any.whl", hash = "sha256:61cecefcd23014ba509a553e71c79815bc32c0f85ebf6736c3ab0e117267c057", size = 10830, upload-time = "2026-06-27T10:49:33.146Z" },
+    { url = "https://files.pythonhosted.org/packages/d9/b4/78551cf01446e2c9918a9e9260fb94b2e2e2c9845b2d46ff9599ae00de5f/pyrig_pypi-1.21.0-py3-none-any.whl", hash = "sha256:6f9db172efb21647bea861012cfb2639f884f07bb3b58c04eb87c88af210887f", size = 10830, upload-time = "2026-06-27T17:28:17.648Z" },
 ]
 
 [[package]]
 name = "pyrig-runtime"
-version = "0.8.0"
+version = "0.13.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "typer" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/30/86/26463610c4e8eca3537bce7589abd7c7e74b4a42c2199fe7a279ed8caff5/pyrig_runtime-0.8.0.tar.gz", hash = "sha256:a40750380fb2b0cc0f7dcd7bae7478076eb1344ddcd4767b1cf6404ad78a910f", size = 16624, upload-time = "2026-06-27T10:49:35.701Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/55/71/4666dd3ea26acbd9faa4e7c732d240e5f0a24d2768f10277438b43384c35/pyrig_runtime-0.13.0.tar.gz", hash = "sha256:b3219654d0ff96baecd14c53a28cb3d51b0d0c8c3c781d17e5bda392b3c5de34", size = 16636, upload-time = "2026-06-27T17:30:59.248Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/60/00/d2db18aedd347fae933de9f44e0c1227341acab21d044c2bf0d7420527ac/pyrig_runtime-0.8.0-py3-none-any.whl", hash = "sha256:d40c19be6798d607058aa85be6288d30f05befb665dbf69d470b9caa7d5ddf19", size = 25646, upload-time = "2026-06-27T10:49:34.804Z" },
+    { url = "https://files.pythonhosted.org/packages/c2/7b/e748d001d6f03665e9d2295022d8b55636af6d07a1799a0390576da55c0e/pyrig_runtime-0.13.0-py3-none-any.whl", hash = "sha256:d45de0a7597114870720559ac47c8e26e69ea5f8dd642814065c19baf83e3108", size = 25661, upload-time = "2026-06-27T17:30:58.22Z" },
 ]
 
 [[package]]
@@ -1680,7 +1664,7 @@ wheels = [
 
 [[package]]
 name = "winiutils"
-version = "2.15.0"
+version = "2.18.0"
 source = { editable = "." }
 dependencies = [
     { name = "cryptography" },
@@ -1704,10 +1688,10 @@ dev = [
     { name = "pip-audit" },
     { name = "prek" },
     { name = "pyrig" },
-    { name = "pyrig-fixtures" },
     { name = "pyrig-pypi" },
     { name = "pytest" },
     { name = "pytest-cov" },
+    { name = "pytest-mock" },
     { name = "ruff" },
     { name = "rumdl" },
     { name = "ty" },
@@ -1739,10 +1723,10 @@ dev = [
     { name = "pip-audit", specifier = ">=2.10.0" },
     { name = "prek", specifier = ">=0.3.2" },
     { name = "pyrig" },
-    { name = "pyrig-fixtures", specifier = ">=0.9.0" },
     { name = "pyrig-pypi", specifier = ">=1.0.1" },
     { name = "pytest", specifier = ">=9.0.2" },
     { name = "pytest-cov", specifier = ">=7.0.0" },
+    { name = "pytest-mock", specifier = ">=3.15.1" },
     { name = "ruff", specifier = ">=0.15.0" },
     { name = "rumdl", specifier = ">=0.1.17" },
     { name = "ty", specifier = ">=0.0.16" },
