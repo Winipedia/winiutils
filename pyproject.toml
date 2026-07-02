@@ -1,19 +1,19 @@
 [project]
 name = "winiutils"
-version = "3.0.0"
+version = "3.1.0"
 description = "A utility library for Python development"
 license = "MIT"
 requires-python = ">=3.12"
 readme = "README.md"
 dependencies = [
-    "cryptography",
-    "defusedxml",
-    "keyring",
-    "keyrings-alt",
-    "polars",
-    "pyrig>=15.28.0",
-    "pyrig-runtime",
-    "tqdm",
+    "cryptography>=49.0.0",
+    "defusedxml>=0.7.1",
+    "keyring>=25.7.0",
+    "keyrings-alt>=5.0.2",
+    "polars>=1.42.1",
+    "pyrig>=16.0.0",
+    "pyrig-runtime>=1.0.0",
+    "tqdm>=4.68.3",
 ]
 license-files = [
     "LICENSE",
@@ -50,25 +50,25 @@ Changelog = "https://github.com/Winipedia/winiutils/releases"
 
 [dependency-groups]
 dev = [
-    "bandit>=1.9.3",
+    "bandit>=1.9.4",
     "deptry>=0.25.1",
-    "mkdocs-material>=9.7.1",
-    "mkdocs-mermaid2-plugin>=1.2.3",
     "mkdocs>=1.6.1",
-    "mkdocstrings[python]>=1.0.3",
-    "pip-audit>=2.10.0",
-    "prek>=0.3.2",
-    "pyrig",
-    "pyrig-pypi>=1.0.1",
-    "pytest-cov>=7.0.0",
+    "mkdocs-material>=9.7.6",
+    "mkdocs-mermaid2-plugin>=1.2.3",
+    "mkdocstrings[python]>=1.0.4",
+    "pip-audit>=2.10.1",
+    "prek>=0.4.6",
+    "pyrig>=16.0.0",
+    "pyrig-pypi>=2.0.0",
+    "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
     "pytest-mock>=3.15.1",
-    "pytest>=9.0.2",
-    "ruff>=0.15.0",
-    "rumdl>=0.1.17",
-    "ty>=0.0.16",
-    "types-defusedxml>=0.7.0.20250822",
-    "types-tqdm>=4.67.3.20260205",
-    "typos>=1.47.2",
+    "ruff>=0.15.20",
+    "rumdl>=0.2.27",
+    "ty>=0.0.56",
+    "types-defusedxml>=0.7.0.20260504",
+    "types-tqdm>=4.68.0.20260608",
+    "typos>=1.48.0",
 ]
 
 [build-system]
