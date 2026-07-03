@@ -3,8 +3,6 @@
 tests.test_winipedia_utils.test_oop.test_mixins.test_meta
 """
 
-from pyrig_runtime.core.introspection import functions
-from pyrig_runtime.core.introspection.functions import is_funclike
 from pytest_mock import MockFixture
 
 from winiutils.core.data.structures.text.string_ import value_to_truncated_string
@@ -62,7 +60,7 @@ class TestABCLoggingMeta:
     def test_is_loggable_method(self, mocker: MockFixture) -> None:
         """Test method for is_loggable_method."""
         # Mock is_funclike to control its behavior
-        mock_is_funclike = mocker.patch(functions.__name__ + "." + is_funclike.__name__)
+        mock_is_funclike = mocker.patch("inspect.isfunction")
 
         # Test case 1: Regular method (should be loggable)
         def regular_method() -> None:

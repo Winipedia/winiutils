@@ -15,6 +15,7 @@ Example:
     10
 """
 
+import inspect
 import logging
 import time
 from abc import ABCMeta
@@ -22,7 +23,7 @@ from collections.abc import Callable
 from functools import wraps
 from typing import Any
 
-from pyrig_runtime.core.introspection.functions import is_funclike
+from pyrig_runtime.core.introspection.inspection import unwrap_obj
 
 from winiutils.core.data.structures.text.string_ import value_to_truncated_string
 
@@ -119,7 +120,7 @@ class ABCLoggingMeta(ABCMeta):
             traditional sense and cause issues with the wrapping mechanism.
         """
         return (
-            is_funclike(method)  # must be a method-like attribute
+            inspect.isfunction(unwrap_obj(method))  # must be a method-like attribute
             and not getattr(method, "__name__", "__").startswith(
                 "__"
             )  # must not be a magic method
