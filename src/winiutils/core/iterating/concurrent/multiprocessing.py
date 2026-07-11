@@ -90,6 +90,7 @@ def cancel_on_timeout(seconds: float, message: str) -> Callable[..., Any]:
     Example:
         >>> def slow_function():
         ...     import time
+        ...
         ...     time.sleep(10)
         ...     return "done"
         >>> timed_func = cancel_on_timeout(

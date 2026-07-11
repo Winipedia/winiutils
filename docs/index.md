@@ -1,4 +1,4 @@
-# winiutils Documentation
+# Home
 
 <!-- ci/cd -->
 [![CI](https://img.shields.io/github/actions/workflow/status/Winipedia/winiutils/health_check.yml?label=CI&logo=github)](https://github.com/Winipedia/winiutils/actions/workflows/health_check.yml)

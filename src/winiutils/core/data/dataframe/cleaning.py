@@ -211,8 +211,8 @@ class CleaningDF(ABCLoggingMixin):
             >>> @classmethod
             ... def get_sort_cols(cls):
             ...     return (
-            ...         ("created_at", True),   # Descending
-            ...         ("user_id", False),     # Ascending
+            ...         ("created_at", True),  # Descending
+            ...         ("user_id", False),  # Ascending
             ...     )
         """
 
@@ -236,8 +236,8 @@ class CleaningDF(ABCLoggingMixin):
             >>> @classmethod
             ... def get_unique_subsets(cls):
             ...     return (
-            ...         ("user_id", "date"),      # Unique by user_id and date
-            ...         ("transaction_id",),      # Unique by transaction_id
+            ...         ("user_id", "date"),  # Unique by user_id and date
+            ...         ("transaction_id",),  # Unique by transaction_id
             ...     )
         """
 

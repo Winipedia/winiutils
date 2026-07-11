@@ -38,10 +38,7 @@ class ABCLoggingMeta(ABCMeta):
     limiting to prevent log flooding.
 
     This metaclass extends ``ABCMeta``, so classes using it can also define
-    abstract methods.
-
-    Attributes:
-        Inherits all attributes from ``ABCMeta``.
+    abstract methods and inherit all of its attributes.
 
     Example:
         >>> class Calculator(metaclass=ABCLoggingMeta):

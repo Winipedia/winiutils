@@ -14,6 +14,7 @@ Example:
     ... )
     >>> def fetch_url(url):
     ...     import requests
+    ...
     ...     return requests.get(url).status_code
     >>> results = multithread_loop(
     ...     process_function=fetch_url,
@@ -87,6 +88,7 @@ def multithread_loop(
     Example:
         >>> def download(url, timeout):
         ...     import requests
+        ...
         ...     return requests.get(url, timeout=timeout).text
         >>> results = multithread_loop(
         ...     process_function=download,
