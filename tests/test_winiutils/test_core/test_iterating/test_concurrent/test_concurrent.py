@@ -87,7 +87,8 @@ def test_generate_process_args() -> None:
 
     process_args = [[1], [2], [3]]
     result_generator = generate_process_args(
-        process_function=test_func, process_args=process_args
+        process_function=test_func,
+        process_args=process_args,
     )
     results = list(result_generator)
 
@@ -200,7 +201,7 @@ def test_get_multiprocess_results_with_tqdm() -> None:
     )
 
     for i, (result, expected) in enumerate(
-        zip(sorted_results, expected_results, strict=False)
+        zip(sorted_results, expected_results, strict=False),
     ):
         assert result == expected, f"At index {i}: expected {expected}, got {result}"
 
@@ -215,7 +216,7 @@ def test_get_multiprocess_results_with_tqdm() -> None:
 
     expected_int_results = [50, 100, 150]
     for i, (result_2, expected_2) in enumerate(
-        zip(int_sorted_results, expected_int_results, strict=False)
+        zip(int_sorted_results, expected_int_results, strict=False),
     ):
         assert result_2 == expected_2, (
             f"At index {i}: expected {expected_2}, got {result_2}"
@@ -236,7 +237,10 @@ def test_get_multiprocess_results_with_tqdm() -> None:
     # Test with empty results
     empty_results: list[tuple[int, Any]] = []
     sorted_empty = get_multiprocess_results_with_tqdm(
-        results=empty_results, process_func=dummy_func, process_args_len=0, threads=True
+        results=empty_results,
+        process_func=dummy_func,
+        process_args_len=0,
+        threads=True,
     )
 
     assert len(sorted_empty) == 0, f"Expected 0 results, got {len(sorted_empty)}"
@@ -292,7 +296,9 @@ def test_concurrent_loop() -> None:
 
     process_args = [[1], [2], [3], [4]]
     results = concurrent_loop(
-        threading=True, process_function=square_func, process_args=process_args
+        threading=True,
+        process_function=square_func,
+        process_args=process_args,
     )
 
     expected_results = [1, 4, 9, 16]
@@ -302,7 +308,7 @@ def test_concurrent_loop() -> None:
     )
 
     for i, (result, expected) in enumerate(
-        zip(results, expected_results, strict=False)
+        zip(results, expected_results, strict=False),
     ):
         assert result == expected, f"At index {i}: expected {expected}, got {result}"
 
@@ -321,7 +327,7 @@ def test_concurrent_loop() -> None:
 
     expected_results = [11, 12, 13]
     for i, (result, expected) in enumerate(
-        zip(results, expected_results, strict=False)
+        zip(results, expected_results, strict=False),
     ):
         assert result == expected, f"At index {i}: expected {expected}, got {result}"
 
@@ -339,7 +345,7 @@ def test_concurrent_loop() -> None:
 
     expected_string_results = ["test1", "test2"]
     for idx, (result_2, expected_2) in enumerate(
-        zip(string_results, expected_string_results, strict=False)
+        zip(string_results, expected_string_results, strict=False),
     ):
         assert result_2 == expected_2, (
             f"At index {idx}: expected {expected_2}, got {result_2}"
@@ -348,7 +354,9 @@ def test_concurrent_loop() -> None:
     # Test edge case with single item
     single_process_args = [[42]]
     single_results = concurrent_loop(
-        threading=True, process_function=square_func, process_args=single_process_args
+        threading=True,
+        process_function=square_func,
+        process_args=single_process_args,
     )
 
     expected_single_result = 1764
@@ -360,7 +368,9 @@ def test_concurrent_loop() -> None:
     # Test edge case with empty args
     empty_process_args: list[list[Any]] = []
     empty_results = concurrent_loop(
-        threading=True, process_function=square_func, process_args=empty_process_args
+        threading=True,
+        process_function=square_func,
+        process_args=empty_process_args,
     )
 
     assert len(empty_results) == 0, f"Expected 0 results, got {len(empty_results)}"

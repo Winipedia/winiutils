@@ -76,14 +76,14 @@ def test_cancel_on_timeout() -> None:
 
     # Test successful execution within timeout
     wrapped_func = cancel_on_timeout(seconds=1.0, message="Test timeout")(
-        quick_function
+        quick_function,
     )
     result = wrapped_func(5, y=15)
     assert result == expected_sum, f"Expected {expected_sum}, got {result}"
 
     # Test timeout behavior
     wrapped_slow_func = cancel_on_timeout(seconds=0.5, message="Slow function timeout")(
-        slow_function
+        slow_function,
     )
 
     with pytest.raises(multiprocessing.TimeoutError):
@@ -91,14 +91,14 @@ def test_cancel_on_timeout() -> None:
 
     # Test with different argument types
     wrapped_args_func = cancel_on_timeout(seconds=1.0, message="Args test timeout")(
-        function_with_args
+        function_with_args,
     )
     result = wrapped_args_func("test", 5, multiplier=2.0)
     assert result == expected_result, f"Expected '{expected_result}', got {result}"
 
     # Test edge case with zero timeout (should timeout immediately)
     wrapped_instant = cancel_on_timeout(seconds=0.0, message="Zero timeout")(
-        instant_function
+        instant_function,
     )
 
     with pytest.raises(multiprocessing.TimeoutError):
@@ -110,7 +110,8 @@ def test_multiprocess_loop() -> None:
     # Test basic parallel execution
     process_args = [[1], [2], [3], [4], [5]]
     results = multiprocess_loop(
-        process_function=square_function, process_args=process_args
+        process_function=square_function,
+        process_args=process_args,
     )
     expected_results = [1, 4, 9, 16, 25]
     assert len(results) == len(expected_results), (
@@ -119,7 +120,7 @@ def test_multiprocess_loop() -> None:
 
     # Results should be in original order
     for i, (result, expected) in enumerate(
-        zip(results, expected_results, strict=False)
+        zip(results, expected_results, strict=False),
     ):
         assert result == expected, f"At index {i}: expected {expected}, got {result}"
 
@@ -137,14 +138,15 @@ def test_multiprocess_loop() -> None:
     )
 
     for i, (result, expected) in enumerate(
-        zip(results, expected_results, strict=False)
+        zip(results, expected_results, strict=False),
     ):
         assert result == expected, f"At index {i}: expected {expected}, got {result}"
 
     # Test with multiple arguments per function call
     process_args = [[1, 2, 3], [2, 3, 4], [3, 4, 5]]
     results = multiprocess_loop(
-        process_function=multiply_function, process_args=process_args
+        process_function=multiply_function,
+        process_args=process_args,
     )
     expected_results = [6, 24, 60]  # 1*2*3, 2*3*4, 3*4*5
     assert len(results) == len(expected_results), (
@@ -152,14 +154,15 @@ def test_multiprocess_loop() -> None:
     )
 
     for i, (result, expected) in enumerate(
-        zip(results, expected_results, strict=False)
+        zip(results, expected_results, strict=False),
     ):
         assert result == expected, f"At index {i}: expected {expected}, got {result}"
 
     # Test edge case with single item
     single_process_args = [[42]]
     results = multiprocess_loop(
-        process_function=square_function, process_args=single_process_args
+        process_function=square_function,
+        process_args=single_process_args,
     )
     assert len(results) == 1, f"Expected 1 result, got {len(results)}"
     expected_square_of_42 = 1764
@@ -170,7 +173,8 @@ def test_multiprocess_loop() -> None:
     # Test edge case with empty args (should return empty list)
     empty_process_args: list[list[Any]] = []
     results = multiprocess_loop(
-        process_function=square_function, process_args=empty_process_args
+        process_function=square_function,
+        process_args=empty_process_args,
     )
     assert results == [], f"Expected empty list, got {results}"
 
@@ -180,7 +184,7 @@ def test_multiprocess_loop_with_deepcopy_args() -> None:
     # Test with deepcopy static arguments
     process_args = [["a"], ["b"], ["c"]]
     deepcopy_args: list[list[str]] = [
-        []
+        [],
     ]  # Empty list that should be deep copied for each process
     results = multiprocess_loop(
         process_function=append_to_list,
@@ -193,7 +197,7 @@ def test_multiprocess_loop_with_deepcopy_args() -> None:
     )
 
     for i, (result, expected) in enumerate(
-        zip(results, expected_results, strict=False)
+        zip(results, expected_results, strict=False),
     ):
         assert result == expected, f"At index {i}: expected {expected}, got {result}"
 
@@ -203,7 +207,9 @@ def test_multiprocess_loop_with_process_args_len() -> None:
     # Test with process_args_len parameter
     process_args = [["test1"], ["test2"]]
     results = multiprocess_loop(
-        process_function=simple_identity, process_args=process_args, process_args_len=2
+        process_function=simple_identity,
+        process_args=process_args,
+        process_args_len=2,
     )
     expected_results: list[str] = ["test1", "test2"]
     assert len(results) == len(expected_results), (
@@ -211,6 +217,6 @@ def test_multiprocess_loop_with_process_args_len() -> None:
     )
 
     for i, (result, expected) in enumerate(
-        zip(results, expected_results, strict=False)
+        zip(results, expected_results, strict=False),
     ):
         assert result == expected, f"At index {i}: expected {expected}, got {result}"

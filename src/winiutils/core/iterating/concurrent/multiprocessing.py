@@ -35,7 +35,7 @@ from winiutils.core.iterating.concurrent.concurrent import concurrent_loop
 logger = logging.getLogger(__name__)
 
 
-def get_spawn_pool(*args: Any, **kwargs: Any) -> Pool:
+def get_spawn_pool(*args: Any, **kwargs: Any) -> Pool:  # noqa: ANN401
     """Create a multiprocessing pool with the spawn context.
 
     Uses the 'spawn' start method which creates a fresh Python interpreter

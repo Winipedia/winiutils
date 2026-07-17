@@ -143,12 +143,6 @@ def get_reusable_hash(value: object) -> str:
     Note:
         Two objects with the same string representation will produce the same
         hash, even if they are different types or have different internal state.
-
-    Example:
-        >>> get_reusable_hash("test")
-        '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08'
-        >>> get_reusable_hash({"key": "value"})  # doctest: +ELLIPSIS
-        '...'
     """
     value_str = str(value)
     return hashlib.sha256(value_str.encode("utf-8")).hexdigest()

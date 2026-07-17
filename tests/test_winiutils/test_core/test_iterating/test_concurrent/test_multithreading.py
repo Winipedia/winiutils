@@ -75,7 +75,8 @@ def test_multithread_loop() -> None:
 
     process_args = [[1], [2], [3], [4], [5]]
     results = multithread_loop(
-        process_function=square_function, process_args=process_args
+        process_function=square_function,
+        process_args=process_args,
     )
     expected_results = [1, 4, 9, 16, 25]
     assert len(results) == len(expected_results), (
@@ -84,7 +85,7 @@ def test_multithread_loop() -> None:
 
     # Results should be in original order
     for i, (result, expected) in enumerate(
-        zip(results, expected_results, strict=False)
+        zip(results, expected_results, strict=False),
     ):
         assert result == expected, f"At index {i}: expected {expected}, got {result}"
 
@@ -105,7 +106,7 @@ def test_multithread_loop() -> None:
     )
 
     for i, (result, expected) in enumerate(
-        zip(results, expected_results, strict=False)
+        zip(results, expected_results, strict=False),
     ):
         assert result == expected, f"At index {i}: expected {expected}, got {result}"
 
@@ -115,7 +116,8 @@ def test_multithread_loop() -> None:
 
     process_args = [[1, 2, 3], [2, 3, 4], [3, 4, 5]]
     results = multithread_loop(
-        process_function=multiply_function, process_args=process_args
+        process_function=multiply_function,
+        process_args=process_args,
     )
     expected_results = [6, 24, 60]  # 1*2*3, 2*3*4, 3*4*5
     assert len(results) == len(expected_results), (
@@ -123,7 +125,7 @@ def test_multithread_loop() -> None:
     )
 
     for i, (result, expected) in enumerate(
-        zip(results, expected_results, strict=False)
+        zip(results, expected_results, strict=False),
     ):
         assert result == expected, f"At index {i}: expected {expected}, got {result}"
 
@@ -143,7 +145,7 @@ def test_multithread_loop() -> None:
     )
 
     for i, (result_2, expected_2) in enumerate(
-        zip(string_results, expected_string_results, strict=False)
+        zip(string_results, expected_string_results, strict=False),
     ):
         assert result_2 == expected_2, (
             f"At index {i}: expected {expected_2}, got {result_2}"
@@ -153,7 +155,8 @@ def test_multithread_loop() -> None:
     expected_square_of_42 = 1764
     single_process_args = [[42]]
     results = multithread_loop(
-        process_function=square_function, process_args=single_process_args
+        process_function=square_function,
+        process_args=single_process_args,
     )
     assert len(results) == 1, f"Expected 1 result, got {len(results)}"
     assert results[0] == expected_square_of_42, (
@@ -163,7 +166,8 @@ def test_multithread_loop() -> None:
     # Test edge case with empty args (should return empty list)
     empty_process_args: list[list[Any]] = []
     results = multithread_loop(
-        process_function=square_function, process_args=empty_process_args
+        process_function=square_function,
+        process_args=empty_process_args,
     )
     assert len(results) == 0, f"Expected 0 results for empty args, got {len(results)}"
     assert results == [], f"Expected empty list, got {results}"
@@ -204,7 +208,7 @@ def test_imap_unordered() -> None:
     with ThreadPoolExecutor(max_workers=2) as executor:
         string_iterable = ["hello", "world", "test"]
         string_results = list(
-            imap_unordered(executor, uppercase_function, string_iterable)
+            imap_unordered(executor, uppercase_function, string_iterable),
         )
 
         assert len(string_results) == expected_string_count, (

@@ -332,8 +332,8 @@ class CleaningDF(ABCLoggingMixin):
 
     def __init__(
         self,
-        *args: Any,
-        **kwargs: Any,
+        *args: Any,  # noqa: ANN401
+        **kwargs: Any,  # noqa: ANN401
     ) -> None:
         """Initialize the CleaningDF and execute the cleaning pipeline.
 
@@ -466,7 +466,7 @@ class CleaningDF(ABCLoggingMixin):
             [
                 pl.col(col_name).fill_null(fill_value)
                 for col_name, fill_value in self.get_fill_null_map().items()
-            ]
+            ],
         )
 
     def convert_cols(self) -> None:
@@ -497,7 +497,7 @@ class CleaningDF(ABCLoggingMixin):
             else:
                 continue
             self.df = self.df.with_columns(
-                pl.col(col_name).map_batches(converter, return_dtype=dtype)
+                pl.col(col_name).map_batches(converter, return_dtype=dtype),
             )
 
     def custom_convert_cols(self) -> None:
@@ -509,11 +509,12 @@ class CleaningDF(ABCLoggingMixin):
         self.df = self.df.with_columns(
             [
                 pl.col(col_name).map_batches(
-                    converter, return_dtype=self.get_col_dtype_map()[col_name]
+                    converter,
+                    return_dtype=self.get_col_dtype_map()[col_name],
                 )
                 for col_name, converter in self.get_col_converter_map().items()
                 if converter.__name__ != self.skip_col_converter.__name__  # ty:ignore[unresolved-attribute]
-            ]
+            ],
         )
 
     @classmethod
@@ -704,7 +705,7 @@ class CleaningDF(ABCLoggingMixin):
         no_null_cols = self.get_no_null_cols()
         # Use a single select to check all columns at once
         null_flags = self.df.select(
-            [pl.col(col).is_null().any() for col in no_null_cols]
+            [pl.col(col).is_null().any() for col in no_null_cols],
         )
         # Iterate over columns and check if any have nulls
         for col in no_null_cols:
@@ -727,7 +728,7 @@ class CleaningDF(ABCLoggingMixin):
             if issubclass(dtype, FloatType)
         ]
         has_nan = self.df.select(
-            pl.any_horizontal(pl.col(float_cols).is_nan().any())
+            pl.any_horizontal(pl.col(float_cols).is_nan().any()),
         ).item()
         if has_nan:
             msg = "NaN values found in the dataframe"

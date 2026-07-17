@@ -50,7 +50,10 @@ def test_get_or_create_key(keyring_cleanup: Callable[[str, str], None]) -> None:
     keyring_cleanup(f"{SERVICE_NAME}_AESGCM", USERNAME)
 
     aesgcm, key = get_or_create_key(
-        SERVICE_NAME, USERNAME, AESGCM, lambda: AESGCM.generate_key(bit_length=256)
+        SERVICE_NAME,
+        USERNAME,
+        AESGCM,
+        lambda: AESGCM.generate_key(bit_length=256),
     )
     assert isinstance(aesgcm, AESGCM)
     assert len(key) == AES_256_KEY_BYTES

@@ -36,7 +36,7 @@ class ConcreteService(MyAbstractService):
 service = ConcreteService()
 service.execute()
 # Logs: "ConcreteService - Calling execute with () and {}"
-# Logs: "ConcreteService 
+# Logs: "ConcreteService
 # - execute finished with 0.001 seconds -> returning None"
 ```
 
@@ -109,7 +109,7 @@ For each method call:
 
 ```text
 INFO - MyService - Calling process_data with ([1, 2, 3],) and {}
-INFO - MyService - process_data finished with 0.001234 seconds 
+INFO - MyService - process_data finished with 0.001234 seconds
     -> returning {'processed': 3}
 INFO - MyService - Calling validate with ('test',) and {}
 INFO - MyService - validate finished with 0.000123 seconds -> returning True

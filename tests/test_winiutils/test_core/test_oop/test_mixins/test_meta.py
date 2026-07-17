@@ -37,7 +37,9 @@ class TestABCLoggingMeta:
         """Test that __new__ skips non-loggable methods."""
         # Mock is_loggable_method to return False
         mock_is_loggable = mocker.patch.object(
-            ABCLoggingMeta, "is_loggable_method", return_value=False
+            ABCLoggingMeta,
+            "is_loggable_method",
+            return_value=False,
         )
         mock_wrap_logging = mocker.patch.object(ABCLoggingMeta, "wrap_with_logging")
 
@@ -90,7 +92,7 @@ class TestABCLoggingMeta:
         mock_value_to_truncated_string = mocker.patch(
             value_to_truncated_string.__module__
             + "."
-            + value_to_truncated_string.__name__
+            + value_to_truncated_string.__name__,
         )
 
         # Set up time mock to simulate passage of time
@@ -106,7 +108,9 @@ class TestABCLoggingMeta:
         # Wrap the function
         call_times: dict[str, float] = {}
         wrapped_func = ABCLoggingMeta.wrap_with_logging(
-            test_func, "TestClass", call_times
+            test_func,
+            "TestClass",
+            call_times,
         )
 
         # Create a mock self object
@@ -150,7 +154,9 @@ class TestABCLoggingMeta:
         # Wrap the function
         call_times: dict[str, float] = {}
         wrapped_func = ABCLoggingMeta.wrap_with_logging(
-            test_func, "TestClass", call_times
+            test_func,
+            "TestClass",
+            call_times,
         )
 
         mock_self = mocker.MagicMock()

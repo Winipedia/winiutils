@@ -77,7 +77,10 @@ def get_or_create_aes_gcm(service_name: str, username: str) -> tuple[AESGCM, byt
         >>> encrypted = encrypt_with_aes_gcm(aes_gcm, b"secret")
     """
     return get_or_create_key(
-        service_name, username, AESGCM, lambda: AESGCM.generate_key(bit_length=256)
+        service_name,
+        username,
+        AESGCM,
+        lambda: AESGCM.generate_key(bit_length=256),
     )
 
 
@@ -129,7 +132,9 @@ def get_or_create_key[T](
 
 
 def get_key_as_str[T](
-    service_name: str, username: str, key_class: Callable[[bytes], T]
+    service_name: str,
+    username: str,
+    key_class: Callable[[bytes], T],
 ) -> str | None:
     """Retrieve a key from the keyring as a base64-encoded string.
 

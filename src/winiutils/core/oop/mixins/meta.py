@@ -82,17 +82,23 @@ class ABCLoggingMeta(ABCMeta):
             if mcs.is_loggable_method(attr_value):
                 if isinstance(attr_value, classmethod):
                     wrapped_method = mcs.wrap_with_logging(
-                        func=attr_value.__func__, class_name=name, call_times={}
+                        func=attr_value.__func__,
+                        class_name=name,
+                        call_times={},
                     )
                     dct[attr_name] = classmethod(wrapped_method)
                 elif isinstance(attr_value, staticmethod):
                     wrapped_method = mcs.wrap_with_logging(
-                        func=attr_value.__func__, class_name=name, call_times={}
+                        func=attr_value.__func__,
+                        class_name=name,
+                        call_times={},
                     )
                     dct[attr_name] = staticmethod(wrapped_method)
                 else:
                     dct[attr_name] = mcs.wrap_with_logging(
-                        func=attr_value, class_name=name, call_times={}
+                        func=attr_value,
+                        class_name=name,
+                        call_times={},
                     )
 
         return super().__new__(mcs, name, bases, dct)
@@ -119,7 +125,7 @@ class ABCLoggingMeta(ABCMeta):
         return (
             inspect.isfunction(unwrap_obj(method))  # must be a method-like attribute
             and not getattr(method, "__name__", "__").startswith(
-                "__"
+                "__",
             )  # must not be a magic method
         )
 
@@ -172,11 +178,13 @@ class ABCLoggingMeta(ABCMeta):
 
             if do_logging:
                 args_str = value_to_truncated_string(
-                    value=args, max_length=max_log_length
+                    value=args,
+                    max_length=max_log_length,
                 )
 
                 kwargs_str = value_to_truncated_string(
-                    value=kwargs, max_length=max_log_length
+                    value=kwargs,
+                    max_length=max_log_length,
                 )
 
                 logger.info(
@@ -195,7 +203,8 @@ class ABCLoggingMeta(ABCMeta):
                 duration = time_time() - current_time
 
                 result_str = value_to_truncated_string(
-                    value=result, max_length=max_log_length
+                    value=result,
+                    max_length=max_log_length,
                 )
 
                 logger.info(

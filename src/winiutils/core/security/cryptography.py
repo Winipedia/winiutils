@@ -30,7 +30,9 @@ AES-GCM requires a 12-byte (96-bit) IV for optimal performance and security.
 
 
 def encrypt_with_aes_gcm(
-    aes_gcm: AESGCM, data: bytes, aad: bytes | None = None
+    aes_gcm: AESGCM,
+    data: bytes,
+    aad: bytes | None = None,
 ) -> bytes:
     """Encrypt data using AES-GCM with a random initialization vector.
 
@@ -65,7 +67,9 @@ def encrypt_with_aes_gcm(
 
 
 def decrypt_with_aes_gcm(
-    aes_gcm: AESGCM, data: bytes, aad: bytes | None = None
+    aes_gcm: AESGCM,
+    data: bytes,
+    aad: bytes | None = None,
 ) -> bytes:
     """Decrypt data that was encrypted with AES-GCM.
 

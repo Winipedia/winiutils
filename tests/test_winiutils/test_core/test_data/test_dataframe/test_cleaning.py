@@ -431,7 +431,7 @@ class TestCleaningDF:
         # get last_row_after via string col of last row
         last_row_after = c_df.df.filter(
             pl.col(MyCleaningDF.STR_COL)
-            == last_row.select(pl.col(MyCleaningDF.STR_COL)).item()
+            == last_row.select(pl.col(MyCleaningDF.STR_COL)).item(),
         )
         for col in MyCleaningDF.get_add_on_duplicate_cols():
             assert (
@@ -497,7 +497,7 @@ class TestCleaningDF:
             {
                 c: [fill_null_map[c] if c != MyCleaningDF.FLOAT_COL else float("nan")]
                 for c in MyCleaningDF.get_col_names()
-            }
+            },
         )
         c_df.df = c_df.df.vstack(new_row)
         with pytest.raises(ValueError, match="NaN values found in the dataframe"):
