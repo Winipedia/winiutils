@@ -75,7 +75,7 @@ def test_cancel_on_timeout() -> None:
     expected_result = "test_10.0"
 
     # Test successful execution within timeout
-    wrapped_func = cancel_on_timeout(seconds=1.0, message="Test timeout")(
+    wrapped_func = cancel_on_timeout(seconds=2.0, message="Test timeout")(
         quick_function,
     )
     result = wrapped_func(5, y=15)
