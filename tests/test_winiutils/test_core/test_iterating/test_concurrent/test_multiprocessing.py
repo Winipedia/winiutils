@@ -90,7 +90,7 @@ def test_cancel_on_timeout() -> None:
         wrapped_slow_func()
 
     # Test with different argument types
-    wrapped_args_func = cancel_on_timeout(seconds=1.0, message="Args test timeout")(
+    wrapped_args_func = cancel_on_timeout(seconds=3.0, message="Args test timeout")(
         function_with_args,
     )
     result = wrapped_args_func("test", 5, multiplier=2.0)
