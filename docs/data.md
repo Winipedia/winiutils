@@ -53,6 +53,7 @@ import polars as pl
 from typing import Any
 from collections.abc import Callable
 
+
 class UserDataCleaner(CleaningDF):
     """Clean and standardize user data."""
 
@@ -90,9 +91,7 @@ class UserDataCleaner(CleaningDF):
         }
 
     @classmethod
-    def get_col_converter_map(
-        cls
-    ) -> dict[str, Callable[[pl.Series], pl.Series]]:
+    def get_col_converter_map(cls) -> dict[str, Callable[[pl.Series], pl.Series]]:
         return {
             cls.USER_ID: cls.skip_col_converter,
             cls.EMAIL: lambda s: s.str.to_lowercase(),
@@ -189,9 +188,7 @@ from winiutils.core.data.structures.text.string_ import (
 )
 
 # Truncate long strings
-truncated = value_to_truncated_string(
-    {"key": "very long value..."}, max_length=20
-)
+truncated = value_to_truncated_string({"key": "very long value..."}, max_length=20)
 
 # Generate consistent hash
 hash_value = get_reusable_hash({"user_id": 123, "action": "login"})

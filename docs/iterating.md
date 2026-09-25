@@ -24,9 +24,11 @@ Execute a function in parallel using a process pool.
 ```python
 from winiutils.core.iterating.concurrent.multiprocessing import multiprocess_loop
 
+
 def process_chunk(data, config):
     """CPU-intensive computation."""
     return heavy_computation(data, config)
+
 
 results = multiprocess_loop(
     process_function=process_chunk,
@@ -54,14 +56,14 @@ Decorator/wrapper to enforce execution time limits.
 from winiutils.core.iterating.concurrent.multiprocessing import cancel_on_timeout
 import multiprocessing
 
+
 # As a wrapper (recommended for pickle-able functions)
 def slow_function():
     # Some potentially slow operation
     return result
 
-timed_func = cancel_on_timeout(
-    seconds=5, message="Operation timed out"
-)(slow_function)
+
+timed_func = cancel_on_timeout(seconds=5, message="Operation timed out")(slow_function)
 
 try:
     result = timed_func()
@@ -98,9 +100,11 @@ Execute a function concurrently using a thread pool.
 ```python
 from winiutils.core.iterating.concurrent.multithreading import multithread_loop
 
+
 def fetch_url(url, headers):
     """I/O-bound operation."""
     return requests.get(url, headers=headers)
+
 
 responses = multithread_loop(
     process_function=fetch_url,
@@ -129,7 +133,7 @@ Yield results from futures as they complete.
 
 ```python
 from winiutils.core.iterating.concurrent.multithreading import (
-    get_future_results_as_completed
+    get_future_results_as_completed,
 )
 
 futures = [executor.submit(func, arg) for arg in args]
@@ -180,9 +184,11 @@ from winiutils.core.iterating.iterate import get_len_with_default
 # Works with sized iterables
 length = get_len_with_default([1, 2, 3], default=0)  # 3
 
+
 # Falls back to default for generators
 def gen():
     yield from range(10)
+
 
 length = get_len_with_default(gen(), default=10)  # 10
 ```

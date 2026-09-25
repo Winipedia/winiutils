@@ -20,10 +20,12 @@ all non-magic methods with logging functionality.
 from winiutils.core.oop.mixins.meta import ABCLoggingMeta
 from abc import abstractmethod
 
+
 class MyAbstractService(metaclass=ABCLoggingMeta):
     @abstractmethod
     def execute(self) -> None:
         pass
+
 
 class ConcreteService(MyAbstractService):
     def execute(self) -> None:
@@ -31,6 +33,7 @@ class ConcreteService(MyAbstractService):
 
     def process(self, data: list) -> int:
         return len(data)
+
 
 # All methods automatically logged
 service = ConcreteService()
@@ -56,6 +59,7 @@ A ready-to-use mixin class with `ABCLoggingMeta` pre-configured.
 ```python
 from winiutils.core.oop.mixins.mixin import ABCLoggingMixin
 
+
 class MyService(ABCLoggingMixin):
     def process_data(self, data: list) -> dict:
         return {"processed": len(data)}
@@ -67,6 +71,7 @@ class MyService(ABCLoggingMixin):
     @staticmethod
     def helper(x: int) -> int:
         return x * 2
+
 
 # All methods automatically logged
 service = MyService()
@@ -151,6 +156,7 @@ The `CleaningDF` class uses `ABCLoggingMixin` for automatic pipeline logging:
 ```python
 from winiutils.core.oop.mixins.mixin import ABCLoggingMixin
 
+
 class CleaningDF(ABCLoggingMixin):
     def rename_cols(self, df):
         # Automatically logged
@@ -207,5 +213,6 @@ INFO - CleaningDF - fill_nulls finished with 0.001 seconds -> ...
 
 ```python
 import logging
+
 logging.getLogger("winiutils.core.oop.mixins.meta").setLevel(logging.WARNING)
 ```

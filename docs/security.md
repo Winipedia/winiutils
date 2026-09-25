@@ -84,8 +84,7 @@ Get or create a 256-bit AES-GCM key stored in the system keyring.
 from winiutils.core.security.keyring import get_or_create_aes_gcm
 
 aes_gcm, raw_key = get_or_create_aes_gcm(
-    service_name="my_app",
-    username="user@example.com"
+    service_name="my_app", username="user@example.com"
 )
 ```
 
@@ -106,8 +105,7 @@ Get or create a Fernet key stored in the system keyring.
 from winiutils.core.security.keyring import get_or_create_fernet
 
 fernet, raw_key = get_or_create_fernet(
-    service_name="my_app",
-    username="user@example.com"
+    service_name="my_app", username="user@example.com"
 )
 
 # Fernet provides simpler API with timestamps
