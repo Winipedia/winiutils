@@ -1,6 +1,6 @@
 [project]
 name = "winiutils"
-version = "4.14.120"
+version = "4.14.123"
 description = "A utility library for Python development"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -30,7 +30,7 @@ dependencies = [
   "keyring>=25.7.0",
   "keyrings-alt>=5.0.2",
   "polars>=2.0.0",
-  "pyrig-runtime>=3.25.0",
+  "pyrig-runtime>=3.26.0",
   "tqdm>=4.70.1",
 ]
 
