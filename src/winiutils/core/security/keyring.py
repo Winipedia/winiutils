@@ -36,31 +36,6 @@ if os.getenv("GITHUB_ACTIONS", "false") == "true":
     keyring.set_keyring(_backend)
 
 
-def get_or_create_fernet(service_name: str, username: str) -> tuple[Fernet, bytes]:
-    """Get or create a Fernet symmetric encryption key from the keyring.
-
-    Retrieves an existing Fernet key from the system keyring, or generates
-    a new one if it doesn't exist. The key is stored in the keyring for
-    future use.
-
-    Args:
-        service_name: The service name to use for keyring storage. This
-            identifies your application.
-        username: The username/key identifier within the service.
-
-    Returns:
-        A tuple of (Fernet instance, raw key bytes). The Fernet instance
-        can be used directly for encryption/decryption.
-
-    Example:
-        >>> fernet, key = get_or_create_fernet("my_app", "main_key")
-        >>> encrypted = fernet.encrypt(b"hello")
-        >>> fernet.decrypt(encrypted)
-        b'hello'
-    """
-    return get_or_create_key(service_name, username, Fernet, Fernet.generate_key)
-
-
 def get_or_create_aes_gcm(service_name: str, username: str) -> tuple[AESGCM, bytes]:
     """Get or create an AES-GCM encryption key from the keyring.
 
@@ -88,6 +63,31 @@ def get_or_create_aes_gcm(service_name: str, username: str) -> tuple[AESGCM, byt
         AESGCM,
         lambda: AESGCM.generate_key(bit_length=256),
     )
+
+
+def get_or_create_fernet(service_name: str, username: str) -> tuple[Fernet, bytes]:
+    """Get or create a Fernet symmetric encryption key from the keyring.
+
+    Retrieves an existing Fernet key from the system keyring, or generates
+    a new one if it doesn't exist. The key is stored in the keyring for
+    future use.
+
+    Args:
+        service_name: The service name to use for keyring storage. This
+            identifies your application.
+        username: The username/key identifier within the service.
+
+    Returns:
+        A tuple of (Fernet instance, raw key bytes). The Fernet instance
+        can be used directly for encryption/decryption.
+
+    Example:
+        >>> fernet, key = get_or_create_fernet("my_app", "main_key")
+        >>> encrypted = fernet.encrypt(b"hello")
+        >>> fernet.decrypt(encrypted)
+        b'hello'
+    """
+    return get_or_create_key(service_name, username, Fernet, Fernet.generate_key)
 
 
 def get_or_create_key[T](

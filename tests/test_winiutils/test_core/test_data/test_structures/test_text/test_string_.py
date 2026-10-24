@@ -96,60 +96,6 @@ def test_find_xml_namespaces() -> None:
     )
 
 
-def test_value_to_truncated_string() -> None:
-    """Test func for value_to_truncated_string."""
-    # Local constants for this test function
-    truncate_length_small = 5
-    truncate_length_medium = 15
-    truncate_length_large = 20
-
-    # Test with short string
-    short_text = "Hello"
-    result = value_to_truncated_string(short_text, 10)
-
-    assert result == "Hello", f"Expected 'Hello', got '{result}'"
-
-    # Test with long string that needs truncation
-    long_text = "This is a very long string that should be truncated"
-    result = value_to_truncated_string(long_text, truncate_length_large)
-
-    assert len(result) <= truncate_length_large, (
-        f"Expected result length <= {truncate_length_large}, got {len(result)}"
-    )
-    assert result.endswith("..."), (
-        f"Expected truncated string to end with '...', got '{result}'"
-    )
-
-    # Test with non-string object
-    test_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    result = value_to_truncated_string(test_list, truncate_length_medium)
-
-    assert len(result) <= truncate_length_medium, (
-        f"Expected result length <= {truncate_length_medium}, got {len(result)}"
-    )
-
-    # Test with exact length
-    exact_text = "Exactly20Characters!"
-    result = value_to_truncated_string(exact_text, truncate_length_large)
-
-    assert result == exact_text, f"Expected '{exact_text}', got '{result}'"
-
-    # Test with very small max_length
-    result = value_to_truncated_string("Hello World", truncate_length_small)
-
-    assert len(result) <= truncate_length_small, (
-        f"Expected result length <= {truncate_length_small}, got {len(result)}"
-    )
-
-    # Test with very small max_length (minimum is 4 for textwrap.shorten with "...")
-    min_width = 4  # Must be larger than placeholder length
-    result = value_to_truncated_string("Hello World", min_width)
-
-    assert len(result) <= min_width, (
-        f"Expected result length <= {min_width}, got {len(result)}"
-    )
-
-
 def test_get_reusable_hash() -> None:
     """Test func for get_reusable_hash."""
     # Local constant for this test function
@@ -208,4 +154,58 @@ def test_get_reusable_hash() -> None:
 
     assert none_hash == expected_none_hash, (
         f"Expected {expected_none_hash}, got {none_hash}"
+    )
+
+
+def test_value_to_truncated_string() -> None:
+    """Test func for value_to_truncated_string."""
+    # Local constants for this test function
+    truncate_length_small = 5
+    truncate_length_medium = 15
+    truncate_length_large = 20
+
+    # Test with short string
+    short_text = "Hello"
+    result = value_to_truncated_string(short_text, 10)
+
+    assert result == "Hello", f"Expected 'Hello', got '{result}'"
+
+    # Test with long string that needs truncation
+    long_text = "This is a very long string that should be truncated"
+    result = value_to_truncated_string(long_text, truncate_length_large)
+
+    assert len(result) <= truncate_length_large, (
+        f"Expected result length <= {truncate_length_large}, got {len(result)}"
+    )
+    assert result.endswith("..."), (
+        f"Expected truncated string to end with '...', got '{result}'"
+    )
+
+    # Test with non-string object
+    test_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    result = value_to_truncated_string(test_list, truncate_length_medium)
+
+    assert len(result) <= truncate_length_medium, (
+        f"Expected result length <= {truncate_length_medium}, got {len(result)}"
+    )
+
+    # Test with exact length
+    exact_text = "Exactly20Characters!"
+    result = value_to_truncated_string(exact_text, truncate_length_large)
+
+    assert result == exact_text, f"Expected '{exact_text}', got '{result}'"
+
+    # Test with very small max_length
+    result = value_to_truncated_string("Hello World", truncate_length_small)
+
+    assert len(result) <= truncate_length_small, (
+        f"Expected result length <= {truncate_length_small}, got {len(result)}"
+    )
+
+    # Test with very small max_length (minimum is 4 for textwrap.shorten with "...")
+    min_width = 4  # Must be larger than placeholder length
+    result = value_to_truncated_string("Hello World", min_width)
+
+    assert len(result) <= min_width, (
+        f"Expected result length <= {min_width}, got {len(result)}"
     )

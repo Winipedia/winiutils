@@ -14,61 +14,6 @@ from winiutils.core.iterating.concurrent.multiprocessing import (
 
 
 # Module-level functions for multiprocessing tests (must be pickle-able)
-def quick_function(x: int, y: int = 10) -> int:
-    """Quick function for testing timeout functionality."""
-    return x + y
-
-
-def slow_function() -> str:
-    """Slow function for testing timeout behavior."""
-    time.sleep(2.0)  # Sleep longer than timeout
-    return "completed"
-
-
-def function_with_args(name: str, count: int, multiplier: float = 1.0) -> str:
-    """Function with various argument types for testing."""
-    return f"{name}_{count * multiplier}"
-
-
-def instant_function() -> str:
-    """Instant function for testing zero timeout."""
-    return "instant"
-
-
-def square_function(x: int) -> int:
-    """Square function for testing basic parallel execution."""
-    return x * x
-
-
-def add_function(x: int, y: int) -> int:
-    """Add function for testing static arguments."""
-    return x + y
-
-
-def multiply_function(x: int, y: int, z: int) -> int:
-    """Multiply function for testing multiple arguments."""
-    return x * y * z
-
-
-def append_to_list(item: str, target_list: list[str]) -> list[str]:
-    """Append function for testing deepcopy arguments."""
-    target_list.append(item)
-    return target_list.copy()
-
-
-def simple_identity(x: str) -> str:
-    """Identity function for testing process_args_len."""
-    return x
-
-
-def test_get_spawn_pool() -> None:
-    """Test func for get_spawn_pool."""
-    with get_spawn_pool(processes=1) as pool:
-        ctx = getattr(pool, "_ctx", None)
-        method = getattr(ctx, "get_start_method", lambda: None)()
-        assert method == "spawn", "Expected spawn context"
-
-
 def test_cancel_on_timeout() -> None:
     """Test func for cancel_on_timeout."""
     expected_sum = 20
@@ -103,6 +48,14 @@ def test_cancel_on_timeout() -> None:
 
     with pytest.raises(multiprocessing.TimeoutError):
         wrapped_instant()
+
+
+def test_get_spawn_pool() -> None:
+    """Test func for get_spawn_pool."""
+    with get_spawn_pool(processes=1) as pool:
+        ctx = getattr(pool, "_ctx", None)
+        method = getattr(ctx, "get_start_method", lambda: None)()
+        assert method == "spawn", "Expected spawn context"
 
 
 def test_multiprocess_loop() -> None:
@@ -220,3 +173,50 @@ def test_multiprocess_loop_with_process_args_len() -> None:
         zip(results, expected_results, strict=False),
     ):
         assert result == expected, f"At index {i}: expected {expected}, got {result}"
+
+
+def add_function(x: int, y: int) -> int:
+    """Add function for testing static arguments."""
+    return x + y
+
+
+def append_to_list(item: str, target_list: list[str]) -> list[str]:
+    """Append function for testing deepcopy arguments."""
+    target_list.append(item)
+    return target_list.copy()
+
+
+def function_with_args(name: str, count: int, multiplier: float = 1.0) -> str:
+    """Function with various argument types for testing."""
+    return f"{name}_{count * multiplier}"
+
+
+def instant_function() -> str:
+    """Instant function for testing zero timeout."""
+    return "instant"
+
+
+def multiply_function(x: int, y: int, z: int) -> int:
+    """Multiply function for testing multiple arguments."""
+    return x * y * z
+
+
+def quick_function(x: int, y: int = 10) -> int:
+    """Quick function for testing timeout functionality."""
+    return x + y
+
+
+def simple_identity(x: str) -> str:
+    """Identity function for testing process_args_len."""
+    return x
+
+
+def slow_function() -> str:
+    """Slow function for testing timeout behavior."""
+    time.sleep(2.0)  # Sleep longer than timeout
+    return "completed"
+
+
+def square_function(x: int) -> int:
+    """Square function for testing basic parallel execution."""
+    return x * x

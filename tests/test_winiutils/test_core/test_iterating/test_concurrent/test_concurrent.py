@@ -15,63 +15,134 @@ from winiutils.core.iterating.concurrent.concurrent import (
 )
 
 
-def test_get_order_and_func_result() -> None:
-    """Test func for get_order_and_func_result."""
-    expected_add_result = 8
-    expected_multiply_order = 2
-    expected_multiply_result = 24
-    expected_string_order = 1
-    expected_no_args_order = 3
+def test_concurrent_loop() -> None:
+    """Test func for concurrent_loop."""
 
-    # Test basic functionality
-    def simple_add(x: int, y: int) -> int:
+    # Test basic threading functionality
+    def square_func(x: int) -> int:
+        return x * x
+
+    process_args = [[1], [2], [3], [4]]
+    results = concurrent_loop(
+        threading=True,
+        process_function=square_func,
+        process_args=process_args,
+    )
+
+    expected_results = [1, 4, 9, 16]
+    expected_count = 4
+    assert len(results) == expected_count, (
+        f"Expected {expected_count} results, got {len(results)}"
+    )
+
+    for i, (result, expected) in enumerate(
+        zip(results, expected_results, strict=False),
+    ):
+        assert result == expected, f"At index {i}: expected {expected}, got {result}"
+
+    # Test with static arguments
+    def add_func(x: int, y: int) -> int:
         return x + y
 
-    add_func_order_args = (simple_add, 0, 5, 3)
-    order, result = get_order_and_func_result(add_func_order_args)
-
-    assert order == 0, f"Expected order 0, got {order}"
-    assert result == expected_add_result, (
-        f"Expected result {expected_add_result}, got {result}"
+    process_args = [[1], [2], [3]]
+    static_args = [10]
+    results = concurrent_loop(
+        threading=True,
+        process_function=add_func,
+        process_args=process_args,
+        process_args_static=static_args,
     )
 
-    # Test with different function and order
-    def multiply(x: int, y: int, z: int) -> int:
-        return x * y * z
+    expected_results = [11, 12, 13]
+    for i, (result, expected) in enumerate(
+        zip(results, expected_results, strict=False),
+    ):
+        assert result == expected, f"At index {i}: expected {expected}, got {result}"
 
-    multiply_func_order_args = (multiply, expected_multiply_order, 2, 3, 4)
-    order, result = get_order_and_func_result(multiply_func_order_args)
+    # Test with process_args_len parameter
+    def identity_func(x: str) -> str:
+        return x
 
-    assert order == expected_multiply_order, (
-        f"Expected order {expected_multiply_order}, got {order}"
+    string_process_args = [["test1"], ["test2"]]
+    string_results = concurrent_loop(
+        threading=True,
+        process_function=identity_func,
+        process_args=string_process_args,
+        process_args_len=2,
     )
-    assert result == expected_multiply_result, (
-        f"Expected result {expected_multiply_result}, got {result}"
+
+    expected_string_results = ["test1", "test2"]
+    for idx, (result_2, expected_2) in enumerate(
+        zip(string_results, expected_string_results, strict=False),
+    ):
+        assert result_2 == expected_2, (
+            f"At index {idx}: expected {expected_2}, got {result_2}"
+        )
+
+    # Test edge case with single item
+    single_process_args = [[42]]
+    single_results = concurrent_loop(
+        threading=True,
+        process_function=square_func,
+        process_args=single_process_args,
     )
 
-    # Test with string function
-    def concat_strings(*args: str) -> str:
-        return "".join(args)
-
-    string_func_order_args = (concat_strings, expected_string_order, "hello", "world")
-    order, result = get_order_and_func_result(string_func_order_args)
-
-    assert order == expected_string_order, (
-        f"Expected order {expected_string_order}, got {order}"
+    expected_single_result = 1764
+    assert len(single_results) == 1, f"Expected 1 result, got {len(single_results)}"
+    assert single_results[0] == expected_single_result, (
+        f"Expected {expected_single_result}, got {single_results[0]}"
     )
-    assert result == "helloworld", f"Expected 'helloworld', got {result}"
 
-    # Test with no additional arguments
-    def no_args_func() -> str:
-        return "no_args"
-
-    no_args_func_order_args = (no_args_func, expected_no_args_order)
-    order, result = get_order_and_func_result(no_args_func_order_args)
-
-    assert order == expected_no_args_order, (
-        f"Expected order {expected_no_args_order}, got {order}"
+    # Test edge case with empty args
+    empty_process_args: list[list[Any]] = []
+    empty_results = concurrent_loop(
+        threading=True,
+        process_function=square_func,
+        process_args=empty_process_args,
     )
-    assert result == "no_args", f"Expected 'no_args', got {result}"
+
+    assert len(empty_results) == 0, f"Expected 0 results, got {len(empty_results)}"
+    assert empty_results == [], f"Expected empty list, got {empty_results}"
+
+
+def test_find_max_pools() -> None:
+    """Test func for find_max_pools."""
+    # Test threading mode
+    threading_pools = find_max_pools(threads=True)
+
+    # Should return at least 1
+    assert threading_pools >= 1, (
+        f"Expected at least 1 thread pool, got {threading_pools}"
+    )
+
+    # Should be reasonable based on CPU count
+    cpu_count = os.cpu_count() or 1
+    max_expected_threads = cpu_count * 4
+    assert threading_pools <= max_expected_threads, (
+        f"Expected at most {max_expected_threads} thread pools, got {threading_pools}"
+    )
+
+    # Test multiprocessing mode
+    multiprocessing_pools = find_max_pools(threads=False)
+
+    assert multiprocessing_pools >= 1, (
+        f"Expected at least 1 process pool, got {multiprocessing_pools}"
+    )
+    assert multiprocessing_pools <= cpu_count, (
+        f"Expected at most {cpu_count} process pools, got {multiprocessing_pools}"
+    )
+
+    # Test with process_args_len constraint
+    small_task_pools = find_max_pools(threads=True, process_args_len=2)
+
+    # Should not exceed the number of tasks
+    assert small_task_pools >= 1, f"Expected at least 1 pool, got {small_task_pools}"
+    # Note: The actual constraint depends on available tasks vs process_args_len
+
+    # Test with large process_args_len
+    large_task_pools = find_max_pools(threads=False, process_args_len=1000)
+
+    assert large_task_pools >= 1, f"Expected at least 1 pool, got {large_task_pools}"
 
 
 def test_generate_process_args() -> None:
@@ -247,134 +318,63 @@ def test_get_multiprocess_results_with_tqdm() -> None:
     assert sorted_empty == [], f"Expected empty list, got {sorted_empty}"
 
 
-def test_find_max_pools() -> None:
-    """Test func for find_max_pools."""
-    # Test threading mode
-    threading_pools = find_max_pools(threads=True)
+def test_get_order_and_func_result() -> None:
+    """Test func for get_order_and_func_result."""
+    expected_add_result = 8
+    expected_multiply_order = 2
+    expected_multiply_result = 24
+    expected_string_order = 1
+    expected_no_args_order = 3
 
-    # Should return at least 1
-    assert threading_pools >= 1, (
-        f"Expected at least 1 thread pool, got {threading_pools}"
-    )
-
-    # Should be reasonable based on CPU count
-    cpu_count = os.cpu_count() or 1
-    max_expected_threads = cpu_count * 4
-    assert threading_pools <= max_expected_threads, (
-        f"Expected at most {max_expected_threads} thread pools, got {threading_pools}"
-    )
-
-    # Test multiprocessing mode
-    multiprocessing_pools = find_max_pools(threads=False)
-
-    assert multiprocessing_pools >= 1, (
-        f"Expected at least 1 process pool, got {multiprocessing_pools}"
-    )
-    assert multiprocessing_pools <= cpu_count, (
-        f"Expected at most {cpu_count} process pools, got {multiprocessing_pools}"
-    )
-
-    # Test with process_args_len constraint
-    small_task_pools = find_max_pools(threads=True, process_args_len=2)
-
-    # Should not exceed the number of tasks
-    assert small_task_pools >= 1, f"Expected at least 1 pool, got {small_task_pools}"
-    # Note: The actual constraint depends on available tasks vs process_args_len
-
-    # Test with large process_args_len
-    large_task_pools = find_max_pools(threads=False, process_args_len=1000)
-
-    assert large_task_pools >= 1, f"Expected at least 1 pool, got {large_task_pools}"
-
-
-def test_concurrent_loop() -> None:
-    """Test func for concurrent_loop."""
-
-    # Test basic threading functionality
-    def square_func(x: int) -> int:
-        return x * x
-
-    process_args = [[1], [2], [3], [4]]
-    results = concurrent_loop(
-        threading=True,
-        process_function=square_func,
-        process_args=process_args,
-    )
-
-    expected_results = [1, 4, 9, 16]
-    expected_count = 4
-    assert len(results) == expected_count, (
-        f"Expected {expected_count} results, got {len(results)}"
-    )
-
-    for i, (result, expected) in enumerate(
-        zip(results, expected_results, strict=False),
-    ):
-        assert result == expected, f"At index {i}: expected {expected}, got {result}"
-
-    # Test with static arguments
-    def add_func(x: int, y: int) -> int:
+    # Test basic functionality
+    def simple_add(x: int, y: int) -> int:
         return x + y
 
-    process_args = [[1], [2], [3]]
-    static_args = [10]
-    results = concurrent_loop(
-        threading=True,
-        process_function=add_func,
-        process_args=process_args,
-        process_args_static=static_args,
+    add_func_order_args = (simple_add, 0, 5, 3)
+    order, result = get_order_and_func_result(add_func_order_args)
+
+    assert order == 0, f"Expected order 0, got {order}"
+    assert result == expected_add_result, (
+        f"Expected result {expected_add_result}, got {result}"
     )
 
-    expected_results = [11, 12, 13]
-    for i, (result, expected) in enumerate(
-        zip(results, expected_results, strict=False),
-    ):
-        assert result == expected, f"At index {i}: expected {expected}, got {result}"
+    # Test with different function and order
+    def multiply(x: int, y: int, z: int) -> int:
+        return x * y * z
 
-    # Test with process_args_len parameter
-    def identity_func(x: str) -> str:
-        return x
+    multiply_func_order_args = (multiply, expected_multiply_order, 2, 3, 4)
+    order, result = get_order_and_func_result(multiply_func_order_args)
 
-    string_process_args = [["test1"], ["test2"]]
-    string_results = concurrent_loop(
-        threading=True,
-        process_function=identity_func,
-        process_args=string_process_args,
-        process_args_len=2,
+    assert order == expected_multiply_order, (
+        f"Expected order {expected_multiply_order}, got {order}"
+    )
+    assert result == expected_multiply_result, (
+        f"Expected result {expected_multiply_result}, got {result}"
     )
 
-    expected_string_results = ["test1", "test2"]
-    for idx, (result_2, expected_2) in enumerate(
-        zip(string_results, expected_string_results, strict=False),
-    ):
-        assert result_2 == expected_2, (
-            f"At index {idx}: expected {expected_2}, got {result_2}"
-        )
+    # Test with string function
+    def concat_strings(*args: str) -> str:
+        return "".join(args)
 
-    # Test edge case with single item
-    single_process_args = [[42]]
-    single_results = concurrent_loop(
-        threading=True,
-        process_function=square_func,
-        process_args=single_process_args,
+    string_func_order_args = (concat_strings, expected_string_order, "hello", "world")
+    order, result = get_order_and_func_result(string_func_order_args)
+
+    assert order == expected_string_order, (
+        f"Expected order {expected_string_order}, got {order}"
     )
+    assert result == "helloworld", f"Expected 'helloworld', got {result}"
 
-    expected_single_result = 1764
-    assert len(single_results) == 1, f"Expected 1 result, got {len(single_results)}"
-    assert single_results[0] == expected_single_result, (
-        f"Expected {expected_single_result}, got {single_results[0]}"
+    # Test with no additional arguments
+    def no_args_func() -> str:
+        return "no_args"
+
+    no_args_func_order_args = (no_args_func, expected_no_args_order)
+    order, result = get_order_and_func_result(no_args_func_order_args)
+
+    assert order == expected_no_args_order, (
+        f"Expected order {expected_no_args_order}, got {order}"
     )
-
-    # Test edge case with empty args
-    empty_process_args: list[list[Any]] = []
-    empty_results = concurrent_loop(
-        threading=True,
-        process_function=square_func,
-        process_args=empty_process_args,
-    )
-
-    assert len(empty_results) == 0, f"Expected 0 results, got {len(empty_results)}"
-    assert empty_results == [], f"Expected empty list, got {empty_results}"
+    assert result == "no_args", f"Expected 'no_args', got {result}"
 
 
 # Note: test_get_order_and_func_result_func() is not needed as

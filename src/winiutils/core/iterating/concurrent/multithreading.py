@@ -30,29 +30,32 @@ from typing import Any
 from winiutils.core.iterating.concurrent.concurrent import concurrent_loop
 
 
-def get_future_results_as_completed(
-    futures: Iterable[Future[Any]],
+def imap_unordered(
+    executor: ThreadPoolExecutor,
+    func: Callable[..., Any],
+    iterable: Iterable[Any],
 ) -> Generator[Any, None, None]:
-    """Yield future results as they complete.
+    """Apply a function to each item in an iterable in parallel.
 
-    Yields results from futures in the order they complete, not in the
-    order they were submitted. This allows processing results as soon as
-    they're available.
+    Similar to ``multiprocessing.Pool.imap_unordered()``, this function
+    submits all items to the executor and yields results as they complete.
 
     Args:
-        futures: Iterable of Future objects to get results from.
+        executor: ThreadPoolExecutor to use for parallel execution.
+        func: Function to apply to each item in the iterable.
+        iterable: Iterable of items to apply the function to.
 
     Yields:
-        The result of each completed future.
+        Results of applying the function to each item, in completion order
+        (not submission order).
 
     Example:
-        >>> with ThreadPoolExecutor() as executor:
-        ...     futures = [executor.submit(square, i) for i in range(3)]
-        ...     for result in get_future_results_as_completed(futures):
+        >>> with ThreadPoolExecutor(max_workers=4) as executor:
+        ...     for result in imap_unordered(executor, square, [1, 2, 3]):
         ...         print(result)
     """
-    for future in as_completed(futures):
-        yield future.result()
+    results = [executor.submit(func, item) for item in iterable]
+    yield from get_future_results_as_completed(results)
 
 
 def multithread_loop(
@@ -106,29 +109,26 @@ def multithread_loop(
     )
 
 
-def imap_unordered(
-    executor: ThreadPoolExecutor,
-    func: Callable[..., Any],
-    iterable: Iterable[Any],
+def get_future_results_as_completed(
+    futures: Iterable[Future[Any]],
 ) -> Generator[Any, None, None]:
-    """Apply a function to each item in an iterable in parallel.
+    """Yield future results as they complete.
 
-    Similar to ``multiprocessing.Pool.imap_unordered()``, this function
-    submits all items to the executor and yields results as they complete.
+    Yields results from futures in the order they complete, not in the
+    order they were submitted. This allows processing results as soon as
+    they're available.
 
     Args:
-        executor: ThreadPoolExecutor to use for parallel execution.
-        func: Function to apply to each item in the iterable.
-        iterable: Iterable of items to apply the function to.
+        futures: Iterable of Future objects to get results from.
 
     Yields:
-        Results of applying the function to each item, in completion order
-        (not submission order).
+        The result of each completed future.
 
     Example:
-        >>> with ThreadPoolExecutor(max_workers=4) as executor:
-        ...     for result in imap_unordered(executor, square, [1, 2, 3]):
+        >>> with ThreadPoolExecutor() as executor:
+        ...     futures = [executor.submit(square, i) for i in range(3)]
+        ...     for result in get_future_results_as_completed(futures):
         ...         print(result)
     """
-    results = [executor.submit(func, item) for item in iterable]
-    yield from get_future_results_as_completed(results)
+    for future in as_completed(futures):
+        yield future.result()

@@ -19,16 +19,15 @@ USERNAME = "test_user"
 AES_256_KEY_BYTES = 32
 
 
-def test_get_or_create_fernet(keyring_cleanup: Callable[[str, str], None]) -> None:
-    """Test get_or_create_fernet creates and retrieves keys."""
+def test_get_key_as_str(keyring_cleanup: Callable[[str, str], None]) -> None:
+    """Test get_key_as_str returns stored key string."""
     keyring_cleanup(f"{SERVICE_NAME}_Fernet", USERNAME)
 
-    fernet, key = get_or_create_fernet(SERVICE_NAME, USERNAME)
-    assert isinstance(fernet, Fernet)
-    assert fernet.decrypt(fernet.encrypt(b"test")) == b"test"
+    assert get_key_as_str(SERVICE_NAME, USERNAME, Fernet) is None
 
-    _, key2 = get_or_create_fernet(SERVICE_NAME, USERNAME)
-    assert key == key2
+    get_or_create_fernet(SERVICE_NAME, USERNAME)
+    result = get_key_as_str(SERVICE_NAME, USERNAME, Fernet)
+    assert result is not None
 
 
 def test_get_or_create_aes_gcm(keyring_cleanup: Callable[[str, str], None]) -> None:
@@ -45,6 +44,18 @@ def test_get_or_create_aes_gcm(keyring_cleanup: Callable[[str, str], None]) -> N
     assert key == key2
 
 
+def test_get_or_create_fernet(keyring_cleanup: Callable[[str, str], None]) -> None:
+    """Test get_or_create_fernet creates and retrieves keys."""
+    keyring_cleanup(f"{SERVICE_NAME}_Fernet", USERNAME)
+
+    fernet, key = get_or_create_fernet(SERVICE_NAME, USERNAME)
+    assert isinstance(fernet, Fernet)
+    assert fernet.decrypt(fernet.encrypt(b"test")) == b"test"
+
+    _, key2 = get_or_create_fernet(SERVICE_NAME, USERNAME)
+    assert key == key2
+
+
 def test_get_or_create_key(keyring_cleanup: Callable[[str, str], None]) -> None:
     """Test get_or_create_key with custom key class."""
     keyring_cleanup(f"{SERVICE_NAME}_AESGCM", USERNAME)
@@ -57,17 +68,6 @@ def test_get_or_create_key(keyring_cleanup: Callable[[str, str], None]) -> None:
     )
     assert isinstance(aesgcm, AESGCM)
     assert len(key) == AES_256_KEY_BYTES
-
-
-def test_get_key_as_str(keyring_cleanup: Callable[[str, str], None]) -> None:
-    """Test get_key_as_str returns stored key string."""
-    keyring_cleanup(f"{SERVICE_NAME}_Fernet", USERNAME)
-
-    assert get_key_as_str(SERVICE_NAME, USERNAME, Fernet) is None
-
-    get_or_create_fernet(SERVICE_NAME, USERNAME)
-    result = get_key_as_str(SERVICE_NAME, USERNAME, Fernet)
-    assert result is not None
 
 
 def test_make_service_name() -> None:

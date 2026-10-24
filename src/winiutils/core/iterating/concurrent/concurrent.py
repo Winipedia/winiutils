@@ -43,26 +43,139 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def get_order_and_func_result(
-    func_order_args: tuple[Any, ...],
-) -> tuple[int, Any]:
-    """Execute a function and return its result with order index.
+def concurrent_loop(  # noqa: PLR0913
+    *,
+    threading: bool,
+    process_function: Callable[..., Any],
+    process_args: Iterable[Iterable[Any]],
+    process_args_static: Iterable[Any] | None = None,
+    deepcopy_static_args: Iterable[Any] | None = None,
+    process_args_len: int = 1,
+) -> list[Any]:
+    """Execute a function concurrently with multiple argument sets.
 
-    Helper function used with ``imap_unordered`` to execute a function with
-    arguments unpacking while preserving the original order of results.
+    Core function that provides a unified interface for both multiprocessing
+    and multithreading execution. This is the internal implementation used
+    by ``multiprocess_loop()`` and ``multithread_loop()``.
 
     Args:
-        func_order_args: Tuple containing:
-            - The function to be executed
-            - The order index (int)
-            - The arguments for the function (unpacked)
+        threading: Whether to use threading (True) or multiprocessing
+            (False). Use threading for I/O-bound tasks and multiprocessing
+            for CPU-bound tasks.
+        process_function: The function to execute concurrently. Must be
+            pickle-able for multiprocessing.
+        process_args: Iterable of argument lists for each parallel call.
+            Each inner iterable contains the arguments for one function
+            call.
+        process_args_static: Optional constant arguments to append to each
+            call. These are shared across all calls without copying.
+            Defaults to None.
+        deepcopy_static_args: Optional arguments that should be deep-copied
+            for each process. Use this for mutable objects that should not
+            be shared between processes. Defaults to None.
+        process_args_len: Length of ``process_args``. Used for progress bar
+            and worker pool sizing. Defaults to 1.
 
     Returns:
-        A tuple of (order_index, result) where order_index is the original
-        position and result is the function's return value.
+        List of results from the function executions, in the original
+        submission order.
+
+    Note:
+        This function is not meant to be used directly. Use
+        ``multiprocess_loop()`` for CPU-bound tasks or ``multithread_loop()``
+        for I/O-bound tasks instead.
     """
-    function, order, *args = func_order_args
-    return order, function(*args)
+    from winiutils.core.iterating.concurrent.multiprocessing import (  # noqa: PLC0415  # avoid circular import
+        get_spawn_pool,
+    )
+    from winiutils.core.iterating.concurrent.multithreading import (  # noqa: PLC0415  # avoid circular import
+        imap_unordered,
+    )
+
+    process_args_len = get_len_with_default(process_args, process_args_len)
+    process_args = generate_process_args(
+        process_function=process_function,
+        process_args=process_args,
+        process_args_static=process_args_static,
+        deepcopy_static_args=deepcopy_static_args,
+    )
+    max_workers = find_max_pools(threads=threading, process_args_len=process_args_len)
+    pool_executor = (
+        ThreadPoolExecutor(max_workers=max_workers)
+        if threading
+        else get_spawn_pool(processes=max_workers)
+    )
+    with pool_executor as pool:
+        map_func: Callable[[Callable[..., Any], Iterable[Any]], Any]
+
+        if process_args_len == 1:
+            map_func = map
+        elif threading:
+            pool = cast("ThreadPoolExecutor", pool)
+            map_func = partial(imap_unordered, pool)
+        else:
+            pool = cast("Pool", pool)
+            map_func = pool.imap_unordered
+
+        results = map_func(get_order_and_func_result, process_args)
+
+        return get_multiprocess_results_with_tqdm(
+            results=results,
+            process_func=process_function,
+            process_args_len=process_args_len,
+            threads=threading,
+        )
+
+
+def find_max_pools(
+    *,
+    threads: bool,
+    process_args_len: int | None = None,
+) -> int:
+    """Determine optimal number of workers for parallel execution.
+
+    Calculates the maximum number of worker processes or threads based on
+    system resources, currently active tasks, and the number of items to
+    process.
+
+    Args:
+        threads: Whether to use threading (True) or multiprocessing (False).
+            Threading allows up to 4x CPU count, while multiprocessing is
+            limited to CPU count.
+        process_args_len: Number of items to process in parallel. If
+            provided, the result will not exceed this value.
+
+    Returns:
+        Maximum number of worker processes or threads to use. Always at
+        least 1.
+
+    Note:
+        For threading, the maximum is ``cpu_count * 4`` minus active threads.
+        For multiprocessing, the maximum is ``cpu_count`` minus active
+        child processes.
+    """
+    # use tee to find length of process_args
+    cpu_count = os.cpu_count() or 1
+    if threads:
+        active_tasks = threading.active_count()
+        max_tasks = cpu_count * 4
+    else:
+        active_tasks = len(multiprocessing.active_children())
+        max_tasks = cpu_count
+
+    available_tasks = max_tasks - active_tasks
+    max_pools = (
+        min(available_tasks, process_args_len) if process_args_len else available_tasks
+    )
+    max_pools = max(max_pools, 1)
+
+    logger.info(
+        "Multi%s with max_pools: %s",
+        "threading" if threads else "processing",
+        max_pools,
+    )
+
+    return max_pools
 
 
 def generate_process_args(
@@ -166,136 +279,23 @@ def get_multiprocess_results_with_tqdm(
     return [result[1] for result in results_list]
 
 
-def find_max_pools(
-    *,
-    threads: bool,
-    process_args_len: int | None = None,
-) -> int:
-    """Determine optimal number of workers for parallel execution.
+def get_order_and_func_result(
+    func_order_args: tuple[Any, ...],
+) -> tuple[int, Any]:
+    """Execute a function and return its result with order index.
 
-    Calculates the maximum number of worker processes or threads based on
-    system resources, currently active tasks, and the number of items to
-    process.
+    Helper function used with ``imap_unordered`` to execute a function with
+    arguments unpacking while preserving the original order of results.
 
     Args:
-        threads: Whether to use threading (True) or multiprocessing (False).
-            Threading allows up to 4x CPU count, while multiprocessing is
-            limited to CPU count.
-        process_args_len: Number of items to process in parallel. If
-            provided, the result will not exceed this value.
+        func_order_args: Tuple containing:
+            - The function to be executed
+            - The order index (int)
+            - The arguments for the function (unpacked)
 
     Returns:
-        Maximum number of worker processes or threads to use. Always at
-        least 1.
-
-    Note:
-        For threading, the maximum is ``cpu_count * 4`` minus active threads.
-        For multiprocessing, the maximum is ``cpu_count`` minus active
-        child processes.
+        A tuple of (order_index, result) where order_index is the original
+        position and result is the function's return value.
     """
-    # use tee to find length of process_args
-    cpu_count = os.cpu_count() or 1
-    if threads:
-        active_tasks = threading.active_count()
-        max_tasks = cpu_count * 4
-    else:
-        active_tasks = len(multiprocessing.active_children())
-        max_tasks = cpu_count
-
-    available_tasks = max_tasks - active_tasks
-    max_pools = (
-        min(available_tasks, process_args_len) if process_args_len else available_tasks
-    )
-    max_pools = max(max_pools, 1)
-
-    logger.info(
-        "Multi%s with max_pools: %s",
-        "threading" if threads else "processing",
-        max_pools,
-    )
-
-    return max_pools
-
-
-def concurrent_loop(  # noqa: PLR0913
-    *,
-    threading: bool,
-    process_function: Callable[..., Any],
-    process_args: Iterable[Iterable[Any]],
-    process_args_static: Iterable[Any] | None = None,
-    deepcopy_static_args: Iterable[Any] | None = None,
-    process_args_len: int = 1,
-) -> list[Any]:
-    """Execute a function concurrently with multiple argument sets.
-
-    Core function that provides a unified interface for both multiprocessing
-    and multithreading execution. This is the internal implementation used
-    by ``multiprocess_loop()`` and ``multithread_loop()``.
-
-    Args:
-        threading: Whether to use threading (True) or multiprocessing
-            (False). Use threading for I/O-bound tasks and multiprocessing
-            for CPU-bound tasks.
-        process_function: The function to execute concurrently. Must be
-            pickle-able for multiprocessing.
-        process_args: Iterable of argument lists for each parallel call.
-            Each inner iterable contains the arguments for one function
-            call.
-        process_args_static: Optional constant arguments to append to each
-            call. These are shared across all calls without copying.
-            Defaults to None.
-        deepcopy_static_args: Optional arguments that should be deep-copied
-            for each process. Use this for mutable objects that should not
-            be shared between processes. Defaults to None.
-        process_args_len: Length of ``process_args``. Used for progress bar
-            and worker pool sizing. Defaults to 1.
-
-    Returns:
-        List of results from the function executions, in the original
-        submission order.
-
-    Note:
-        This function is not meant to be used directly. Use
-        ``multiprocess_loop()`` for CPU-bound tasks or ``multithread_loop()``
-        for I/O-bound tasks instead.
-    """
-    from winiutils.core.iterating.concurrent.multiprocessing import (  # noqa: PLC0415  # avoid circular import
-        get_spawn_pool,
-    )
-    from winiutils.core.iterating.concurrent.multithreading import (  # noqa: PLC0415  # avoid circular import
-        imap_unordered,
-    )
-
-    process_args_len = get_len_with_default(process_args, process_args_len)
-    process_args = generate_process_args(
-        process_function=process_function,
-        process_args=process_args,
-        process_args_static=process_args_static,
-        deepcopy_static_args=deepcopy_static_args,
-    )
-    max_workers = find_max_pools(threads=threading, process_args_len=process_args_len)
-    pool_executor = (
-        ThreadPoolExecutor(max_workers=max_workers)
-        if threading
-        else get_spawn_pool(processes=max_workers)
-    )
-    with pool_executor as pool:
-        map_func: Callable[[Callable[..., Any], Iterable[Any]], Any]
-
-        if process_args_len == 1:
-            map_func = map
-        elif threading:
-            pool = cast("ThreadPoolExecutor", pool)
-            map_func = partial(imap_unordered, pool)
-        else:
-            pool = cast("Pool", pool)
-            map_func = pool.imap_unordered
-
-        results = map_func(get_order_and_func_result, process_args)
-
-        return get_multiprocess_results_with_tqdm(
-            results=results,
-            process_func=process_function,
-            process_args_len=process_args_len,
-            threads=threading,
-        )
+    function, order, *args = func_order_args
+    return order, function(*args)

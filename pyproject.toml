@@ -1,6 +1,6 @@
 [project]
 name = "winiutils"
-version = "4.15.5"
+version = "4.15.11"
 description = "A utility library for Python development"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -54,6 +54,7 @@ dev = [
   "pre-commit-hooks>=6.0.0",
   "prek>=0.5.5",
   "pyflakes>=4.0.3",
+  "pyorder>=0.5.2",
   "pyrig-codeql>=1.2.0",
   "pyrig-public>=1.2.0",
   "pyrig-pypi>=3.22.0",

@@ -12,91 +12,9 @@ from pytest_mock import MockerFixture
 from winiutils.core.data.dataframe.cleaning import CleaningDF
 
 
-class MyCleaningDF(CleaningDF):
-    """Concrete implementation of CleaningDF for testing."""
-
-    STR_COL = "str_col"
-    INT_COL = "int_col"
-    FLOAT_COL = "float_col"
-    FLOAT_COL_2 = "float_col_2"
-    BOOL_COL = "bool_col"
-
-    @classmethod
-    def get_rename_map(cls) -> dict[str, str]:
-        """Test implementation of rename_map."""
-        return {
-            cls.STR_COL: "str_col_old",
-            cls.INT_COL: "int_col_old",
-            cls.FLOAT_COL: "float_col_old",
-            cls.FLOAT_COL_2: "float_col_2_old",
-            cls.BOOL_COL: "bool_col_old",
-        }
-
-    @classmethod
-    def get_col_dtype_map(cls) -> dict[str, type[pl.DataType]]:
-        """Test implementation of col_cls_map."""
-        return {
-            cls.STR_COL: pl.Utf8,
-            cls.INT_COL: pl.Int64,
-            cls.FLOAT_COL: pl.Float64,
-            cls.FLOAT_COL_2: pl.Float64,
-            cls.BOOL_COL: pl.Boolean,
-        }
-
-    @classmethod
-    def get_drop_null_subsets(cls) -> tuple[tuple[str, ...], ...]:
-        """Test implementation of drop_null_subsets."""
-        return ((cls.STR_COL, cls.INT_COL), (cls.FLOAT_COL, cls.BOOL_COL))
-
-    @classmethod
-    def get_fill_null_map(cls) -> dict[str, Any]:
-        """Test implementation of fill_null_map."""
-        return {
-            cls.STR_COL: "",
-            cls.INT_COL: 0,
-            cls.FLOAT_COL: 0.0,
-            cls.FLOAT_COL_2: 0.0,
-            cls.BOOL_COL: False,
-        }
-
-    @classmethod
-    def get_sort_cols(cls) -> tuple[tuple[str, bool], ...]:
-        """Test implementation of sort_cols."""
-        return ((cls.INT_COL, False), (cls.STR_COL, True))
-
-    @classmethod
-    def get_unique_subsets(cls) -> tuple[tuple[str, ...], ...]:
-        """Test implementation of unique_subsets."""
-        return ((cls.STR_COL, cls.INT_COL), (cls.FLOAT_COL, cls.BOOL_COL))
-
-    @classmethod
-    def get_no_null_cols(cls) -> tuple[str, ...]:
-        """Test implementation of not_null_cols."""
-        return (cls.STR_COL, cls.INT_COL)
-
-    @classmethod
-    def get_col_converter_map(
-        cls,
-    ) -> dict[str, Callable[[pl.Series], pl.Series]]:
-        """Test implementation of col_converter_map."""
-        # lets add 1 to the int_col
-        return {
-            cls.FLOAT_COL: cls.skip_col_converter,
-            cls.FLOAT_COL_2: lambda x: x * 2,
-            cls.INT_COL: lambda x: x + 1,
-            cls.STR_COL: cls.skip_col_converter,
-            cls.BOOL_COL: cls.skip_col_converter,
-        }
-
-    @classmethod
-    def get_add_on_duplicate_cols(cls) -> tuple[str, ...]:
-        """Test implementation of add_on_duplicate_cols."""
-        return (cls.FLOAT_COL, cls.INT_COL)
-
-    @classmethod
-    def get_col_precision_map(cls) -> dict[str, int]:
-        """Test implementation of col_precision_map."""
-        return {cls.FLOAT_COL: 2, cls.FLOAT_COL_2: 2}
+def get_cleaning_df() -> CleaningDF:
+    """Get clean data for testing."""
+    return MyCleaningDF(get_dirty_data())
 
 
 def get_dirty_data() -> dict[str, list[Any]]:
@@ -108,11 +26,6 @@ def get_dirty_data() -> dict[str, list[Any]]:
         "float_col_2_old": [0.0, 1.1234, 2.5678],
         "bool_col_old": [True, False, True],
     }
-
-
-def get_cleaning_df() -> CleaningDF:
-    """Get clean data for testing."""
-    return MyCleaningDF(get_dirty_data())
 
 
 class TestCleaningDF:
@@ -502,3 +415,90 @@ class TestCleaningDF:
         c_df.df = c_df.df.vstack(new_row)
         with pytest.raises(ValueError, match="NaN values found in the dataframe"):
             c_df.check_no_nan()
+
+
+class MyCleaningDF(CleaningDF):
+    """Concrete implementation of CleaningDF for testing."""
+
+    STR_COL = "str_col"
+    INT_COL = "int_col"
+    FLOAT_COL = "float_col"
+    FLOAT_COL_2 = "float_col_2"
+    BOOL_COL = "bool_col"
+
+    @classmethod
+    def get_rename_map(cls) -> dict[str, str]:
+        """Test implementation of rename_map."""
+        return {
+            cls.STR_COL: "str_col_old",
+            cls.INT_COL: "int_col_old",
+            cls.FLOAT_COL: "float_col_old",
+            cls.FLOAT_COL_2: "float_col_2_old",
+            cls.BOOL_COL: "bool_col_old",
+        }
+
+    @classmethod
+    def get_col_dtype_map(cls) -> dict[str, type[pl.DataType]]:
+        """Test implementation of col_cls_map."""
+        return {
+            cls.STR_COL: pl.Utf8,
+            cls.INT_COL: pl.Int64,
+            cls.FLOAT_COL: pl.Float64,
+            cls.FLOAT_COL_2: pl.Float64,
+            cls.BOOL_COL: pl.Boolean,
+        }
+
+    @classmethod
+    def get_drop_null_subsets(cls) -> tuple[tuple[str, ...], ...]:
+        """Test implementation of drop_null_subsets."""
+        return ((cls.STR_COL, cls.INT_COL), (cls.FLOAT_COL, cls.BOOL_COL))
+
+    @classmethod
+    def get_fill_null_map(cls) -> dict[str, Any]:
+        """Test implementation of fill_null_map."""
+        return {
+            cls.STR_COL: "",
+            cls.INT_COL: 0,
+            cls.FLOAT_COL: 0.0,
+            cls.FLOAT_COL_2: 0.0,
+            cls.BOOL_COL: False,
+        }
+
+    @classmethod
+    def get_sort_cols(cls) -> tuple[tuple[str, bool], ...]:
+        """Test implementation of sort_cols."""
+        return ((cls.INT_COL, False), (cls.STR_COL, True))
+
+    @classmethod
+    def get_unique_subsets(cls) -> tuple[tuple[str, ...], ...]:
+        """Test implementation of unique_subsets."""
+        return ((cls.STR_COL, cls.INT_COL), (cls.FLOAT_COL, cls.BOOL_COL))
+
+    @classmethod
+    def get_no_null_cols(cls) -> tuple[str, ...]:
+        """Test implementation of not_null_cols."""
+        return (cls.STR_COL, cls.INT_COL)
+
+    @classmethod
+    def get_col_converter_map(
+        cls,
+    ) -> dict[str, Callable[[pl.Series], pl.Series]]:
+        """Test implementation of col_converter_map."""
+        # lets add 1 to the int_col
+        return {
+            cls.FLOAT_COL: cls.skip_col_converter,
+            cls.FLOAT_COL_2: lambda x: x * 2,
+            cls.INT_COL: lambda x: x + 1,
+            cls.STR_COL: cls.skip_col_converter,
+            cls.BOOL_COL: cls.skip_col_converter,
+        }
+
+    @classmethod
+    def get_add_on_duplicate_cols(cls) -> tuple[str, ...]:
+        """Test implementation of add_on_duplicate_cols."""
+        return (cls.FLOAT_COL, cls.INT_COL)
+
+    @classmethod
+    def get_col_precision_map(cls) -> dict[str, int]:
+        """Test implementation of col_precision_map."""
+        return {cls.FLOAT_COL: 2, cls.FLOAT_COL_2: 2}

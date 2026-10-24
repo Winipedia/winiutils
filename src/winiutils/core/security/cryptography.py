@@ -29,43 +29,6 @@ AES-GCM requires a 12-byte (96-bit) IV for optimal performance and security.
 """
 
 
-def encrypt_with_aes_gcm(
-    aes_gcm: AESGCM,
-    data: bytes,
-    aad: bytes | None = None,
-) -> bytes:
-    """Encrypt data using AES-GCM with a random initialization vector.
-
-    Encrypts the provided data using AES-GCM and prepends a randomly
-    generated 12-byte IV to the ciphertext. The IV is required for
-    decryption.
-
-    Args:
-        aes_gcm: An initialized AESGCM cipher instance.
-        data: The plaintext data to encrypt.
-        aad: Optional additional authenticated data. This data is not
-            encrypted but is authenticated, meaning any tampering will
-            be detected during decryption.
-
-    Returns:
-        The encrypted data with the IV prepended. Format: ``IV + ciphertext``.
-
-    Example:
-        >>> key = AESGCM.generate_key(bit_length=256)
-        >>> aes_gcm = AESGCM(key)
-        >>> encrypted = encrypt_with_aes_gcm(aes_gcm, b"hello world")
-        >>> len(encrypted) > len(b"hello world")  # IV + ciphertext + tag
-        True
-
-    Note:
-        A new random IV is generated for each encryption call. Never reuse
-        an IV with the same key.
-    """
-    iv = os.urandom(IV_LEN)
-    encrypted = aes_gcm.encrypt(iv, data, aad)
-    return iv + encrypted
-
-
 def decrypt_with_aes_gcm(
     aes_gcm: AESGCM,
     data: bytes,
@@ -102,3 +65,40 @@ def decrypt_with_aes_gcm(
     """
     iv, encrypted = data[:IV_LEN], data[IV_LEN:]
     return aes_gcm.decrypt(iv, encrypted, aad)
+
+
+def encrypt_with_aes_gcm(
+    aes_gcm: AESGCM,
+    data: bytes,
+    aad: bytes | None = None,
+) -> bytes:
+    """Encrypt data using AES-GCM with a random initialization vector.
+
+    Encrypts the provided data using AES-GCM and prepends a randomly
+    generated 12-byte IV to the ciphertext. The IV is required for
+    decryption.
+
+    Args:
+        aes_gcm: An initialized AESGCM cipher instance.
+        data: The plaintext data to encrypt.
+        aad: Optional additional authenticated data. This data is not
+            encrypted but is authenticated, meaning any tampering will
+            be detected during decryption.
+
+    Returns:
+        The encrypted data with the IV prepended. Format: ``IV + ciphertext``.
+
+    Example:
+        >>> key = AESGCM.generate_key(bit_length=256)
+        >>> aes_gcm = AESGCM(key)
+        >>> encrypted = encrypt_with_aes_gcm(aes_gcm, b"hello world")
+        >>> len(encrypted) > len(b"hello world")  # IV + ciphertext + tag
+        True
+
+    Note:
+        A new random IV is generated for each encryption call. Never reuse
+        an IV with the same key.
+    """
+    iv = os.urandom(IV_LEN)
+    encrypted = aes_gcm.encrypt(iv, data, aad)
+    return iv + encrypted

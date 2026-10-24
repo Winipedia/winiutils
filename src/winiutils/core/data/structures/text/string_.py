@@ -98,6 +98,30 @@ def find_xml_namespaces(xml: str | StringIO) -> dict[str, str]:
     return namespaces_
 
 
+def get_reusable_hash(value: object) -> str:
+    """Generate a deterministic SHA-256 hash for any object.
+
+    Creates a consistent hash based on the string representation of the given
+    value. Unlike Python's built-in ``hash()`` function, this hash is:
+        - Deterministic across Python sessions
+        - Consistent across different machines
+        - Suitable for caching, deduplication, or identification
+
+    Args:
+        value: Any object to hash. The object's ``__str__`` method is used
+            to generate the string representation for hashing.
+
+    Returns:
+        A 64-character hexadecimal string representation of the SHA-256 hash.
+
+    Note:
+        Two objects with the same string representation will produce the same
+        hash, even if they are different types or have different internal state.
+    """
+    value_str = str(value)
+    return hashlib.sha256(value_str.encode("utf-8")).hexdigest()
+
+
 def value_to_truncated_string(value: object, max_length: int) -> str:
     """Convert any value to a string and truncate if it exceeds the maximum length.
 
@@ -122,27 +146,3 @@ def value_to_truncated_string(value: object, max_length: int) -> str:
     """
     string = str(value)
     return textwrap.shorten(string, width=max_length, placeholder="...")
-
-
-def get_reusable_hash(value: object) -> str:
-    """Generate a deterministic SHA-256 hash for any object.
-
-    Creates a consistent hash based on the string representation of the given
-    value. Unlike Python's built-in ``hash()`` function, this hash is:
-        - Deterministic across Python sessions
-        - Consistent across different machines
-        - Suitable for caching, deduplication, or identification
-
-    Args:
-        value: Any object to hash. The object's ``__str__`` method is used
-            to generate the string representation for hashing.
-
-    Returns:
-        A 64-character hexadecimal string representation of the SHA-256 hash.
-
-    Note:
-        Two objects with the same string representation will produce the same
-        hash, even if they are different types or have different internal state.
-    """
-    value_str = str(value)
-    return hashlib.sha256(value_str.encode("utf-8")).hexdigest()

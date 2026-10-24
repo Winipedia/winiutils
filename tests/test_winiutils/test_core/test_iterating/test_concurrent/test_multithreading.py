@@ -66,6 +66,93 @@ def test_get_future_results_as_completed() -> None:
         )
 
 
+def test_imap_unordered() -> None:
+    """Test func for imap_unordered."""
+    expected_int_count = 5
+    expected_string_count = 3
+    expected_single_double = 14
+    max_parallel_time = 1
+    expected_parallel_count = 3
+
+    # Test basic functionality
+    def double_function(x: int) -> int:
+        return x * 2
+
+    with ThreadPoolExecutor(max_workers=3) as executor:
+        iterable = [1, 2, 3, 4, 5]
+        results = list(imap_unordered(executor, double_function, iterable))
+
+        # Should have all results
+        assert len(results) == expected_int_count, (
+            f"Expected {expected_int_count} results, got {len(results)}"
+        )
+
+        # Results should contain expected values (order may vary)
+        expected_values = {2, 4, 6, 8, 10}  # 1*2, 2*2, 3*2, 4*2, 5*2
+        result_set = set(results)
+        assert result_set == expected_values, (
+            f"Expected {expected_values}, got {result_set}"
+        )
+
+    # Test with string processing
+    def uppercase_function(s: str) -> str:
+        return s.upper()
+
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        string_iterable = ["hello", "world", "test"]
+        string_results = list(
+            imap_unordered(executor, uppercase_function, string_iterable),
+        )
+
+        assert len(string_results) == expected_string_count, (
+            f"Expected {expected_string_count} results, got {len(string_results)}"
+        )
+        expected_string_values = {"HELLO", "WORLD", "TEST"}
+        string_result_set = set(string_results)
+        assert string_result_set == expected_string_values, (
+            f"Expected {expected_string_values}, got {string_result_set}"
+        )
+
+    # Test with empty iterable
+    with ThreadPoolExecutor(max_workers=1) as executor:
+        empty_results = list(imap_unordered(executor, double_function, []))
+        assert len(empty_results) == 0, f"Expected 0 results, got {len(empty_results)}"
+
+    # Test with single item
+    with ThreadPoolExecutor(max_workers=1) as executor:
+        single_results = list(imap_unordered(executor, double_function, [7]))
+        assert len(single_results) == 1, f"Expected 1 result, got {len(single_results)}"
+        assert single_results[0] == expected_single_double, (
+            f"Expected {expected_single_double}, got {single_results[0]}"
+        )
+
+    # Test with function that takes time (to verify parallel execution)
+    def slow_function(x: int) -> int:
+        time.sleep(0.05)  # Small delay
+        return x * 3
+
+    with ThreadPoolExecutor(max_workers=3) as executor:
+        start_time = time.time()
+        parallel_results = list(imap_unordered(executor, slow_function, [1, 2, 3]))
+        end_time = time.time()
+
+        # Should complete faster than sequential execution
+        # Sequential would take ~0.15s, parallel should be much faster
+        execution_time = end_time - start_time
+        assert execution_time < max_parallel_time, (
+            f"Parallel execution took too long: {execution_time:.3f}s"
+        )  # Allow some margin for overhead
+
+        assert len(parallel_results) == expected_parallel_count, (
+            f"Expected {expected_parallel_count} results, got {len(parallel_results)}"
+        )
+        expected_parallel_values = {3, 6, 9}  # 1*3, 2*3, 3*3
+        parallel_result_set = set(parallel_results)
+        assert parallel_result_set == expected_parallel_values, (
+            f"Expected {expected_parallel_values}, got {parallel_result_set}"
+        )
+
+
 def test_multithread_loop() -> None:
     """Test func for multithread_loop."""
 
@@ -171,90 +258,3 @@ def test_multithread_loop() -> None:
     )
     assert len(results) == 0, f"Expected 0 results for empty args, got {len(results)}"
     assert results == [], f"Expected empty list, got {results}"
-
-
-def test_imap_unordered() -> None:
-    """Test func for imap_unordered."""
-    expected_int_count = 5
-    expected_string_count = 3
-    expected_single_double = 14
-    max_parallel_time = 1
-    expected_parallel_count = 3
-
-    # Test basic functionality
-    def double_function(x: int) -> int:
-        return x * 2
-
-    with ThreadPoolExecutor(max_workers=3) as executor:
-        iterable = [1, 2, 3, 4, 5]
-        results = list(imap_unordered(executor, double_function, iterable))
-
-        # Should have all results
-        assert len(results) == expected_int_count, (
-            f"Expected {expected_int_count} results, got {len(results)}"
-        )
-
-        # Results should contain expected values (order may vary)
-        expected_values = {2, 4, 6, 8, 10}  # 1*2, 2*2, 3*2, 4*2, 5*2
-        result_set = set(results)
-        assert result_set == expected_values, (
-            f"Expected {expected_values}, got {result_set}"
-        )
-
-    # Test with string processing
-    def uppercase_function(s: str) -> str:
-        return s.upper()
-
-    with ThreadPoolExecutor(max_workers=2) as executor:
-        string_iterable = ["hello", "world", "test"]
-        string_results = list(
-            imap_unordered(executor, uppercase_function, string_iterable),
-        )
-
-        assert len(string_results) == expected_string_count, (
-            f"Expected {expected_string_count} results, got {len(string_results)}"
-        )
-        expected_string_values = {"HELLO", "WORLD", "TEST"}
-        string_result_set = set(string_results)
-        assert string_result_set == expected_string_values, (
-            f"Expected {expected_string_values}, got {string_result_set}"
-        )
-
-    # Test with empty iterable
-    with ThreadPoolExecutor(max_workers=1) as executor:
-        empty_results = list(imap_unordered(executor, double_function, []))
-        assert len(empty_results) == 0, f"Expected 0 results, got {len(empty_results)}"
-
-    # Test with single item
-    with ThreadPoolExecutor(max_workers=1) as executor:
-        single_results = list(imap_unordered(executor, double_function, [7]))
-        assert len(single_results) == 1, f"Expected 1 result, got {len(single_results)}"
-        assert single_results[0] == expected_single_double, (
-            f"Expected {expected_single_double}, got {single_results[0]}"
-        )
-
-    # Test with function that takes time (to verify parallel execution)
-    def slow_function(x: int) -> int:
-        time.sleep(0.05)  # Small delay
-        return x * 3
-
-    with ThreadPoolExecutor(max_workers=3) as executor:
-        start_time = time.time()
-        parallel_results = list(imap_unordered(executor, slow_function, [1, 2, 3]))
-        end_time = time.time()
-
-        # Should complete faster than sequential execution
-        # Sequential would take ~0.15s, parallel should be much faster
-        execution_time = end_time - start_time
-        assert execution_time < max_parallel_time, (
-            f"Parallel execution took too long: {execution_time:.3f}s"
-        )  # Allow some margin for overhead
-
-        assert len(parallel_results) == expected_parallel_count, (
-            f"Expected {expected_parallel_count} results, got {len(parallel_results)}"
-        )
-        expected_parallel_values = {3, 6, 9}  # 1*3, 2*3, 3*3
-        parallel_result_set = set(parallel_results)
-        assert parallel_result_set == expected_parallel_values, (
-            f"Expected {expected_parallel_values}, got {parallel_result_set}"
-        )

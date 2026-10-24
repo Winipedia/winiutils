@@ -35,28 +35,6 @@ from winiutils.core.iterating.concurrent.concurrent import concurrent_loop
 logger = logging.getLogger(__name__)
 
 
-def get_spawn_pool(*args: Any, **kwargs: Any) -> Pool:  # noqa: ANN401
-    """Create a multiprocessing pool with the spawn context.
-
-    Uses the 'spawn' start method which creates a fresh Python interpreter
-    process. This is safer than 'fork' as it avoids issues with inherited
-    file descriptors and locks.
-
-    Args:
-        *args: Positional arguments passed to ``Pool`` constructor.
-        **kwargs: Keyword arguments passed to ``Pool`` constructor.
-
-    Returns:
-        A multiprocessing Pool configured with the spawn context.
-
-    Example:
-        >>> pool = get_spawn_pool(processes=4)
-        >>> with pool:
-        ...     results = pool.map(square, [1, 2, 3])
-    """
-    return multiprocessing.get_context("spawn").Pool(*args, **kwargs)
-
-
 def cancel_on_timeout(seconds: float, message: str) -> Callable[..., Any]:
     """Create a decorator that cancels function execution on timeout.
 
@@ -185,3 +163,25 @@ def multiprocess_loop(
         deepcopy_static_args=deepcopy_static_args,
         process_args_len=process_args_len,
     )
+
+
+def get_spawn_pool(*args: Any, **kwargs: Any) -> Pool:  # noqa: ANN401
+    """Create a multiprocessing pool with the spawn context.
+
+    Uses the 'spawn' start method which creates a fresh Python interpreter
+    process. This is safer than 'fork' as it avoids issues with inherited
+    file descriptors and locks.
+
+    Args:
+        *args: Positional arguments passed to ``Pool`` constructor.
+        **kwargs: Keyword arguments passed to ``Pool`` constructor.
+
+    Returns:
+        A multiprocessing Pool configured with the spawn context.
+
+    Example:
+        >>> pool = get_spawn_pool(processes=4)
+        >>> with pool:
+        ...     results = pool.map(square, [1, 2, 3])
+    """
+    return multiprocessing.get_context("spawn").Pool(*args, **kwargs)
