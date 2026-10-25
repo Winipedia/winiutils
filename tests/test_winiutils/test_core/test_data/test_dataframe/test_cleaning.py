@@ -12,22 +12,6 @@ from pytest_mock import MockerFixture
 from winiutils.core.data.dataframe.cleaning import CleaningDF
 
 
-def get_cleaning_df() -> CleaningDF:
-    """Get clean data for testing."""
-    return MyCleaningDF(get_dirty_data())
-
-
-def get_dirty_data() -> dict[str, list[Any]]:
-    """Get dirty data for testing."""
-    return {
-        "str_col_old": ["a", "b", "c"],
-        "int_col_old": [0, 1, 2],
-        "float_col_old": [0.0, 1.1234, 2.5678],
-        "float_col_2_old": [0.0, 1.1234, 2.5678],
-        "bool_col_old": [True, False, True],
-    }
-
-
 class TestCleaningDF:
     """Test class for CleaningDF."""
 
@@ -415,6 +399,22 @@ class TestCleaningDF:
         c_df.df = c_df.df.vstack(new_row)
         with pytest.raises(ValueError, match="NaN values found in the dataframe"):
             c_df.check_no_nan()
+
+
+def get_cleaning_df() -> CleaningDF:
+    """Get clean data for testing."""
+    return MyCleaningDF(get_dirty_data())
+
+
+def get_dirty_data() -> dict[str, list[Any]]:
+    """Get dirty data for testing."""
+    return {
+        "str_col_old": ["a", "b", "c"],
+        "int_col_old": [0, 1, 2],
+        "float_col_old": [0.0, 1.1234, 2.5678],
+        "float_col_2_old": [0.0, 1.1234, 2.5678],
+        "bool_col_old": [True, False, True],
+    }
 
 
 class MyCleaningDF(CleaningDF):
