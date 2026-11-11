@@ -712,7 +712,7 @@ class CleaningDF(ABCLoggingMixin):
                     return_dtype=self.get_col_dtype_map()[col_name],
                 )
                 for col_name, converter in self.get_col_converter_map().items()
-                if converter.__name__ != self.skip_col_converter.__name__  # ty:ignore[unresolved-attribute]
+                if converter.__name__ != self.skip_col_converter.__name__  # ty:ignore[missing-attribute]
             ],
         )
 

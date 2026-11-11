@@ -164,7 +164,7 @@ class ABCLoggingMeta(ABCMeta):
             # we only log if the time since the last call is greater than the threshold
             # this is to avoid spamming the logs
 
-            func_name = func.__name__  # ty:ignore[unresolved-attribute]
+            func_name = func.__name__  # ty:ignore[missing-attribute]
 
             threshold = 1
 

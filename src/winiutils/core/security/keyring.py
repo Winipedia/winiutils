@@ -173,4 +173,4 @@ def make_service_name[T](service_name: str, key_class: Callable[[bytes], T]) -> 
         >>> make_service_name("my_app", Fernet)
         'my_app_Fernet'
     """
-    return f"{service_name}_{key_class.__name__}"  # ty:ignore[unresolved-attribute]
+    return f"{service_name}_{key_class.__name__}"  # ty:ignore[missing-attribute]
