@@ -165,7 +165,9 @@ def find_max_pools(
 
     available_tasks = max_tasks - active_tasks
     max_pools = (
-        min(available_tasks, process_args_len) if process_args_len else available_tasks
+        min(available_tasks, process_args_len)
+        if process_args_len is not None
+        else available_tasks
     )
     max_pools = max(max_pools, 1)
 

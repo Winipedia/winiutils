@@ -1,6 +1,6 @@
 [project]
 name = "winiutils"
-version = "4.15.98"
+version = "4.15.105"
 description = "A utility library for Python development"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -138,6 +138,9 @@ strict = true
 ALL = "enable"
 key-ordering = "disable"
 yaml-directive = "disable"
+
+[tool.ty.rules]
+all = "error"
 
 [tool.typos.default]
 extend-ignore-re = [

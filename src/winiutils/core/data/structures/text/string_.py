@@ -20,12 +20,16 @@ Example:
 import hashlib
 import textwrap
 from io import StringIO
+from typing import TYPE_CHECKING, cast
 
 from defusedxml import ElementTree as DefusedElementTree
 
 from winiutils.core.iterating.concurrent.multiprocessing import (
     cancel_on_timeout,
 )
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 def ask_for_input_with_timeout(prompt: str, timeout: int) -> str:
@@ -53,7 +57,10 @@ def ask_for_input_with_timeout(prompt: str, timeout: int) -> str:
         >>> # response = ask_for_input_with_timeout("Enter name: ", timeout=30)
     """
 
-    @cancel_on_timeout(timeout, "Input not given within the timeout")
+    @cast(
+        "Callable[[Callable[[], str]], Callable[[], str]]",
+        cancel_on_timeout(timeout, "Input not given within the timeout"),
+    )
     def give_input() -> str:
         return input(prompt)
 
