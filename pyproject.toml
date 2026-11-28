@@ -1,6 +1,6 @@
 [project]
 name = "winiutils"
-version = "4.15.118"
+version = "4.16.7"
 description = "A utility library for Python development"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -30,7 +30,7 @@ dependencies = [
   "keyring>=25.7.0",
   "keyrings-alt>=5.0.2",
   "polars>=2.2.0",
-  "pyrig-runtime>=3.27.115",
+  "pyrig-runtime>=3.28.0",
   "tqdm>=4.70.1",
 ]
 
@@ -56,10 +56,10 @@ dev = [
   "pre-commit-hooks>=6.0.0",
   "prek>=0.5.12",
   "pyflakes>=4.1.0",
-  "pyorder>=1.0.81",
-  "pyrig-codeql>=3.2.0",
-  "pyrig-public>=1.5.4",
-  "pyrig-pypi>=4.1.4",
+  "pyorder>=1.1.0",
+  "pyrig-codeql>=3.3.0",
+  "pyrig-public>=1.6.0",
+  "pyrig-pypi>=4.2.0",
   "pytest>=9.2.0",
   "pytest-cov>=7.1.0",
   "pytest-mock>=3.17.0",
